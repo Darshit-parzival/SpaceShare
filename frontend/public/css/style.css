@@ -902,3 +902,72 @@ a:focus {
   color: inherit;
 }
 /*# sourceMappingURL=style.css.map */
+.dropdown-menu{
+  display: block;
+  background-color: #21667a !important;
+}
+.dropdown-item{
+  color: #ffffff !important;
+}
+.dropdown-item:hover{
+  color: #000 !important;
+}
+
+.sub_page {
+  font-family: Arial, sans-serif;
+}
+
+.hero_area {
+  position: relative;
+}
+
+.bg-box img {
+  width: 100%;
+  height: auto;
+}
+
+.form_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.form_heading {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #343a40;
+  text-align: center;
+}
+
+.form-sig {
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-control {
+  border-radius: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: #ff6f3c !important;
+  border-color: #ff6f3c !important;
+  border-radius: 4px;
+}
+
+.btn-primary:hover {
+  background-color: #db5829 !important;
+  border-color: #db5829 !important;
+}
+
+.footer {
+  margin-top: 20px;
+}

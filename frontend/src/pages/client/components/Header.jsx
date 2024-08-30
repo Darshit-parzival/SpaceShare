@@ -9,7 +9,7 @@ const Header = () => {
         <div className="container">
           <nav className="navbar navbar-expand-lg custom_nav-container ">
             <Link className="navbar-brand" to="/">
-              <span>Paspark</span>
+              <span>Space Share</span>
             </Link>
 
             <button
@@ -29,40 +29,76 @@ const Header = () => {
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav">
-                <li className={`nav-item ${currentPath === '/' ? 'active' : ''}`}>
+                <li
+                  className={`nav-item ${currentPath === "/" ? "active" : ""}`}
+                >
                   <Link className="nav-link" to="/">
                     Home <span className="sr-only">(current)</span>
                   </Link>
                 </li>
-                <li className={`nav-item ${currentPath === '/about' ? 'active' : ''}`}>
+                <li
+                  className={`nav-item ${
+                    currentPath === "/about" ? "active" : ""
+                  }`}
+                >
                   <Link className="nav-link" to="/about">
                     About
                   </Link>
                 </li>
-                <li className={`nav-item ${currentPath === '/price' ? 'active' : ''}`}>
+                <li
+                  className={`nav-item ${
+                    currentPath === "/price" ? "active" : ""
+                  }`}
+                >
                   <Link className="nav-link" to="/price">
                     Pricing
                   </Link>
                 </li>
-                <li className={`nav-item ${currentPath === '/why' ? 'active' : ''}`}>
+                <li
+                  className={`nav-item ${
+                    currentPath === "/why" ? "active" : ""
+                  }`}
+                >
                   <Link className="nav-link" to="/why">
                     Why Us
                   </Link>
                 </li>
-                <li className={`nav-item ${currentPath === '/testimonial' ? 'active' : ''}`}>
+                <li
+                  className={`nav-item ${
+                    currentPath === "/testimonial" ? "active" : ""
+                  }`}
+                >
                   <Link className="nav-link" to="/testimonial">
                     Testimonial
                   </Link>
                 </li>
+                <li className="nav-item dropdown">
+                  <button
+                    className="nav-link dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Sign Up/Sign In
+                  </button>
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton1"
+                  >
+                    <li>
+                      <Link className="dropdown-item" to="/signup">
+                        Sign Up
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/signin">
+                        Sign In
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
               </ul>
-              <form className="form-inline">
-                <button
-                  className="btn  my-2 my-sm-0 nav_search-btn"
-                  type="submit"
-                >
-                  <i className="fa fa-search" aria-hidden="true"></i>
-                </button>
-              </form>
             </div>
           </nav>
         </div>
