@@ -7,54 +7,50 @@ const jwt = require("jsonwebtoken");
 // Register
 router.post("/register", async (req, res) => {
   try {
-    if (
-      req.body.name &&
-      req.body.email &&
-      req.body.password &&
-      req.body.confirmPassword
-    ) {
-      const authResult = await userAuth(
-        req.body.name,
-        req.body.email,
-        req.body.password,
-        req.body.confirmPassword
-      );
-      const { name, email, password } = authResult.data;
-      if (authResult.status !== 200)
-        return res.status(authResult.status).send(authResult.message);
+    const { name, email, password, confirmPassword } = req.body;
 
-      const newUser = new User({
-        name,
-        email,
-        password,
-      });
-      const savedUser = await newUser.save();
-      // return res.status(201).json({
-      //   message: "User Created...",
-      //   userId: savedUser._id,
-      //   name: savedUser.fullName,
-      // });
-
-      const userToken = jwt.sign(
-        {
-          userToken: savedUser._id,
-        },
-        process.env.JWT_KEY
-      );
-
-      res
-        .cookie(`userToken`, userToken, {
-          httpOnly: true,
-        })
-        .send();
-    } else {
+    // Check if all required fields are provided
+    if (!name || !email || !password || !confirmPassword) {
       return res.status(400).send("Missing required fields");
     }
+
+    // Call the authentication function and handle its result
+    const authResult = await userAuth(name, email, password, confirmPassword);
+
+    // Ensure authResult exists and has a status property
+    if (!authResult || typeof authResult.status === 'undefined') {
+      return res.status(500).send("Unexpected error during authentication.");
+    }
+
+    // If authentication fails, return an error
+    if (authResult.status !== 200) {
+      return res.status(authResult.status).send(authResult.message);
+    }
+
+    // If authentication is successful, proceed
+    const { name: authName, email: authEmail, password: authPassword } = authResult.data || {};
+
+    const newUser = new User({
+      name: authName,
+      email: authEmail,
+      password: authPassword,
+    });
+
+    const savedUser = await newUser.save();
+
+    // Send a response with the user data
+    return res.status(201).json({
+      message: "User created successfully.",
+      userId: savedUser._id,
+      name: savedUser.name,
+    });
+
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
   }
 });
+
 
 // Login
 router.post("/login", async (req, res) => {

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../middleware/AuthContext";
 
@@ -6,6 +6,10 @@ const Header = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const { loggedIn } = useContext(AuthContext);
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+    setUserName(sessionStorage.getItem("userName"));
+  }, []);
   return (
     <>
       <header className="header_section">
@@ -75,60 +79,62 @@ const Header = () => {
                     Testimonial
                   </Link>
                 </li>
-                {loggedIn === false &&
+                {loggedIn === false && (
                   <li className="nav-item dropdown">
-                  <button
-                    className="nav-link dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Sign Up/Sign In
-                  </button>
-                  <ul
-                    className="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton1"
-                  >
-                    <li>
-                      <Link className="dropdown-item" to="/signup">
-                        Sign Up
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/signin">
-                        Sign In
-                      </Link>
-                    </li>
-                  </ul>
-                </li>}
-                {loggedIn === true &&
+                    <button
+                      className="nav-link dropdown-toggle"
+                      type="button"
+                      id="dropdownMenuButton1"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Sign Up/Sign In
+                    </button>
+                    <ul
+                      className="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton1"
+                    >
+                      <li>
+                        <Link className="dropdown-item" to="/signup">
+                          Sign Up
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" to="/signin">
+                          Sign In
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                )}
+                {loggedIn === true && (
                   <li className="nav-item dropdown">
-                  <button
-                    className="nav-link dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Name
-                  </button>
-                  <ul
-                    className="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton1"
-                  >
-                    <li>
-                      <Link className="dropdown-item" to="/profile">
-                        Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/logout">
-                        Logout
-                      </Link>
-                    </li>
-                  </ul>
-                </li>}
+                    <button
+                      className="nav-link dropdown-toggle"
+                      type="button"
+                      id="dropdownMenuButton1"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {userName}
+                    </button>
+                    <ul
+                      className="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton1"
+                    >
+                      <li>
+                        <Link className="dropdown-item" to="/profile">
+                          Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" to="/logout">
+                          Logout
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                )}
               </ul>
             </div>
           </nav>

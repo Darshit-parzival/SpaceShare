@@ -25,8 +25,9 @@ const SignUp = () => {
         registerData
       );
 
-      if (response.status === 200) alert("User registered successfully");
-      else alert(response.status);
+      if (response.status === 201) {
+        alert(response.data.name);
+      } else alert(response.status);
     } catch (error) {
       console.error(error);
     }

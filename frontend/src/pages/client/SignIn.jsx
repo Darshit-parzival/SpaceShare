@@ -3,8 +3,11 @@ import axios from "axios";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NavBg from "./img/slider-bg.jpg";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,8 +24,11 @@ const SignIn = () => {
         loginData
       );
 
-      if (response.status === 200) alert(response.data);
-      else alert(response.status);
+      if (response.status === 200) {
+        sessionStorage.setItem("userName", response.data);
+        window.location.reload();
+        navigate("/");
+      } else alert(response.status);
     } catch (error) {
       console.error(error);
     }
@@ -52,7 +58,7 @@ const SignIn = () => {
               value={email}
             />
             <div id="emailHelp" className="form-text">
-              We'll never share your email with anyone else.
+              We&apos;ll never share your email with anyone else.
             </div>
           </div>
           <div className="mb-3">
@@ -67,7 +73,7 @@ const SignIn = () => {
               value={password}
             />
           </div>
-          
+
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
