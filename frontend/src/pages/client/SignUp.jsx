@@ -3,6 +3,7 @@ import axios from "axios";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NavBg from "./img/slider-bg.jpg";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -70,7 +71,7 @@ const SignUp = () => {
               value={email}
             />
             <div id="emailHelp" className="form-text">
-              We'll never share your email with anyone else.
+              We&apos;ll never share your email with anyone else.
             </div>
           </div>
           <div className="mb-3">
@@ -100,6 +101,11 @@ const SignUp = () => {
           <button type="submit" className="btn btn-primary">
             Sign Up
           </button>
+          <div className="mt-3">
+            <Link className="form-label text-primary text-decoration-underline" to="/signin">
+              Already have an account?
+            </Link>
+          </div>
         </form>
       </div>
       <Footer />

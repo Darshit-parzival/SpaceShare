@@ -3,8 +3,7 @@ import axios from "axios";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NavBg from "./img/slider-bg.jpg";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 const SignIn = () => {
   const navigate = useNavigate();
 
@@ -77,6 +76,14 @@ const SignIn = () => {
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
+          <div className="mt-3 d-flex ">
+            <Link className="form-label me-3 text-primary text-decoration-underline" to="/signup">
+              Didn&apos;t have an account?
+            </Link>
+            <Link className="form-label text-danger text-decoration-underline" to="/forgot">
+              Forgot password?
+            </Link>
+          </div>
         </form>
       </div>
       <Footer />

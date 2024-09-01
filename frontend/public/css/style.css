@@ -957,16 +957,6 @@ a:focus {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.btn-primary {
-  background-color: #ff6f3c !important;
-  border-color: #ff6f3c !important;
-  border-radius: 4px;
-}
-
-.btn-primary:hover {
-  background-color: #db5829 !important;
-  border-color: #db5829 !important;
-}
 
 .footer {
   margin-top: 20px;
