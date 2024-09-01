@@ -15,6 +15,7 @@ import IndexAdmin from "./pages/admin/IndexAdmin";
 import ForgotAdmin from "./pages/admin/ForgotAdmin";
 import HomeAdmin from "./pages/admin/HomeAdmin";
 import Admins from "./pages/admin/Admins";
+import Users from "./pages/admin/Users";
 
 const Urls = () => {
   // const [loading, setLoading] = useState(true);
@@ -87,6 +88,7 @@ const Urls = () => {
         <Route path="/admin/forget" element={<ForgotAdmin />} />
         <Route path="/admin/home" element={<HomeAdmin />} />
         <Route path="/admin/admins" element={<Admins />} />
+        <Route path="/admin/users" element={<Users />} />
       </Routes>
     </>
   );

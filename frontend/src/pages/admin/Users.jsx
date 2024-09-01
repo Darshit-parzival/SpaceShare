@@ -2,28 +2,14 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 
-const Admins = () => {
+const Users = () => {
   const data = [
     {
       id: 1001,
-      col1: "Jay",
-      col2: "jaypurani@gmail.com",
-      col3: <button className="btn btn-danger">Delete</button>,
-      col4: <button className="btn btn-primary">Password</button>,
-    },
-    {
-      id: 1001,
-      col1: "Jay",
-      col2: "jaypurani@gmail.com",
-      col3: <button className="btn btn-danger">Delete</button>,
-      col4: <button className="btn btn-primary">Password</button>,
-    },
-    {
-      id: 1001,
-      col1: "Jay",
-      col2: "jaypurani@gmail.com",
-      col3: <button className="btn btn-danger">Delete</button>,
-      col4: <button className="btn btn-primary">Password</button>,
+      col1: "random",
+      col2: "data",
+      col3: "placeholder",
+      col4: "text",
     },
   ];
 
@@ -47,7 +33,7 @@ const Admins = () => {
           <Sidebar />
           <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-              <h1 className="h2">Admin</h1>
+              <h1 className="h2">Users</h1>
               <button
                 type="button"
                 className="btn btn-primary"
@@ -62,11 +48,11 @@ const Admins = () => {
                 <table className="table table-striped table-sm">
                   <thead>
                     <tr>
-                      <th scope="col">ID</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Delete</th>
-                      <th scope="col">Update Password</th>
+                      <th scope="col">#</th>
+                      <th scope="col">Header 1</th>
+                      <th scope="col">Header 2</th>
+                      <th scope="col">Header 3</th>
+                      <th scope="col">Header 4</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -175,4 +161,4 @@ const Admins = () => {
   );
 };
 
-export default Admins;
+export default Users;

@@ -51,12 +51,13 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link d-flex align-items-center gap-2" href="#">
-                <svg className="bi">
-                  <use xlinkHref="#cart" />
-                </svg>
-                Products
-              </a>
+              <Link
+                className="nav-link d-flex align-items-center gap-2"
+                to="/admin/users"
+              >
+                <i className="bi bi-person-fill mb-1"></i>
+                Users
+              </Link>
             </li>
             <li className="nav-item">
               <a className="nav-link d-flex align-items-center gap-2" href="#">
