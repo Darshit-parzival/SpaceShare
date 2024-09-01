@@ -1,8 +1,33 @@
+import { useState } from "react";
+import axios from "axios";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NavBg from "./img/slider-bg.jpg";
 
 const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const loginData = {
+        email,
+        password,
+      };
+      const response = await axios.post(
+        "http://localhost:5000/user/login",
+        loginData
+      );
+
+      if (response.status === 200) alert(response.data);
+      else alert(response.status);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="sub_page">
       <div className="hero_area">
@@ -13,7 +38,7 @@ const SignIn = () => {
       </div>
       <div className="form_container">
         <h1 className="form_heading">Sign In</h1>
-        <form className="form-sig">
+        <form className="form-sig" onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="exampleInputEmail1" className="form-label">
               Email address
@@ -23,6 +48,8 @@ const SignIn = () => {
               className="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
             />
             <div id="emailHelp" className="form-text">
               We'll never share your email with anyone else.
@@ -36,6 +63,8 @@ const SignIn = () => {
               type="password"
               className="form-control"
               id="exampleInputPassword1"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
             />
           </div>
           

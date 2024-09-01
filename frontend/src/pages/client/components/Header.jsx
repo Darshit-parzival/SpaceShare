@@ -1,8 +1,11 @@
+import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { AuthContext } from "../../middleware/AuthContext";
 
 const Header = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const { loggedIn } = useContext(AuthContext);
   return (
     <>
       <header className="header_section">
@@ -72,7 +75,8 @@ const Header = () => {
                     Testimonial
                   </Link>
                 </li>
-                <li className="nav-item dropdown">
+                {loggedIn === false &&
+                  <li className="nav-item dropdown">
                   <button
                     className="nav-link dropdown-toggle"
                     type="button"
@@ -97,7 +101,34 @@ const Header = () => {
                       </Link>
                     </li>
                   </ul>
-                </li>
+                </li>}
+                {loggedIn === true &&
+                  <li className="nav-item dropdown">
+                  <button
+                    className="nav-link dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Name
+                  </button>
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton1"
+                  >
+                    <li>
+                      <Link className="dropdown-item" to="/profile">
+                        Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/logout">
+                        Logout
+                      </Link>
+                    </li>
+                  </ul>
+                </li>}
               </ul>
             </div>
           </nav>

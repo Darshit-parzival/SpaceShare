@@ -8,6 +8,7 @@ import Why from "./pages/client/Why";
 import Testimonial from "./pages/client/Testimonial";
 import SignIn from "./pages/client/SignIn";
 import SignUp from "./pages/client/SignUp";
+import Test from "./pages/client/Test";
 
 const Urls = () => {
   const [loading, setLoading] = useState(true);
@@ -39,6 +40,7 @@ const Urls = () => {
           <Route path="/testimonial" element={<Testimonial />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       )}
     </>

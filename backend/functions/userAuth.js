@@ -11,10 +11,10 @@ const userAuth = async (name, email, password, confirmPassword) => {
   try {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
-    return {
+    return res.status(200).json({
       status: 200,
-      data: { name: name, email: email, password: passwordHash },
-    };
+      data: { name, email, password: passwordHash },
+    });
   } catch (error) {
     return { status: 500, message: "Error hashing password" };
   }

@@ -70,12 +70,7 @@ router.post("/login", async (req, res) => {
       );
 
       if (authResult.status !== 200)
-        return res.status(authResult.status).send(authResult.message);
-
-      // return res.status(authResult.status).json({
-      //   id: existingUser._id,
-      //   name: existingUser.name,
-      // });
+        return res.status(authResult.status).json(authResult.message);
 
       const userToken = jwt.sign(
         {
@@ -84,11 +79,11 @@ router.post("/login", async (req, res) => {
         process.env.JWT_KEY
       );
 
-      res
-        .cookie(`userToken`, userToken, {
+      return res
+        .cookie("userToken", userToken, {
           httpOnly: true,
         })
-        .send();
+        .send(existingUser.name);
     } else {
       return res.status(400).send("User not found...");
     }
@@ -149,10 +144,26 @@ router.post("/update", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  res.cookie("userToken", "", {
-    httpOnly: true,
-    expires: new Date(0),
-  }).send("User Logged out");
+  res
+    .cookie("userToken", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    })
+    .send("User Logged out");
 });
 
 module.exports = router;
+
+router.get("/loggedIn", (req, res) => {
+  try {
+    const userToken = req.cookies.userToken;
+    if (!userToken) return res.send(false);
+
+    jwt.verify(userToken, process.env.JWT_KEY);
+
+    res.send(true);
+  } catch (error) {
+    console.error(error);
+    res.send(false);
+  }
+});
