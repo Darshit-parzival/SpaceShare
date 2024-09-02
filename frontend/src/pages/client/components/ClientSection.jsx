@@ -29,12 +29,7 @@ const ClientSection = () => {
               <div className="box">
                 <div className="detail-box">
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad
-                    minim
+                  "I've been using this platform for a few months now, and it's been a game-changer. The booking process is incredibly easy, and the availability of parking spaces in prime locations is fantastic. I especially appreciate the transparent pricing with no hidden fees, which makes budgeting simple and straightforward. Highly recommend it to anyone looking for a hassle-free parking experience."
                   </p>
                 </div>
                 <div className="client_id">
@@ -42,7 +37,7 @@ const ClientSection = () => {
                     <img src={c1} alt="" className="img-1" />
                   </div>
                   <div className="name">
-                    <h6>Lisa Adams</h6>
+                    <h6>Hinata Hyuga</h6>
                     <p>Magna</p>
                   </div>
                 </div>
@@ -52,12 +47,7 @@ const ClientSection = () => {
               <div className="box">
                 <div className="detail-box">
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad
-                    minim
+                  "This service has made finding storage space so convenient! The online payment options are secure, and I love that I can manage everything from my phone. The customer support team is responsive and genuinely helpful, making the whole process smooth and stress-free. It's clear that they prioritize customer satisfaction, and it shows in every interaction."
                   </p>
                 </div>
                 <div className="client_id">
@@ -65,7 +55,7 @@ const ClientSection = () => {
                     <img src={c2} alt="" className="img-1" />
                   </div>
                   <div className="name">
-                    <h6>Michel Trout</h6>
+                    <h6>Sasuke Uchiha</h6>
                     <p>Magna</p>
                   </div>
                 </div>
