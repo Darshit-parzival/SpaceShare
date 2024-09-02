@@ -1,8 +1,37 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import axios from "axios";
 
 const Admins = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const registerData = {
+        name,
+        email,
+        password,
+        confirmPassword,
+      };
+      const response = await axios.post(
+        "http://localhost:5000/admin/register",
+        registerData
+      );
+
+      if (response.status === 201) {
+        alert(response.data.name);
+      } else alert(response.status);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const data = [
     {
       id: 1001,
@@ -12,14 +41,14 @@ const Admins = () => {
       col4: <button className="btn btn-primary">Password</button>,
     },
     {
-      id: 1001,
+      id: 1002,
       col1: "Jay",
       col2: "jaypurani@gmail.com",
       col3: <button className="btn btn-danger">Delete</button>,
       col4: <button className="btn btn-primary">Password</button>,
     },
     {
-      id: 1001,
+      id: 1003,
       col1: "Jay",
       col2: "jaypurani@gmail.com",
       col3: <button className="btn btn-danger">Delete</button>,
@@ -54,7 +83,7 @@ const Admins = () => {
                 data-bs-toggle="modal"
                 data-bs-target="#addAdminModal"
               >
-                Launch static backdrop modal
+                Add admin
               </button>
             </div>
             <div className="table-responsive">
@@ -144,29 +173,84 @@ const Admins = () => {
       >
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="addAdminModalLabel">
-                Modal title
+            <div className="modal-header bg-primary">
+              <h5 className="modal-title text-white" id="addAdminModalLabel">
+                Add Admin
               </h5>
               <button
                 type="button"
-                className="btn-close"
+                className="btn-close bg-white"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div className="modal-body">...</div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button type="button" className="btn btn-primary">
-                Understood
-              </button>
+            <div className="modal-body">
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="exampleInputEmail1" className="form-label">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
+                    value={name}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="exampleInputEmail1" className="form-label">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                    value={email}
+                  />
+                  <div id="emailHelp" className="form-text">
+                    We&apos;ll never share your email with anyone else.
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="exampleInputPassword1" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="exampleInputPassword1"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                    value={password}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="exampleInputPassword1" className="form-label">
+                    Confirm Password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="exampleInputPassword1"
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                    }}
+                    value={confirmPassword}
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              </form>
             </div>
           </div>
         </div>
