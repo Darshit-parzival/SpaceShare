@@ -14,21 +14,21 @@ router.post("/register", async (req, res) => {
       return res.status(400).send("Missing required fields");
     }
 
-    // Call the authentication function and handle its result
     const authResult = await userAuth(name, email, password, confirmPassword);
 
-    // Ensure authResult exists and has a status property
-    if (!authResult || typeof authResult.status === 'undefined') {
+    if (!authResult || typeof authResult.status === "undefined") {
       return res.status(500).send("Unexpected error during authentication.");
     }
 
-    // If authentication fails, return an error
     if (authResult.status !== 200) {
       return res.status(authResult.status).send(authResult.message);
     }
 
-    // If authentication is successful, proceed
-    const { name: authName, email: authEmail, password: authPassword } = authResult.data || {};
+    const {
+      name: authName,
+      email: authEmail,
+      password: authPassword,
+    } = authResult.data || {};
 
     const newAdmin = new Admin({
       name: authName,
@@ -38,21 +38,17 @@ router.post("/register", async (req, res) => {
 
     const savedAdmin = await newAdmin.save();
 
-    // Send a response with the Admin data
     return res.status(201).json({
       message: "Admin created successfully.",
       userId: savedAdmin._id,
       name: savedAdmin.name,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
   }
 });
 
-
-// Login
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -161,5 +157,15 @@ router.get("/loggedIn", (req, res) => {
   } catch (error) {
     console.error(error);
     res.send(false);
+  }
+});
+
+router.post("/fetch", async (req, res) => {
+  try {
+    const adminData = await Admin.find();
+    res.status(200).json(adminData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
   }
 });
