@@ -32,10 +32,7 @@ const Footer = () => {
                 <div className="info_detail">
                   <h4>About Us</h4>
                   <p>
-                    Necessitatibus, culpa, totam quod neque cum officiis odio,
-                    excepturi magnam incidunt voluptates sed voluptate id
-                    expedita sint! Cum veritatis iusto molestiae reiciendis
-                    deserunt vel odio incidunt, tenetur itaque. Ullam, iste!
+                  we connect people looking for parking and storage solutions with those who have space to share, making city living more convenient and efficient. Our platform ensures a secure, easy, and reliable way to rent out or find spaces whenever you need them.
                   </p>
                 </div>
               </div>
@@ -43,16 +40,13 @@ const Footer = () => {
                 <div className="info_detail">
                   <h4>Online Booking</h4>
                   <p>
-                    Accusantium quis architecto, necessitatibus libero nemo
-                    facere perferendis obcaecati pariatur magni quod praesentium
-                    provident nisi impedit nobis omnis. Assumenda vero impedit
-                    dolorum perspiciatis, ipsa quasi corrupti numquam.
+                  Our streamlined booking process ensures you can find, select, and book a space in just a few clicks. User-friendly navigation and clear instructions make it easy to rent a space, saving you time and effort.
                   </p>
                 </div>
               </div>
               <div className="col-md-6 col-lg-3 info_col">
                 <h4>Contact us</h4>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+                <p>"Reach out to us anytime for assistance, inquiries, or feedback—we're here to help!"</p>
                 <div className="contact_nav">
                   <a href="">
                     <i className="fa fa-map-marker" aria-hidden="true"></i>
@@ -60,11 +54,11 @@ const Footer = () => {
                   </a>
                   <a href="">
                     <i className="fa fa-phone" aria-hidden="true"></i>
-                    <span>Call : +01 123455678990</span>
+                    <span>Call : +91 9876543210</span>
                   </a>
                   <a href="">
                     <i className="fa fa-envelope" aria-hidden="true"></i>
-                    <span>Email : demo@gmail.com</span>
+                    <span>Email : demo@email.com</span>
                   </a>
                 </div>
               </div>
@@ -75,8 +69,7 @@ const Footer = () => {
       <footer className="footer_section">
     <div className="container">
       <p>
-        &copy; <span id="displayYear"></span> All Rights Reserved By
-        <a href="https://html.design/">Free Html Templates</a>
+        &copy; <span id="displayYear"></span> Created by Jay Purani, Janvi Suthar, Tanvi Vara
       </p>
     </div>
   </footer>

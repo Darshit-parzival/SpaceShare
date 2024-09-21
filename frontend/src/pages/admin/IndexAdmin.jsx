@@ -22,9 +22,9 @@ const IndexAdmin = () => {
       );
 
       if (response.status === 200) {
-        sessionStorage.setItem("userName", response.data);
+        sessionStorage.setItem("adminName", response.data);
         window.location.reload();
-        navigate("/");
+        navigate("/admin/home");
       } else alert(response.status);
     } catch (error) {
       console.error(error);

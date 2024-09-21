@@ -3,10 +3,9 @@ import axios from "axios";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NavBg from "./img/slider-bg.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +27,8 @@ const SignUp = () => {
       );
 
       if (response.status === 201) {
-        alert(response.data.name);
+        window.location.reload();
+        navigate('/signin')
       } else alert(response.status);
     } catch (error) {
       console.error(error);

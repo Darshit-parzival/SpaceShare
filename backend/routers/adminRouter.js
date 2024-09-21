@@ -129,6 +129,7 @@ router.post("/update", async (req, res) => {
     } else {
       return res.status(400).send("No user ID or update data provided");
     }
+    pop
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");

@@ -23,10 +23,7 @@ const Index = () => {
             <div className="detail-box col-md-9 mx-auto px-0">
               <h1>Finding Parking Lots Made Easy</h1>
               <p>
-                Necessitatibus non ducimus hic dolor? Maiores itaque vitae sit
-                blanditiis porro, a expedita ex. Totam vel sed obcaecati.
-                Placeat maxime asperiores deleniti tenetur officiis laboriosam
-                laborum a nihil quisquam quis!
+              Unlock the potential of every corner – seamlessly connecting those with space to share and those in need, making city living more convenient and efficient for everyone.
               </p>
             </div>
             <div className="find_form_container">
@@ -38,11 +35,11 @@ const Index = () => {
                       <div className="input-group">
                         <select className="form-control">
                           <option data-display="Highway Park">
-                            Highway Park
+                          Residential Driveways
                           </option>
-                          <option value="1">Highway Park</option>
-                          <option value="2">Highway Park</option>
-                          <option value="3">Highway Park</option>
+                          <option value="1">Commercial Parking Lots</option>
+                          <option value="2">Apartment Complex</option>
+                          <option value="3">Public Parking</option>
                         </select>
                       </div>
                     </div>
@@ -54,7 +51,7 @@ const Index = () => {
                         <input
                           type="text"
                           className="form-control"
-                          placeholder="John doe"
+                          placeholder="Naruto Uzumaki"
                         />
                       </div>
                     </div>
@@ -66,7 +63,7 @@ const Index = () => {
                         <input
                           type="text"
                           className="form-control"
-                          placeholder="01 2345678910"
+                          placeholder="91 9876543210"
                         />
                       </div>
                     </div>
@@ -87,8 +84,7 @@ const Index = () => {
           <div className="heading_container ">
             <h2>About Us</h2>
             <p>
-              Magni quod blanditiis non minus sed aut voluptatum illum quisquam
-              aspernatur ullam vel beatae rerum ipsum voluptatibus
+            we connect people looking for parking and storage solutions with those who have space to share, making city living more convenient and efficient. Our platform ensures a secure, easy, and reliable way to rent out or find spaces whenever you need them.
             </p>
           </div>
           <div className="row">
@@ -101,21 +97,11 @@ const Index = () => {
               <div className="detail-box">
                 <h3>We Are Here For Help</h3>
                 <p>
-                  There are many variations of passages of Lorem Ipsum
-                  available, but the majority have suffered alteration in some
-                  form, by injected humour, or randomised words which don't look
-                  even slightly believable. If you are going to use a passage to
-                  be sure there isn't anything the middle of text.
+                We are here to help you find the perfect parking or storage solution with ease and convenience. Whether you need a spot to park your vehicle for a few hours or a secure space to store your belongings temporarily, our platform connects you with trusted space providers in your area. Our user-friendly search tools and verified listings ensure that you can quickly find and book the space that meets your needs without any hassle.
                 </p>
                 <p>
-                  Molestiae odio earum non qui cumque provident voluptates,
-                  repellendus exercitationem, possimus at iste corrupti officiis
-                  unde alias eius ducimus reiciendis soluta eveniet. Nobis ullam
-                  ab omnis quasi expedita.
+                At <b>SpaceShare</b>, customer satisfaction is our top priority. Our dedicated support team is always available to assist you with any questions or concerns, providing guidance every step of the way. We strive to make the process of finding and renting parking or storage spaces as seamless as possible, giving you peace of mind and more time to focus on what matters most. Let us help you simplify your space needs today.
                 </p>
-                <a to="about" className="text-decoration-none">
-                  Read More
-                </a>
               </div>
             </div>
           </div>
@@ -127,10 +113,7 @@ const Index = () => {
             <div className="heading_container">
               <h2>Why Choose Us</h2>
               <p>
-                Eaque nostrum quis ad aliquam autem odio assumenda accusamus,
-                consequuntur, iste voluptate voluptates quia non dicta hic
-                repellendus similique a facere earum omnis? Repellendus nemo,
-                aspernatur ullam est deserunt officiis.
+              Choose us for a seamless and secure experience in finding parking and storage solutions tailored to your needs. With verified listings, real-time availability, and dedicated customer support, we make it easy to find and rent spaces with confidence.
               </p>
             </div>
           </div>
@@ -141,13 +124,9 @@ const Index = () => {
                   <img src={w1} alt="" />
                 </div>
                 <div className="detail-box">
-                  <h4>No Booking Fees</h4>
+                  <h4>No Booking Fees for Customers</h4>
                   <p>
-                    Voluptatem earum eveniet mollitia sit animi dolorum. Iste,
-                    quas? Omnis error culpa illo nihil consequatur consectetur
-                    tenetur harum modi, quae libero ducimus reiciendis voluptat
-                    excepturi. Cum ducimus nesciunt dicta tenetur ducimus
-                    perferendis.
+                  Enjoy a cost-effective experience with no hidden charges or booking fees. Our platform allows you to rent parking and storage spaces without any extra costs, ensuring transparency and affordability.
                   </p>
                 </div>
               </div>
@@ -160,11 +139,7 @@ const Index = () => {
                 <div className="detail-box">
                   <h4>Online Payments</h4>
                   <p>
-                    Voluptatem earum eveniet mollitia sit animi dolorum. Iste,
-                    quas? Omnis error culpa illo nihil consequatur consectetur
-                    tenetur harum modi, quae libero ducimus reiciendis voluptat
-                    excepturi. Cum ducimus nesciunt dicta tenetur ducimus
-                    perferendis.
+                  Secure and convenient online payment options make transactions smooth and hassle-free. With multiple payment methods supported, you can book your space confidently from anywhere, anytime.
                   </p>
                 </div>
               </div>
@@ -177,11 +152,7 @@ const Index = () => {
                 <div className="detail-box">
                   <h4>Simple Booking Process</h4>
                   <p>
-                    Voluptatem earum eveniet mollitia sit animi dolorum. Iste,
-                    quas? Omnis error culpa illo nihil consequatur consectetur
-                    tenetur harum modi, quae libero ducimus reiciendis voluptat
-                    excepturi. Cum ducimus nesciunt dicta tenetur ducimus
-                    perferendis.
+                  Our streamlined booking process ensures you can find, select, and book a space in just a few clicks. User-friendly navigation and clear instructions make it easy to rent a space, saving you time and effort.
                   </p>
                 </div>
               </div>
@@ -201,37 +172,37 @@ const Index = () => {
             <div className="row">
               <div className="col-md-6 col-lg-4 mx-auto">
                 <div className="box">
-                  <h4 className="price">$10</h4>
+                  <h4 className="price">100₹</h4>
                   <h5 className="name">Basic</h5>
                   <p>
-                    Consequuntur iure, quam vero quidem minima obcaecati veniam,
-                    praesentium impedit quod repudiandae tempora amet deserunt
-                    rerum accusamus. Commodi qui, illum ad ipsa porro ipsum
-                    nostrum magni minus.
+                  Get access to our basic parking plan, which includes a reserved parking spot
+                  for up to 2 hours at any of our participating locations. Enjoy hassle-free
+                  parking with easy booking, real-time availability updates, and secure payments.
+                  Ideal for quick errands or short visits to the city.
                   </p>
                 </div>
               </div>
               <div className="col-md-6 col-lg-4 mx-auto">
                 <div className="box box-center">
-                  <h4 className="price">$30</h4>
+                  <h4 className="price">300₹</h4>
                   <h5 className="name">Premium</h5>
                   <p>
-                    Consequuntur iure, quam vero quidem minima obcaecati veniam,
-                    praesentium impedit quod repudiandae tempora amet deserunt
-                    rerum accusamus. Commodi qui, illum ad ipsa porro ipsum
-                    nostrum magni minus.
+                  Upgrade to our Premium plan and enjoy exclusive benefits such as extended parking
+                  durations, priority access to high-demand spots, and free cancellations. Perfect
+                  for business trips or long city visits, this plan ensures a convenient and stress-free
+                  parking experience with added security and round-the-clock support.
                   </p>
                 </div>
               </div>
               <div className="col-md-6 col-lg-4 mx-auto">
                 <div className="box">
-                  <h4 className="price">$20</h4>
+                  <h4 className="price">500₹</h4>
                   <h5 className="name">Standard</h5>
                   <p>
-                    Consequuntur iure, quam vero quidem minima obcaecati veniam,
-                    praesentium impedit quod repudiandae tempora amet deserunt
-                    rerum accusamus. Commodi qui, illum ad ipsa porro ipsum
-                    nostrum magni minus.
+                  Opt for our Standard plan for enhanced security and extended parking durations of up to 10 days. 
+                  This plan is ideal for longer stays, offering secure parking with 24/7 surveillance, easy access, 
+                  and flexible booking options. Enjoy peace of mind with high security for your vehicle and the convenience 
+                  of parking for your extended needs.
                   </p>
                 </div>
               </div>
