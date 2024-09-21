@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import axios from "axios";
+import { AdminContext } from "../middleware/AdminContext";
 
 const Admins = () => {
+  const { admins, loading } = useContext(AdminContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -32,42 +36,6 @@ const Admins = () => {
     }
   };
 
-  const data = [
-    {
-      id: 1001,
-      col1: "Jay",
-      col2: "jaypurani@gmail.com",
-      col3: <button className="btn btn-danger">Delete</button>,
-      col4: <button className="btn btn-primary">Password</button>,
-    },
-    {
-      id: 1002,
-      col1: "Jay",
-      col2: "jaypurani@gmail.com",
-      col3: <button className="btn btn-danger">Delete</button>,
-      col4: <button className="btn btn-primary">Password</button>,
-    },
-    {
-      id: 1003,
-      col1: "Jay",
-      col2: "jaypurani@gmail.com",
-      col3: <button className="btn btn-danger">Delete</button>,
-      col4: <button className="btn btn-primary">Password</button>,
-    },
-  ];
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
   return (
     <>
       <Header />
@@ -91,71 +59,22 @@ const Admins = () => {
                 <table className="table table-striped table-sm">
                   <thead>
                     <tr>
-                      <th scope="col">ID</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Delete</th>
-                      <th scope="col">Update Password</th>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentItems.map((item) => (
-                      <tr key={item.id}>
-                        <td>{item.id}</td>
-                        <td>{item.col1}</td>
-                        <td>{item.col2}</td>
-                        <td>{item.col3}</td>
-                        <td>{item.col4}</td>
+                    {admins.map((admin) => (
+                      <tr key={admin.id}>
+                        <td>{admin.id}</td>
+                        <td>{admin.name}</td>
+                        <td>{admin.email}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-
-              {/* Pagination controls */}
-              <nav aria-label="Page navigation">
-                <ul className="pagination justify-content-center">
-                  <li
-                    className={`page-item ${
-                      currentPage === 1 ? "disabled" : ""
-                    }`}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => handlePageChange(currentPage - 1)}
-                    >
-                      Previous
-                    </button>
-                  </li>
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <li
-                      key={i + 1}
-                      className={`page-item ${
-                        currentPage === i + 1 ? "active" : ""
-                      }`}
-                    >
-                      <button
-                        className="page-link"
-                        onClick={() => handlePageChange(i + 1)}
-                      >
-                        {i + 1}
-                      </button>
-                    </li>
-                  ))}
-                  <li
-                    className={`page-item ${
-                      currentPage === totalPages ? "disabled" : ""
-                    }`}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => handlePageChange(currentPage + 1)}
-                    >
-                      Next
-                    </button>
-                  </li>
-                </ul>
-              </nav>
             </div>
           </main>
         </div>
@@ -255,6 +174,58 @@ const Admins = () => {
           </div>
         </div>
       </div>
+
+      {/* Admin Delete Modal */}
+      {/* <div
+        className="modal fade"
+        id="adminDeleteModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header bg-danger">
+              <h5 className="modal-title text-white" id="staticBackdropLabel">
+                Delete Admin
+              </h5>
+              <button
+                type="button"
+                className="btn-close bg-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>Are you sure you want to delete the following admin?</p>
+              <p>
+                <strong>Name:</strong> {selectedAdmin.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {selectedAdmin.email}
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="btn btn-danger"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div> */}
     </>
   );
 };

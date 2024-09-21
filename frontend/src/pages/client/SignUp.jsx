@@ -6,6 +6,7 @@ import NavBg from "./img/slider-bg.jpg";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

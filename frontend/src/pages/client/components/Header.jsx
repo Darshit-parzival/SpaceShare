@@ -1,15 +1,34 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../middleware/AuthContext";
+import { UserContext } from "../../middleware/UserContext";
+import axios from "axios";
 
 const Header = () => {
+  const { userName, setUserName } = useContext(UserContext);
   const location = useLocation();
-  const currentPath = location.pathname;
-  const { loggedIn } = useContext(AuthContext);
-  const [userName, setUserName] = useState("");
+  const [currentPath, setCurrentPath] = useState(location.pathname);
+
   useEffect(() => {
-    setUserName(sessionStorage.getItem("userName"));
-  }, []);
+    setCurrentPath(location.pathname);
+
+    const sessionUserName = sessionStorage.getItem("userName");
+    if (sessionUserName && !userName) {
+      setUserName(sessionUserName);
+    }
+  }, [location, userName, setUserName]);
+
+  const logout = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/user/logout");
+      if (response.status === 200) {
+        sessionStorage.removeItem("userName");
+        setUserName("");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
   return (
     <>
       <header className="header_section">
@@ -79,7 +98,7 @@ const Header = () => {
                     Testimonial
                   </Link>
                 </li>
-                {loggedIn === false && (
+                {userName === "" && (
                   <li className="nav-item dropdown">
                     <button
                       className="nav-link dropdown-toggle"
@@ -107,7 +126,8 @@ const Header = () => {
                     </ul>
                   </li>
                 )}
-                {loggedIn === true && (
+
+                {userName !== "" && (
                   <li className="nav-item dropdown">
                     <button
                       className="nav-link dropdown-toggle"
@@ -128,9 +148,9 @@ const Header = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link className="dropdown-item" to="/logout">
+                        <button className="dropdown-item" onClick={logout}>
                           Logout
-                        </Link>
+                        </button>
                       </li>
                     </ul>
                   </li>

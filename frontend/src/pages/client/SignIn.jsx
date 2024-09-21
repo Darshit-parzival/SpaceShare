@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NavBg from "./img/slider-bg.jpg";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../middleware/UserContext";
+
+
 const SignIn = () => {
+  const { setUserName } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -25,7 +29,7 @@ const SignIn = () => {
 
       if (response.status === 200) {
         sessionStorage.setItem("userName", response.data);
-        window.location.reload();
+        setUserName(response.data);
         navigate("/");
       } else alert(response.status);
     } catch (error) {

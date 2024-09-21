@@ -148,15 +148,14 @@ router.post("/logout", (req, res) => {
     .send("User Logged out");
 });
 
-module.exports = router;
 
 router.get("/loggedIn", (req, res) => {
   try {
     const userToken = req.cookies.userToken;
     if (!userToken) return res.send(false);
-
+    
     jwt.verify(userToken, process.env.JWT_KEY);
-
+    
     res.send(true);
   } catch (error) {
     console.error(error);
@@ -164,3 +163,5 @@ router.get("/loggedIn", (req, res) => {
   }
 });
 
+
+module.exports = router;
