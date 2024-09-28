@@ -101,20 +101,20 @@ router.post("/delete", async (req, res) => {
     } else {
       return res.status(400).json({ message: "No Admin ID provided" });
     }
-
   } catch (error) {
     console.error("Error deleting user:", error);
-    res.status(500).json({ message: "An error occurred while deleting the Admin." });
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting the Admin." });
   }
 });
-
 
 // Update User
 router.post("/update", async (req, res) => {
   try {
-    const { userId, updateData } = req.body;
+    const { id, updateData } = req.body;
 
-    if (userId && updateData) {
+    if (id && updateData) {
       const filteredData = await userAuth(
         updateData.name,
         updateData.email,
@@ -122,16 +122,18 @@ router.post("/update", async (req, res) => {
         updateData.confirmPassword
       );
       console.log(filteredData);
-      const result = await Admin.findByIdAndUpdate(userId, filteredData.data, {
+      const result = await Admin.findByIdAndUpdate(id, filteredData.data, {
         new: true,
       });
-      if (!result) return res.status(404).send("User Not Exists");
+      if (!result) return res.status(404).json({ message: "Admin Not Exists" });
 
-      return res.status(200).json(result);
+      return res.status(200).json({ message: "Admin Data Updated..." });
     } else {
-      return res.status(400).send("No user ID or update data provided");
+      return res
+        .status(400)
+        .json({ message: "No user ID or update data provided" });
     }
-    pop;
+
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
@@ -147,15 +149,13 @@ router.post("/logout", (req, res) => {
     .send("User Logged out");
 });
 
-module.exports = router;
-
 router.get("/loggedIn", (req, res) => {
   try {
     const userToken = req.cookies.userToken;
     if (!userToken) return res.send(false);
-
+    
     jwt.verify(userToken, process.env.JWT_KEY);
-
+    
     res.send(true);
   } catch (error) {
     console.error(error);
@@ -172,3 +172,5 @@ router.post("/fetch", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+
+module.exports = router;

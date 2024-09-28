@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiEndpoint = "http://localhost:5000/admin";
 
-const sendData = async (adminData) => {
+const addAdmin = async (adminData) => {
   try {
     const response = await axios.post(apiEndpoint + "/register", adminData);
 
@@ -20,7 +20,7 @@ const sendData = async (adminData) => {
 
 const adminDelete = async (id) => {
   try {
-    const response = await axios.post(apiEndpoint + "/delete", {id});
+    const response = await axios.post(apiEndpoint + "/delete", { id });
 
     if (response.status === 200) {
       return {
@@ -33,4 +33,22 @@ const adminDelete = async (id) => {
   }
 };
 
-export { sendData, adminDelete };
+const adminUpdate = async (id, updateData) => {
+  try {
+    const response = await axios.post(apiEndpoint + "/update", {
+      id,
+      updateData,
+    });
+
+    if (response.status === 200) {
+      return {
+        status: response.status,
+        message: response.data.message,
+      };
+    } else return response.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { addAdmin, adminDelete, adminUpdate };

@@ -44,13 +44,18 @@ const Modal = ({
                     id={field.id}
                     className="form-control"
                     onChange={handleInputChange}
-                    value={formData[field.name] || ""}
+                    value={
+                      field.name === "email"
+                        ? (formData[field.name] || "").toLowerCase()
+                        : formData[field.name] || ""
+                    }
                   />
                   {field.helpText && (
                     <div className="form-text">{field.helpText}</div>
                   )}
                 </div>
               ))}
+
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>

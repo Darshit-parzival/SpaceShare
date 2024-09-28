@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { AdminContext } from "../middleware/AdminContext";
-import { sendData, adminDelete } from "./control/AdminControl";
+import { addAdmin, adminDelete, adminUpdate } from "./control/AdminControl";
 import LoadingScreen from "../../LoadingScreen";
 import Modal from "./components/Modal";
 import Pagination from "./components/Pagination";
@@ -11,7 +11,6 @@ const Admins = () => {
   const { admins, loading, fetchAdmins } = useContext(AdminContext);
   const [res, setRes] = useState({});
   const [toast, setToast] = useState(false);
-  const [selectedAdmin, setSelectedAdmin] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [adminData, setAdminData] = useState({
@@ -20,7 +19,7 @@ const Admins = () => {
     password: "",
     confirmPassword: "",
   });
-  const addAdminInputFields = [
+  const inputFields = [
     { name: "name", type: "text", label: "Name", id: "nameInput" },
     {
       name: "email",
@@ -89,7 +88,7 @@ const Admins = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await sendData(adminData);
+    const response = await addAdmin(adminData);
     setRes(response);
 
     if (response.status === 201) {
@@ -101,6 +100,24 @@ const Admins = () => {
         confirmPassword: "",
       });
       document.querySelector("#addAdminModal .btn-close").click();
+      fetchAdmins();
+    }
+  };
+
+  const handleSubmitUpdate = async (e) => {
+    e.preventDefault();
+    const response = await adminUpdate(adminData._id, adminData);
+    setRes(response);
+
+    if (response.status === 200) {
+      setToast(true);
+      setAdminData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      document.querySelector("#updateAdminModal .btn-close").click();
       fetchAdmins();
     }
   };
@@ -128,7 +145,8 @@ const Admins = () => {
               >
                 <div className="d-flex">
                   <div className="toast-body">
-                    {res.name && '"' + res.name + '"' + res.message}
+                    {res.name && '"' + res.name + '" ' + res.message}
+                    {res.name && !(res.message && res.message)}
                     {res.message && res.message}
                   </div>
                   <button
@@ -171,13 +189,13 @@ const Admins = () => {
                           <button
                             className="btn btn-danger"
                             data-bs-toggle="modal"
-                            data-bs-target="#adminDeleteModal"
+                            data-bs-target="#deleteAdminModal"
                             value={item._id}
                             onClick={(e) => {
                               const admin = admins.find(
                                 (admin) => admin._id === e.target.value
                               );
-                              setSelectedAdmin(admin);
+                              setAdminData(admin);
                             }}
                           >
                             Delete
@@ -186,9 +204,14 @@ const Admins = () => {
                         <td>
                           <button
                             className="btn btn-secondary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#updateAdminModal"
                             value={item._id}
                             onClick={(e) => {
-                              alert(e.target.value);
+                              const admin = admins.find(
+                                (admin) => admin._id === e.target.value
+                              );
+                              setAdminData(admin);
                             }}
                           >
                             Update
@@ -216,13 +239,23 @@ const Admins = () => {
         handleInputChange={handleInputChange}
         handleSubmit={handleSubmit}
         formData={adminData}
-        inputFields={addAdminInputFields}
+        inputFields={inputFields}
+      />
+
+      {/* Admin Update Modal  */}
+      <Modal
+        modalId="updateAdminModal"
+        title="Update Admin"
+        handleInputChange={handleInputChange}
+        handleSubmit={handleSubmitUpdate}
+        formData={adminData}
+        inputFields={inputFields}
       />
 
       {/* Admin Delete Modal */}
       <div
         className="modal fade"
-        id="adminDeleteModal"
+        id="deleteAdminModal"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         tabIndex="-1"
@@ -245,10 +278,10 @@ const Admins = () => {
             <div className="modal-body">
               <p>Are you sure you want to delete the following admin?</p>
               <p>
-                <strong>Name:</strong> {selectedAdmin.name}
+                <strong>Name:</strong> {adminData.name}
               </p>
               <p>
-                <strong>Email:</strong> {selectedAdmin.email}
+                <strong>Email:</strong> {adminData.email}
               </p>
             </div>
             <div className="modal-footer">
@@ -262,11 +295,11 @@ const Admins = () => {
               <button
                 type="button"
                 onClick={async () => {
-                  const response = await adminDelete(selectedAdmin._id);
+                  const response = await adminDelete(adminData._id);
                   setRes(response);
                   setToast(true);
                   document
-                    .querySelector("#adminDeleteModal .btn-close")
+                    .querySelector("#deleteAdminModal .btn-close")
                     .click();
                   fetchAdmins();
                 }}
