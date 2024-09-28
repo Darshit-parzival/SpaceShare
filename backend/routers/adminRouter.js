@@ -88,24 +88,26 @@ router.post("/login", async (req, res) => {
 // Delete User
 router.post("/delete", async (req, res) => {
   try {
-    const { delete: userId } = req.body;
+    const userId = req.body;
 
     if (userId) {
-      const result = await Admin.findByIdAndDelete(userId);
+      const result = await Admin.findByIdAndDelete(userId.id);
 
       if (!result) {
-        return res.status(404).send("Admin Not Exists");
+        return res.status(404).json({ message: "Admin Not Exists" });
       }
 
-      return res.status(200).send("Admin Deleted...");
+      return res.status(200).json({ message: "Admin Deleted..." });
     } else {
-      return res.status(400).send("No Admin ID provided");
+      return res.status(400).json({ message: "No Admin ID provided" });
     }
+
   } catch (error) {
     console.error("Error deleting user:", error);
-    res.status(500).send("An error occurred while deleting the Admin.");
+    res.status(500).json({ message: "An error occurred while deleting the Admin." });
   }
 });
+
 
 // Update User
 router.post("/update", async (req, res) => {

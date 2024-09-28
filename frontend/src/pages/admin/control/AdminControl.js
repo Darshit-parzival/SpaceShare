@@ -18,4 +18,19 @@ const sendData = async (adminData) => {
   }
 };
 
-export default sendData;
+const adminDelete = async (id) => {
+  try {
+    const response = await axios.post(apiEndpoint + "/delete", {id});
+
+    if (response.status === 200) {
+      return {
+        status: response.status,
+        message: response.data.message,
+      };
+    } else return response.status;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { sendData, adminDelete };

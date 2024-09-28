@@ -2,16 +2,16 @@ import { useContext, useState, useEffect } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { AdminContext } from "../middleware/AdminContext";
-import sendData from "./control/AdminControl";
+import { sendData, adminDelete } from "./control/AdminControl";
 import LoadingScreen from "../../LoadingScreen";
-import AddRoleModals from "./components/AddRoleModals";
+import Modal from "./components/Modal";
 import Pagination from "./components/Pagination";
 
 const Admins = () => {
   const { admins, loading, fetchAdmins } = useContext(AdminContext);
   const [res, setRes] = useState({});
   const [toast, setToast] = useState(false);
-  const [selectedAdmin, setSelectedAdmin] = useState({});
+  const [selectedAdmin, setSelectedAdmin] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [adminData, setAdminData] = useState({
@@ -20,6 +20,28 @@ const Admins = () => {
     password: "",
     confirmPassword: "",
   });
+  const addAdminInputFields = [
+    { name: "name", type: "text", label: "Name", id: "nameInput" },
+    {
+      name: "email",
+      type: "email",
+      label: "Email Address",
+      id: "emailInput",
+      helpText: "We'll never share your email with anyone else.",
+    },
+    {
+      name: "password",
+      type: "password",
+      label: "Password",
+      id: "passwordInput",
+    },
+    {
+      name: "confirmPassword",
+      type: "password",
+      label: "Confirm Password",
+      id: "confirmPasswordInput",
+    },
+  ];
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -93,7 +115,9 @@ const Admins = () => {
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <div
                 className={`toast align-items-center text-white ${
-                  res.status === 201 ? "bg-success" : "bg-danger"
+                  res.status === 200 || res.status === 201
+                    ? "bg-success"
+                    : "bg-danger"
                 } border-0 position-fixed bottom-0 end-0 m-3 ${
                   toast ? "show" : "hide"
                 }`}
@@ -104,7 +128,8 @@ const Admins = () => {
               >
                 <div className="d-flex">
                   <div className="toast-body">
-                    {'"' + res.name + '"'} {res.message}
+                    {res.name && '"' + res.name + '"' + res.message}
+                    {res.message && res.message}
                   </div>
                   <button
                     type="button"
@@ -145,6 +170,8 @@ const Admins = () => {
                         <td>
                           <button
                             className="btn btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#adminDeleteModal"
                             value={item._id}
                             onClick={(e) => {
                               const admin = admins.find(
@@ -183,16 +210,17 @@ const Admins = () => {
       </div>
 
       {/* Add Admin Modal  */}
-      <AddRoleModals
+      <Modal
         modalId="addAdminModal"
         title="Add Admin"
         handleInputChange={handleInputChange}
         handleSubmit={handleSubmit}
-        adminData={adminData}
+        formData={adminData}
+        inputFields={addAdminInputFields}
       />
 
       {/* Admin Delete Modal */}
-      {/* <div
+      <div
         className="modal fade"
         id="adminDeleteModal"
         data-bs-backdrop="static"
@@ -233,7 +261,15 @@ const Admins = () => {
               </button>
               <button
                 type="button"
-                onClick={handleDelete}
+                onClick={async () => {
+                  const response = await adminDelete(selectedAdmin._id);
+                  setRes(response);
+                  setToast(true);
+                  document
+                    .querySelector("#adminDeleteModal .btn-close")
+                    .click();
+                  fetchAdmins();
+                }}
                 className="btn btn-danger"
               >
                 Delete
@@ -241,7 +277,7 @@ const Admins = () => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
     </>
   );
 };

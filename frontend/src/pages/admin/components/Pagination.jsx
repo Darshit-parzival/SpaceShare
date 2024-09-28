@@ -1,3 +1,4 @@
+// eslint-disable-next-line react/prop-types
 const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
   return (
     <nav aria-label="Page navigation">
