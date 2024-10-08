@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const IndexAdmin = () => {
+  
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -23,7 +24,6 @@ const IndexAdmin = () => {
 
       if (response.status === 200) {
         sessionStorage.setItem("adminName", response.data);
-        window.location.reload();
         navigate("/admin/home");
       } else alert(response.status);
     } catch (error) {

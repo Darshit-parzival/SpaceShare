@@ -5,7 +5,7 @@ import Urls from "./Urls.jsx";
 import axios from "axios";
 import { AuthContextProvider } from "./pages/middleware/AuthContext";
 import { AdminContextProvider } from "./pages/middleware/AdminContext";
-import { UserProvider } from "./pages/middleware/UserContext";
+import { UserContextProvider } from "./pages/middleware/UserContext";
 
 axios.defaults.withCredentials = true;
 
@@ -14,9 +14,9 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <AuthContextProvider>
         <AdminContextProvider>
-          <UserProvider>
+          <UserContextProvider>
             <Urls />
-          </UserProvider>
+          </UserContextProvider>
         </AdminContextProvider>
       </AuthContextProvider>
     </BrowserRouter>

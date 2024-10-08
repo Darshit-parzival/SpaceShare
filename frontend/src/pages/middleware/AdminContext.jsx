@@ -5,6 +5,7 @@ export const AdminContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const AdminContextProvider = ({ children }) => {
+  const [adminName, setAdminName] = useState(sessionStorage.getItem("adminName") || "");
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +26,7 @@ export const AdminContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AdminContext.Provider value={{ admins, loading, fetchAdmins }}>
+    <AdminContext.Provider value={{ adminName, setAdminName, admins, loading, fetchAdmins }}>
       {children}
     </AdminContext.Provider>
   );

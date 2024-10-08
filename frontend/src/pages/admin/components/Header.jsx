@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-// import '../assets/css/dashboard.css'
-// import '../assets/css/dashboard.rtl.css'
+import { AdminContext } from "../../middleware/AdminContext";
+import { useContext } from "react";
 
 const Header = () => {
+  const { admins } = useContext(AdminContext);
   return (
     
     <header
@@ -24,7 +25,7 @@ const Header = () => {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          Username
+          {admins.length > 0 ? admins[0].name : "Admin"}
         </button>
         <ul className="dropdown-menu drpadmin" aria-labelledby="dropdownMenuButton1">
           <li>

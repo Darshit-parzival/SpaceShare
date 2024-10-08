@@ -5,7 +5,7 @@ import axios from "axios";
 const AuthContext = createContext();
 
 function AuthContextProvider(props) {
-  const [loggedIn, setLoggedIn] = useState(false); // Set default to false
+  const [loggedIn, setLoggedIn] = useState(false);
 
   async function getLoggedIn() {
     try {
@@ -13,12 +13,12 @@ function AuthContextProvider(props) {
       setLoggedIn(loggedInRes.data);
     } catch (error) {
       console.error("Error checking logged-in status:", error);
-      setLoggedIn(false); // Handle error by assuming the user is logged out
+      setLoggedIn(false);
     }
   }
 
   useEffect(() => {
-    getLoggedIn(); // Fetch login status on component mount
+    getLoggedIn();
   }, []);
 
   return (

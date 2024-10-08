@@ -139,6 +139,16 @@ router.post("/update", async (req, res) => {
   }
 });
 
+router.post("/fetch", async (req, res) => {
+  try {
+    const userData = await User.find();
+    res.status(200).json(userData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
+
 router.post("/logout", (req, res) => {
   res
     .cookie("userToken", "", {

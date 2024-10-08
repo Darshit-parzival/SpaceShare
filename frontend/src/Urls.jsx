@@ -13,6 +13,12 @@ import ForgotAdmin from "./pages/admin/ForgotAdmin";
 import HomeAdmin from "./pages/admin/HomeAdmin";
 import Admins from "./pages/admin/Admins";
 import Users from "./pages/admin/Users";
+import ParkingOwner from "./pages/admin/ParkingOwner";
+import ParkingOwnerProfile from "./pages/admin/ParkinOwnerProfile";
+import ParkingOwnerAdd from "./pages/admin/ParkingOwnerAdd";
+import ParkingSpaceReport from "./pages/admin/ParkingSpaceReport";
+import ParkingSpaceGraph from "./pages/admin/ParkingSpaceGraph";
+import Requests from "./pages/admin/Requests";
 
 const Urls = () => {
   const location = useLocation();
@@ -49,6 +55,12 @@ const Urls = () => {
     <Route path="/admin/home" element={<HomeAdmin />} />
     <Route path="/admin/admins" element={<Admins />} />
     <Route path="/admin/users" element={<Users />} />
+    <Route path="/admin/parkingOwner" element={<ParkingOwner />} />
+    <Route path="/admin/parkingOwnerProfile" element={<ParkingOwnerProfile />} />
+    <Route path="/admin/parkingOwnerAdd" element={<ParkingOwnerAdd />} />
+    <Route path="/admin/parkingSpaceReport" element={<ParkingSpaceReport />} />
+    <Route path="/admin/parkingSpaceGraph" element={<ParkingSpaceGraph />} />
+    <Route path="/admin/req" element={<Requests />} />
     </Routes>
   );
 };

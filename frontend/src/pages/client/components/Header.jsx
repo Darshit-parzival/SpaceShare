@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AuthContext } from "../../middleware/AuthContext";
 import { UserContext } from "../../middleware/UserContext";
 import axios from "axios";
 

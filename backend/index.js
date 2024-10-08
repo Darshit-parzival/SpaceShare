@@ -24,3 +24,4 @@ app.listen(PORT, () => {
 
 app.use("/user", require("./routers/userRouter"));
 app.use("/admin", require("./routers/adminRouter"));
+app.use("/park-space", require("./routers/parkSpaceRouter"));

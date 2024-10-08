@@ -1,7 +1,12 @@
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import { useContext } from "react";
+import { AdminContext } from "../middleware/AdminContext";
+import { UserContext } from "../middleware/UserContext";
 
 const HomeAdmin = () => {
+  const { admins } = useContext(AdminContext);
+  const { users } = useContext(UserContext);
   return (
     <>
       <Header />
@@ -20,12 +25,11 @@ const HomeAdmin = () => {
                 >
                   <div className="card-body d-flex justify-content-center align-items-center">
                     <div>
-                      admins
-                      <i className="bi bi-person-circle"></i>
+                      <i className="mb-2 bi bi-person-circle"></i>
                     </div>
                     <div className="ms-2">
-                      <label className="text-muted me-1">Total Admins:</label>
-                      <label>total admin count</label>
+                      <label className="text-muted me-1 fw-bold">Total Admins:</label>
+                      <label>{admins.length}</label>
                     </div>
                   </div>
                 </div>
@@ -37,12 +41,11 @@ const HomeAdmin = () => {
                 >
                   <div className="card-body d-flex justify-content-center align-items-center">
                     <div>
-                      clients
-                      <i className="bi bi-people-fill"></i>
+                      <i className="mb-2 bi bi-people-fill"></i>
                     </div>
                     <div className="ms-2">
-                      <label className="text-muted me-1">Total Fans:</label>
-                      <label>Clients Counts</label>
+                      <label className="text-muted me-1 fw-bold">Total Users:</label>
+                      <label>{users.length}</label>
                     </div>
                   </div>
                 </div>
@@ -51,7 +54,7 @@ const HomeAdmin = () => {
                 <div
                   className="card bg-light"
                   style={{ height: "5rem", borderColor: "black" }}
-                >
+                > 
                   <div className="card-body d-flex justify-content-center align-items-center">
                     <div>
                       Parking space giver
@@ -59,7 +62,7 @@ const HomeAdmin = () => {
                     </div>
                     <div className="ms-2">
                       <label className="text-muted me-1">
-                        Total Comedians:
+                        Total:
                       </label>
                       <label>space giver counts</label>
                     </div>
