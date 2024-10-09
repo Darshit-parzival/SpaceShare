@@ -92,7 +92,6 @@ const ParkingOwnerAdd = () => {
     try {
       const { name, age, contact, email, parkingSpaces } = owner;
 
-      // Step 1: Add the parking owner
       const response = await axios.post(
         "http://localhost:5000/parkingOwner/add",
         {
@@ -103,16 +102,14 @@ const ParkingOwnerAdd = () => {
         }
       );
 
-      // Check if the parking owner was added successfully
       if (response.status === 201) {
         setRes({ status: response.status, data: response.data });
-        const ownerId = response.data.ownerId; // Extract ownerId from the response
+        const ownerId = response.data.ownerId;
 
-        // Step 2: Loop through each parking space and add it
         for (const space of parkingSpaces) {
           const formData = new FormData();
           formData.append("parkingOwner", ownerId);
-          formData.append("parkingPhoto", space.photo); // Ensure photo is added
+          formData.append("parkingPhoto", space.photo);
           formData.append("parkingName", space.name);
           formData.append("parkingAddress", space.address);
           formData.append("parkingCity", space.city);
@@ -120,7 +117,6 @@ const ParkingOwnerAdd = () => {
           formData.append("parkingCountry", space.country);
           formData.append("parkingPincode", space.pincode);
 
-          // Send the parking space data to the backend
           const parkingSpaceResponse = await axios.post(
             "http://localhost:5000/parkingSpace/add",
             formData,
@@ -131,13 +127,19 @@ const ParkingOwnerAdd = () => {
             }
           );
 
-          // Check if the parking space was added successfully
           if (parkingSpaceResponse.status === 201) {
             setRes({
               status: parkingSpaceResponse.status,
               data: parkingSpaceResponse.data,
             });
-            setToast(true); // Show success toast
+            setToast(true);
+            setOwner({
+              name: "",
+              age: "",
+              contact: "",
+              email: "",
+              parkingSpaces: [],
+            });
           } else {
             console.error(
               "Error adding parking space:",
@@ -147,12 +149,12 @@ const ParkingOwnerAdd = () => {
         }
       } else {
         setRes({ status: response.status, data: response.data });
-        setToast(true); // Show error toast
+        setToast(true);
       }
     } catch (error) {
-      console.error(error); // Log the error for debugging
+      console.error(error);
       setRes({ status: 500, message: "Internal Server Error" });
-      setToast(true); // Show error toast
+      setToast(true);
     }
   };
 
@@ -189,7 +191,7 @@ const ParkingOwnerAdd = () => {
               <div className="d-flex">
                 <div className="toast-body">
                   {res.status === 201
-                    ? res.data.message
+                    ? "Parking Owner Created Successfully!"
                     : "Something went wrong. Please try again...! "}
                 </div>
                 <button
