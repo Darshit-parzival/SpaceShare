@@ -18,7 +18,7 @@ router.post("/register", async (req, res) => {
     const authResult = await userAuth(name, email, password, confirmPassword);
 
     // Ensure authResult exists and has a status property
-    if (!authResult || typeof authResult.status === 'undefined') {
+    if (!authResult || typeof authResult.status === "undefined") {
       return res.status(500).send("Unexpected error during authentication.");
     }
 
@@ -28,7 +28,11 @@ router.post("/register", async (req, res) => {
     }
 
     // If authentication is successful, proceed
-    const { name: authName, email: authEmail, password: authPassword } = authResult.data || {};
+    const {
+      name: authName,
+      email: authEmail,
+      password: authPassword,
+    } = authResult.data || {};
 
     const newUser = new User({
       name: authName,
@@ -44,13 +48,11 @@ router.post("/register", async (req, res) => {
       userId: savedUser._id,
       name: savedUser.name,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
   }
 });
-
 
 // Login
 router.post("/login", async (req, res) => {
@@ -92,7 +94,7 @@ router.post("/login", async (req, res) => {
 // Delete User
 router.post("/delete", async (req, res) => {
   try {
-    const { delete: userId } = req.body;
+    const { id: userId } = req.body; // Change 'delete' to 'id'
 
     if (userId) {
       const result = await User.findByIdAndDelete(userId);
@@ -101,7 +103,7 @@ router.post("/delete", async (req, res) => {
         return res.status(404).send("User Not Exists");
       }
 
-      return res.status(200).send("User Deleted...");
+      return res.status(200).json({ message: "User Deleted..." });
     } else {
       return res.status(400).send("No user ID provided");
     }
@@ -158,20 +160,18 @@ router.post("/logout", (req, res) => {
     .send("User Logged out");
 });
 
-
 router.get("/loggedIn", (req, res) => {
   try {
     const userToken = req.cookies.userToken;
     if (!userToken) return res.send(false);
-    
+
     jwt.verify(userToken, process.env.JWT_KEY);
-    
+
     res.send(true);
   } catch (error) {
     console.error(error);
     res.send(false);
   }
 });
-
 
 module.exports = router;

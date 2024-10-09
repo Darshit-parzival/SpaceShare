@@ -1,19 +1,60 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
 const ParkingOwner = require("../models/parkingOwnerModel");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-router.post("/add", async (req, res) => {
+const ownersDir = path.join(__dirname, "../img/owners");
+
+// Ensure the directory exists
+if (!fs.existsSync(ownersDir)) {
+  fs.mkdirSync(ownersDir, { recursive: true });
+}
+
+// Multer setup for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, ownersDir);
+  },
+  filename: (req, file, cb) => {
+    const timestamp = Date.now();
+    const date = new Date(timestamp).toISOString().split("T")[0];
+    const ext = path.extname(file.originalname).toLowerCase(); 
+    cb(null, `${date}_${timestamp}${ext}`);
+  },
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error("Error: File type not supported!")); 
+  },
+});
+
+// Route to add a new parking owner
+router.post("/add", upload.single("ownerPhoto"), async (req, res) => {
   try {
     const { name, age, email, contact } = req.body;
+    const ownerPhoto = req.file ? req.file.filename : null;
 
     if (!name || !age || !email || !contact) {
-      return res.status(400).send("Missing required fields");
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
     const newParkingOwner = new ParkingOwner({
-      name: name,
-      age: age,
-      email: email,
-      contact: contact,
+      ownerName: name,
+      ownerAge: age,
+      ownerEmail: email,
+      ownerContact: contact,
+      ownerPhoto: ownerPhoto,
     });
 
     const savedParkingOwner = await newParkingOwner.save();
@@ -21,11 +62,31 @@ router.post("/add", async (req, res) => {
     return res.status(201).json({
       message: "Parking owner created successfully.",
       ownerId: savedParkingOwner._id,
-      name: savedParkingOwner.name,
+      name: savedParkingOwner.ownerName,
+      ownerPhoto: savedParkingOwner.ownerPhoto,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal server error");
+    console.error("Error adding parking owner:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Route to fetch parking owners
+router.get("/fetch", async (req, res) => {
+  try {
+    const parkingOwners = await ParkingOwner.find();
+
+    const ownersWithPhotos = parkingOwners.map((owner) => ({
+      ...owner.toObject(),
+      ownerPhoto: owner.ownerPhoto
+        ? `${req.protocol}://${req.get("host")}/img/owners/${owner.ownerPhoto}`
+        : null,
+    }));
+
+    return res.status(200).json(ownersWithPhotos);
+  } catch (error) {
+    console.error("Error fetching parking owners:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

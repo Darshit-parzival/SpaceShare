@@ -11,6 +11,7 @@ const ParkingOwnerAdd = () => {
     age: "",
     contact: "",
     email: "",
+    photo: null,
     parkingSpaces: [],
   });
 
@@ -23,6 +24,14 @@ const ParkingOwnerAdd = () => {
     country: "",
     pincode: "",
   });
+
+  const handleOwnerPhotoChange = (e) => {
+    const file = e.target.files[0];
+    setOwner((prevOwner) => ({
+      ...prevOwner,
+      photo: file,
+    }));
+  };
 
   const [editIndex, setEditIndex] = useState(null);
 
@@ -90,15 +99,22 @@ const ParkingOwnerAdd = () => {
     e.preventDefault();
 
     try {
-      const { name, age, contact, email, parkingSpaces } = owner;
+      const formData = new FormData();
+      formData.append("name", owner.name);
+      formData.append("age", owner.age);
+      formData.append("contact", owner.contact);
+      formData.append("email", owner.email);
+      if (owner.photo) {
+        formData.append("ownerPhoto", owner.photo);
+      }
 
       const response = await axios.post(
         "http://localhost:5000/parkingOwner/add",
+        formData,
         {
-          name,
-          age,
-          contact,
-          email,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
@@ -106,20 +122,21 @@ const ParkingOwnerAdd = () => {
         setRes({ status: response.status, data: response.data });
         const ownerId = response.data.ownerId;
 
-        for (const space of parkingSpaces) {
-          const formData = new FormData();
-          formData.append("parkingOwner", ownerId);
-          formData.append("parkingPhoto", space.photo);
-          formData.append("parkingName", space.name);
-          formData.append("parkingAddress", space.address);
-          formData.append("parkingCity", space.city);
-          formData.append("parkingState", space.state);
-          formData.append("parkingCountry", space.country);
-          formData.append("parkingPincode", space.pincode);
+        // Loop through the parkingSpaces array instead of newParkingSpace
+        for (const space of owner.parkingSpaces) {
+          const parkingFormData = new FormData();
+          parkingFormData.append("parkingOwner", ownerId);
+          parkingFormData.append("parkingPhoto", space.photo);
+          parkingFormData.append("parkingName", space.name);
+          parkingFormData.append("parkingAddress", space.address);
+          parkingFormData.append("parkingCity", space.city);
+          parkingFormData.append("parkingState", space.state);
+          parkingFormData.append("parkingCountry", space.country);
+          parkingFormData.append("parkingPincode", space.pincode);
 
           const parkingSpaceResponse = await axios.post(
             "http://localhost:5000/parkingSpace/add",
-            formData,
+            parkingFormData,
             {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -133,13 +150,6 @@ const ParkingOwnerAdd = () => {
               data: parkingSpaceResponse.data,
             });
             setToast(true);
-            setOwner({
-              name: "",
-              age: "",
-              contact: "",
-              email: "",
-              parkingSpaces: [],
-            });
           } else {
             console.error(
               "Error adding parking space:",
@@ -147,6 +157,15 @@ const ParkingOwnerAdd = () => {
             );
           }
         }
+
+        setOwner({
+          name: "",
+          photo: null,
+          age: "",
+          contact: "",
+          email: "",
+          parkingSpaces: [],
+        });
       } else {
         setRes({ status: response.status, data: response.data });
         setToast(true);
@@ -256,6 +275,19 @@ const ParkingOwnerAdd = () => {
                   onChange={handleInputChange}
                 />
               </div>
+              <div className="mb-3">
+                <label htmlFor="ownerPhotoInput" className="form-label">
+                  Owner Photo
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id="ownerPhotoInput"
+                  name="ownerPhoto"
+                  accept="image/*"
+                  onChange={handleOwnerPhotoChange}
+                />
+              </div>
 
               <button
                 type="button"
@@ -272,8 +304,6 @@ const ParkingOwnerAdd = () => {
               <div className="row">
                 {owner.parkingSpaces.map((space, index) => (
                   <div key={index} className="col-md-6 col-lg-4 mb-3">
-                    {" "}
-                    {/* Adjust the column sizes as needed */}
                     <div className="p-3 border rounded w-100">
                       <h5>Parking Space {index + 1}</h5>
                       <p>
@@ -303,6 +333,7 @@ const ParkingOwnerAdd = () => {
                       )}
                       <hr />
                       <button
+                        type="button" // Set to button type
                         className="btn btn-warning me-2"
                         onClick={() => handleEditParkingSpace(index)}
                         data-bs-toggle="modal"
@@ -311,6 +342,7 @@ const ParkingOwnerAdd = () => {
                         Edit
                       </button>
                       <button
+                        type="button" // Set to button type
                         className="btn btn-danger"
                         onClick={() => handleRemoveParkingSpace(index)}
                       >

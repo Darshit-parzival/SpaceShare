@@ -20,7 +20,7 @@ const addUser = async (userData) => {
 
 const userDelete = async (id) => {
   try {
-    const response = await axios.post(apiEndpoint + "/delete", { id });
+    const response = await axios.post(apiEndpoint + "/delete", { id }); // Send id as is
 
     if (response.status === 200) {
       return {
@@ -32,6 +32,7 @@ const userDelete = async (id) => {
     console.error(error);
   }
 };
+
 
 const userUpdate = async (id, updateData) => {
   try {

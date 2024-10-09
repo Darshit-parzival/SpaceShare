@@ -1,46 +1,42 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import { ParkingContext } from "../middleware/ParkingContext";
+import LoadingScreen from "../../LoadingScreen";
 
 const ParkingOwner = () => {
-  
-  const profiles = [
-    {
-      ownerName: "John Doe",
-      totalSpaces: 5,
-      profile: "https://via.placeholder.com/150",
-    },
-    {
-      ownerName: "Jane Smith",
-      totalSpaces: 3,
-      profile: "https://via.placeholder.com/150",
-    },
-    {
-      ownerName: "Michael Johnson",
-      totalSpaces: 4,
-      profile: "https://via.placeholder.com/150",
-    },
-    {
-      ownerName: "Emily Davis",
-      totalSpaces: 6,
-      profile: "https://via.placeholder.com/150",
-    },
-    {
-      ownerName: "William Brown",
-      totalSpaces: 2,
-      profile: "https://via.placeholder.com/150",
-    },
-    {
-      ownerName: "Olivia Wilson",
-      totalSpaces: 8,
-      profile: "https://via.placeholder.com/150",
-    },
-    {
-      ownerName: "Olivia Wilson",
-      totalSpaces: 8,
-      profile: "https://via.placeholder.com/150",
-    },
-  ];
+  const { owners, spaces, loading } = useContext(ParkingContext);
+
+  const ownerSpaceCounts = owners.map((owner) => {
+    const totalSpaces = spaces.filter(
+      (space) => space.parkingOwner === owner._id
+    ).length;
+    console.log(`Owner: ${owner.ownerPhoto}, Total Spaces: ${totalSpaces}`);
+    return {
+      ...owner,
+      totalSpaces,
+    };
+  });
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className="container-fluid">
+          <div className="row">
+            <Sidebar />
+            <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+              <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <LoadingScreen />
+              </div>
+            </main>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
@@ -53,13 +49,13 @@ const ParkingOwner = () => {
               <Link
                 type="button"
                 className="btn btn-primary"
-                to='/admin/parkingOwnerAdd'
+                to="/admin/parkingOwnerAdd"
               >
                 Add Parking Owner
               </Link>
             </div>
             <div className="d-flex flex-wrap justify-content-left">
-              {profiles.map((profileData, index) => (
+              {ownerSpaceCounts.map((profileData) => (
                 <div
                   className="card m-2"
                   style={{
@@ -67,7 +63,7 @@ const ParkingOwner = () => {
                     transition: "transform 0.2s",
                     cursor: "pointer",
                   }}
-                  key={index}
+                  key={profileData._id}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.transform = "scale(1.05)")
                   }
@@ -76,9 +72,9 @@ const ParkingOwner = () => {
                   }
                 >
                   <img
-                    src={profileData.profile}
+                    src={profileData.ownerPhoto || "/path/to/default/image.jpg"} // Default image if none exists
                     className="card-img-top"
-                    alt="..."
+                    alt={`${profileData.ownerName}'s photo`}
                   />
                   <div className="card-body">
                     <h5 className="card-title">{profileData.ownerName}</h5>

@@ -6,6 +6,7 @@ import axios from "axios";
 import { AuthContextProvider } from "./pages/middleware/AuthContext";
 import { AdminContextProvider } from "./pages/middleware/AdminContext";
 import { UserContextProvider } from "./pages/middleware/UserContext";
+import { ParkingContextProvider } from "./pages/middleware/ParkingContext.jsx";
 
 axios.defaults.withCredentials = true;
 
@@ -15,7 +16,9 @@ createRoot(document.getElementById("root")).render(
       <AuthContextProvider>
         <AdminContextProvider>
           <UserContextProvider>
-            <Urls />
+            <ParkingContextProvider>
+              <Urls />
+            </ParkingContextProvider>
           </UserContextProvider>
         </AdminContextProvider>
       </AuthContextProvider>

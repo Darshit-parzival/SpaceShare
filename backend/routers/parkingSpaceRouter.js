@@ -4,6 +4,8 @@ const ParkingSpace = require("../models/parkingSpacesModel");
 const multer = require("multer");
 const path = require("path");
 
+router.use("/img", express.static(path.join(__dirname, "../img")));
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "../img/parkings"));
@@ -11,7 +13,8 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const timestamp = Date.now();
     const date = new Date(timestamp).toISOString().split("T")[0];
-    cb(null, `${date}_${timestamp}.jpg`);
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, `${date}_${timestamp}${ext}`);
   },
 });
 
@@ -69,7 +72,23 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
     await newParkingSpace.save();
     res.status(201).send("Parking space added successfully");
   } catch (error) {
-    console.error(error);
+    console.error("Error adding parking space:", error); 
+    res.status(500).send("Internal server error");
+  }
+});
+
+router.post("/fetch", async (req, res) => {
+  try {
+    const parkingSpaces = await ParkingSpace.find().populate("parkingOwner");
+
+    const spacesWithPhotos = parkingSpaces.map((space) => ({
+      ...space.toObject(),
+      parkingPhoto: `${req.protocol}://${req.get("host")}/img/parkings/${space.parkingPhoto}`,
+    }));
+
+    res.status(200).json(spacesWithPhotos);
+  } catch (error) {
+    console.error("Error fetching parking spaces:", error);
     res.status(500).send("Internal server error");
   }
 });
