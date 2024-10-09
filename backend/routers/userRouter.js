@@ -94,7 +94,7 @@ router.post("/login", async (req, res) => {
 // Delete User
 router.post("/delete", async (req, res) => {
   try {
-    const { id: userId } = req.body; // Change 'delete' to 'id'
+    const { id: userId } = req.body;
 
     if (userId) {
       const result = await User.findByIdAndDelete(userId);
