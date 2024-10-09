@@ -4,22 +4,22 @@ const ParkingSpace = require("../models/parkingSpacesModel");
 const multer = require("multer");
 const path = require("path");
 
-// Configure multer for file storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../img/parkings")); // Use path.join for better path handling
+    cb(null, path.join(__dirname, "../img/parkings"));
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
+    const timestamp = Date.now();
+    const date = new Date(timestamp).toISOString().split("T")[0];
+    cb(null, `${date}_${timestamp}.jpg`);
   },
 });
 
 const upload = multer({ storage });
 
-// Route to add a parking space
 router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
   try {
-    const parkingPhoto = req.file ? req.file.path : null; // Store the photo path
+    const parkingPhoto = req.file ? req.file.filename : null;
 
     const {
       parkingOwner,
@@ -31,7 +31,6 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
       parkingPincode,
     } = req.body;
 
-    // Log the incoming data for debugging
     console.log({
       parkingOwner,
       parkingName,
@@ -43,7 +42,6 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
       parkingPincode,
     });
 
-    // Check for missing required fields
     if (
       !parkingOwner ||
       !parkingName ||
@@ -57,7 +55,6 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
       return res.status(400).send("Missing required fields");
     }
 
-    // Create and save the new parking space
     const newParkingSpace = new ParkingSpace({
       parkingOwner,
       parkingName,
@@ -72,7 +69,7 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
     await newParkingSpace.save();
     res.status(201).send("Parking space added successfully");
   } catch (error) {
-    console.error(error); // Log the error for debugging
+    console.error(error);
     res.status(500).send("Internal server error");
   }
 });
