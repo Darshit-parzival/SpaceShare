@@ -116,22 +116,23 @@ router.post("/delete", async (req, res) => {
 // Update User
 router.post("/update", async (req, res) => {
   try {
-    const { userId, updateData } = req.body;
+    const { id, updateData } = req.body; // Matching 'id' instead of 'userId'
 
-    if (userId && updateData) {
+    if (id && updateData) {
       const filteredData = await userAuth(
         updateData.name,
         updateData.email,
         updateData.password,
         updateData.confirmPassword
       );
-      console.log(filteredData);
-      const result = await User.findByIdAndUpdate(userId, filteredData.data, {
+
+      const result = await User.findByIdAndUpdate(id, filteredData.data, {
         new: true,
       });
+
       if (!result) return res.status(404).send("User Not Exists");
 
-      return res.status(200).json(result);
+      return res.status(200).json({ message: "User updated successfully", data: result });
     } else {
       return res.status(400).send("No user ID or update data provided");
     }
@@ -140,6 +141,7 @@ router.post("/update", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+
 
 router.post("/fetch", async (req, res) => {
   try {

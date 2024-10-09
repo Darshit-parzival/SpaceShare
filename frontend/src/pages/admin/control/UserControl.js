@@ -41,15 +41,19 @@ const userUpdate = async (id, updateData) => {
       updateData,
     });
 
-    if (response.status === 200) {
-      return {
-        status: response.status,
-        message: response.data.message,
-      };
-    } else return response.status;
+    return {
+      status: response.status,
+      message: response.data.message || 'Update successful',
+      data: response.data
+    };
   } catch (error) {
     console.error(error);
+    return {
+      status: error.response?.status || 500,
+      message: error.response?.data || 'Internal server error',
+    };
   }
 };
+
 
 export { addUser, userDelete, userUpdate };
