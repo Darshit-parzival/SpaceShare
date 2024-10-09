@@ -5,7 +5,9 @@ export const UserContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const UserContextProvider = ({ children }) => {
-  const [userName, setUserName] = useState(sessionStorage.getItem("userName") || "");
+  const [userName, setUserName] = useState(
+    sessionStorage.getItem("userName") || ""
+  );
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +28,9 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ userName, setUserName, users, loading, fetchUsers }}>
+    <UserContext.Provider
+      value={{ userName, setUserName, users, loading, fetchUsers }}
+    >
       {children}
     </UserContext.Provider>
   );

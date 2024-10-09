@@ -22,46 +22,67 @@ import Requests from "./pages/admin/Requests";
 
 const Urls = () => {
   const location = useLocation();
-  const { loggedIn } = useContext(AuthContext);
+  const { loggedIn, adminLoggedIn, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (
-      loggedIn &&
-      (location.pathname === "/signin" || location.pathname === "/signup")
-    ) {
-      navigate("/");
+    if (!loading) {
+      if (!adminLoggedIn && location.pathname.startsWith("/admin")) {
+        navigate("/admin");
+      } else if (
+        loggedIn &&
+        (location.pathname === "/signin" || location.pathname === "/signup")
+      ) {
+        navigate("/");
+      }
     }
-  }, [loggedIn, location.pathname, navigate]);
+  }, [loggedIn, adminLoggedIn, location.pathname, navigate, loading]);
 
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<Index />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/price" element={<Price />} />
-      <Route path="/why" element={<Why />} />
-      <Route path="/testimonial" element={<Testimonial />} />
-      {loggedIn === false && (
-        <>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/forgot" element={<SignIn />} />
-          {/* <Route path="/logout" element={<Logout />} /> */}
-        </>
-      )}
-      <Route path="/admin" element={<IndexAdmin />} />
-    <Route path="/admin/forget" element={<ForgotAdmin />} />
-    <Route path="/admin/home" element={<HomeAdmin />} />
-    <Route path="/admin/admins" element={<Admins />} />
-    <Route path="/admin/users" element={<Users />} />
-    <Route path="/admin/parkingOwner" element={<ParkingOwner />} />
-    <Route path="/admin/parkingOwnerProfile" element={<ParkingOwnerProfile />} />
-    <Route path="/admin/parkingOwnerAdd" element={<ParkingOwnerAdd />} />
-    <Route path="/admin/parkingSpaceReport" element={<ParkingSpaceReport />} />
-    <Route path="/admin/parkingSpaceGraph" element={<ParkingSpaceGraph />} />
-    <Route path="/admin/req" element={<Requests />} />
-    </Routes>
+    !loading && (
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<Index />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/price" element={<Price />} />
+        <Route path="/why" element={<Why />} />
+        <Route path="/testimonial" element={<Testimonial />} />
+        {loggedIn === false && (
+          <>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/forgot" element={<SignIn />} />
+          </>
+        )}
+        <Route path="/admin" element={<IndexAdmin />} />
+        {adminLoggedIn && (
+          <>
+            <Route path="/admin/forget" element={<ForgotAdmin />} />
+            <Route path="/admin/home" element={<HomeAdmin />} />
+            <Route path="/admin/admins" element={<Admins />} />
+            <Route path="/admin/users" element={<Users />} />
+            <Route path="/admin/parkingOwner" element={<ParkingOwner />} />
+            <Route
+              path="/admin/parkingOwnerProfile"
+              element={<ParkingOwnerProfile />}
+            />
+            <Route
+              path="/admin/parkingOwnerAdd"
+              element={<ParkingOwnerAdd />}
+            />
+            <Route
+              path="/admin/parkingSpaceReport"
+              element={<ParkingSpaceReport />}
+            />
+            <Route
+              path="/admin/parkingSpaceGraph"
+              element={<ParkingSpaceGraph />}
+            />
+            <Route path="/admin/req" element={<Requests />} />
+          </>
+        )}
+      </Routes>
+    )
   );
 };
 

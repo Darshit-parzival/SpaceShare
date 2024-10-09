@@ -1,11 +1,24 @@
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { AdminContext } from "../../middleware/AdminContext";
 import { useContext } from "react";
 
 const Header = () => {
-  const { admins } = useContext(AdminContext);
+  const { setAdminName } = useContext(AdminContext);
+  const adminName = sessionStorage.getItem("adminName");
+  const logout = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/admin/logout");
+      if (response.status === 200) {
+        sessionStorage.removeItem("adminName");
+        setAdminName("");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
   return (
-    
     <header
       className="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow"
       data-bs-theme="dark"
@@ -25,13 +38,16 @@ const Header = () => {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          {admins.length > 0 ? admins[0].name : "Admin"}
+          {adminName}
         </button>
-        <ul className="dropdown-menu drpadmin" aria-labelledby="dropdownMenuButton1">
+        <ul
+          className="dropdown-menu drpadmin"
+          aria-labelledby="dropdownMenuButton1"
+        >
           <li>
-            <Link className="dropdown-item drpitem" to="/admin/logout">
+            <button className="dropdown-item drpitem" onClick={logout}>
               Logout
-            </Link>
+            </button>
           </li>
         </ul>
       </div>

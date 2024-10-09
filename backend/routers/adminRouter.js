@@ -146,15 +146,15 @@ router.post("/logout", (req, res) => {
       httpOnly: true,
       expires: new Date(0),
     })
-    .send("User Logged out");
+    .send("Admin Logged out");
 });
 
 router.get("/loggedIn", (req, res) => {
   try {
-    const userToken = req.cookies.userToken;
-    if (!userToken) return res.send(false);
+    const AdminToken = req.cookies.AdminToken;
+    if (!AdminToken) return res.send(false);
     
-    jwt.verify(userToken, process.env.JWT_KEY);
+    jwt.verify(AdminToken, process.env.JWT_KEY);
     
     res.send(true);
   } catch (error) {

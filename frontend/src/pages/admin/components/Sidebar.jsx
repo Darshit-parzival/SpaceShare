@@ -66,7 +66,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/parkingOwner">
+              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/parkingSpaceReport">
               <i className="bi bi-file-earmark-bar-graph-fill"></i>
                 Parking Space Reports
               </Link>
@@ -75,6 +75,12 @@ const Sidebar = () => {
               <Link className="nav-link d-flex align-items-center gap-2" to="/admin/req">
               <i className="bi bi-file-earmark-arrow-down-fill"></i>
                 Requests
+              </Link> 
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/req">
+              <i className="bi bi-person-fill-up"></i>
+                User Messages
               </Link> 
             </li>
           </ul>

@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import axios from "axios";
 
 const ParkingOwnerAdd = () => {
+  const [toast, setToast] = useState(false);
+  const [res, setRes] = useState({});
   const [owner, setOwner] = useState({
     name: "",
     age: "",
@@ -48,21 +51,18 @@ const ParkingOwnerAdd = () => {
     formData.append("pincode", newParkingSpace.pincode);
 
     if (editIndex !== null) {
-      // Edit existing parking space
       const updatedParkingSpaces = owner.parkingSpaces.map((space, index) =>
         index === editIndex ? newParkingSpace : space
       );
       setOwner((prev) => ({ ...prev, parkingSpaces: updatedParkingSpaces }));
       setEditIndex(null);
     } else {
-      // Add new parking space
       setOwner((prev) => ({
         ...prev,
         parkingSpaces: [...prev.parkingSpaces, newParkingSpace],
       }));
     }
 
-    // Reset the newParkingSpace state
     setNewParkingSpace({
       photo: null,
       name: "",
@@ -86,11 +86,84 @@ const ParkingOwnerAdd = () => {
     setOwner((prev) => ({ ...prev, parkingSpaces: updatedParkingSpaces }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Owner Data:", owner);
+
+    try {
+      const { name, age, contact, email, parkingSpaces } = owner;
+
+      // Step 1: Add the parking owner
+      const response = await axios.post(
+        "http://localhost:5000/parkingOwner/add",
+        {
+          name,
+          age,
+          contact,
+          email,
+        }
+      );
+
+      // Check if the parking owner was added successfully
+      if (response.status === 201) {
+        setRes({ status: response.status, data: response.data });
+        const ownerId = response.data.ownerId; // Extract ownerId from the response
+
+        // Step 2: Loop through each parking space and add it
+        for (const space of parkingSpaces) {
+          const formData = new FormData();
+          formData.append("parkingOwner", ownerId);
+          formData.append("parkingPhoto", space.photo); // Ensure photo is added
+          formData.append("parkingName", space.name);
+          formData.append("parkingAddress", space.address);
+          formData.append("parkingCity", space.city);
+          formData.append("parkingState", space.state);
+          formData.append("parkingCountry", space.country);
+          formData.append("parkingPincode", space.pincode);
+
+          // Send the parking space data to the backend
+          const parkingSpaceResponse = await axios.post(
+            "http://localhost:5000/parkingSpace/add",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+
+          // Check if the parking space was added successfully
+          if (parkingSpaceResponse.status === 201) {
+            setRes({
+              status: parkingSpaceResponse.status,
+              data: parkingSpaceResponse.data,
+            });
+            setToast(true); // Show success toast
+          } else {
+            console.error(
+              "Error adding parking space:",
+              parkingSpaceResponse.data
+            );
+          }
+        }
+      } else {
+        setRes({ status: response.status, data: response.data });
+        setToast(true); // Show error toast
+      }
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      setRes({ status: 500, message: "Internal Server Error" });
+      setToast(true); // Show error toast
+    }
   };
 
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => {
+        setToast(false);
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
   return (
     <>
       <Header />
@@ -100,6 +173,32 @@ const ParkingOwnerAdd = () => {
           <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <h1 className="h2">Add Parking Space Owner</h1>
+            </div>
+
+            <div
+              className={`toast align-items-center text-white ${
+                res.status === 201 ? "bg-success" : "bg-danger"
+              } border-0 position-fixed bottom-0 end-0 m-3 ${
+                toast ? "show" : "hide"
+              }`}
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+              style={{ minWidth: "300px" }}
+            >
+              <div className="d-flex">
+                <div className="toast-body">
+                  {res.status === 201
+                    ? res.data.message
+                    : "Something went wrong. Please try again...! "}
+                </div>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white me-2 m-auto"
+                  aria-label="Close"
+                  onClick={() => setToast(false)}
+                ></button>
+              </div>
             </div>
 
             <form onSubmit={handleSubmit}>

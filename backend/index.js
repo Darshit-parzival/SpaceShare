@@ -14,7 +14,6 @@ app.use(
   cors({
     origin: ["http://localhost:5173"],
     credentials: true,
-    
   })
 );
 
@@ -24,4 +23,5 @@ app.listen(PORT, () => {
 
 app.use("/user", require("./routers/userRouter"));
 app.use("/admin", require("./routers/adminRouter"));
-app.use("/park-space", require("./routers/parkSpaceRouter"));
+app.use("/parkingOwner", require("./routers/parkingOwnerRouter"));
+app.use("/parkingSpace", require("./routers/parkingSpaceRouter"));

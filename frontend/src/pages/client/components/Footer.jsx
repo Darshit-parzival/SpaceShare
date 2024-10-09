@@ -9,8 +9,10 @@ const Footer = () => {
                 <div className="info_form">
                   <h4>Stay Connected</h4>
                   <form action="">
+                    <input type="text" placeholder="Enter Your Name" />
                     <input type="text" placeholder="Enter Your Email" />
-                    <button type="submit">Subscribe</button>
+                    <textarea type="text" className="mb-1" placeholder="Enter Your Message"></textarea>
+                    <button type="submit">Submit</button>
                   </form>
                   <div className="social_box">
                     <a href="">
@@ -46,7 +48,7 @@ const Footer = () => {
               </div>
               <div className="col-md-6 col-lg-3 info_col">
                 <h4>Contact us</h4>
-                <p>"Reach out to us anytime for assistance, inquiries, or feedback—we're here to help!"</p>
+                <p>&quot;Reach out to us anytime for assistance, inquiries, or feedback—we&apos;re here to help!&quot;</p>
                 <div className="contact_nav">
                   <a href="">
                     <i className="fa fa-map-marker" aria-hidden="true"></i>
