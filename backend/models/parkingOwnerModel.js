@@ -6,6 +6,7 @@ const parkingOwnerSchema = new mongoose.Schema({
   ownerAge: { type: Number, required: true },
   ownerEmail: { type: String, required: true, unique: true },
   ownerContact: { type: String, required: true },
+  approved: { type: Boolean, required: false, default: false },
 });
 
 const ParkingOwner = mongoose.model("ParkingOwner", parkingOwnerSchema);

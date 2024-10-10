@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
 
-const Schema = new mongoose.Schema({
-  ownerName: { type: String, required: true },
-  ownerPhoto: { type: String, required: true },
-  ownerAge: { type: Number, required: true },
-  ownerEmail: { type: String, required: true, unique: true },
-  ownerContact: { type: String, required: true },
+const userBookingSchema = new mongoose.Schema({
+  userId: { type: String, required: true },
+  parkingId: { type: String, required: true },
+  isPaid: { type: Number, required: true },
 });
 
-const ParkingOwner = mongoose.model("ParkingOwner", parkingOwnerSchema);
+const UserBooking = mongoose.model("UserBooking", userBookingSchema);
 
-module.exports = ParkingOwner;
+module.exports = UserBooking;

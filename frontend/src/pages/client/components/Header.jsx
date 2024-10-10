@@ -107,7 +107,7 @@ const Header = () => {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      Sign Up/Sign In
+                      Others
                     </button>
                     <ul
                       className="dropdown-menu"
@@ -121,6 +121,11 @@ const Header = () => {
                       <li>
                         <Link className="dropdown-item" to="/signin">
                           Sign In
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" to="/owner">
+                          Become Owner
                         </Link>
                       </li>
                     </ul>
