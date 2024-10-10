@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import axios from "axios";
+import { ParkingContext } from "../middleware/ParkingContext";
 
 const ParkingOwnerAdd = () => {
+  const { fetchOwnersAndSpaces } = useContext(ParkingContext);
   const [toast, setToast] = useState(false);
   const [res, setRes] = useState({});
   const [owner, setOwner] = useState({
@@ -23,6 +25,7 @@ const ParkingOwnerAdd = () => {
     state: "",
     country: "",
     pincode: "",
+    price: "",
   });
 
   const handleOwnerPhotoChange = (e) => {
@@ -58,6 +61,7 @@ const ParkingOwnerAdd = () => {
     formData.append("state", newParkingSpace.state);
     formData.append("country", newParkingSpace.country);
     formData.append("pincode", newParkingSpace.pincode);
+    formData.append("price", newParkingSpace.price);
 
     if (editIndex !== null) {
       const updatedParkingSpaces = owner.parkingSpaces.map((space, index) =>
@@ -80,6 +84,7 @@ const ParkingOwnerAdd = () => {
       state: "",
       country: "",
       pincode: "",
+      price: "",
     });
   };
 
@@ -122,7 +127,6 @@ const ParkingOwnerAdd = () => {
         setRes({ status: response.status, data: response.data });
         const ownerId = response.data.ownerId;
 
-        // Loop through the parkingSpaces array instead of newParkingSpace
         for (const space of owner.parkingSpaces) {
           const parkingFormData = new FormData();
           parkingFormData.append("parkingOwner", ownerId);
@@ -133,6 +137,7 @@ const ParkingOwnerAdd = () => {
           parkingFormData.append("parkingState", space.state);
           parkingFormData.append("parkingCountry", space.country);
           parkingFormData.append("parkingPincode", space.pincode);
+          parkingFormData.append("parkingPrice", space.price);
 
           const parkingSpaceResponse = await axios.post(
             "http://localhost:5000/parkingSpace/add",
@@ -150,6 +155,7 @@ const ParkingOwnerAdd = () => {
               data: parkingSpaceResponse.data,
             });
             setToast(true);
+            fetchOwnersAndSpaces();
           } else {
             console.error(
               "Error adding parking space:",
@@ -333,7 +339,7 @@ const ParkingOwnerAdd = () => {
                       )}
                       <hr />
                       <button
-                        type="button" // Set to button type
+                        type="button"
                         className="btn btn-warning me-2"
                         onClick={() => handleEditParkingSpace(index)}
                         data-bs-toggle="modal"
@@ -342,7 +348,7 @@ const ParkingOwnerAdd = () => {
                         Edit
                       </button>
                       <button
-                        type="button" // Set to button type
+                        type="button"
                         className="btn btn-danger"
                         onClick={() => handleRemoveParkingSpace(index)}
                       >
@@ -455,6 +461,19 @@ const ParkingOwnerAdd = () => {
                         id="countryInput"
                         name="country"
                         value={newParkingSpace.country}
+                        onChange={handleParkingSpaceChange}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="priceInput" className="form-label">
+                        Price
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="priceInput"
+                        name="price"
+                        value={newParkingSpace.price}
                         onChange={handleParkingSpaceChange}
                       />
                     </div>

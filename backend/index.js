@@ -19,16 +19,13 @@ app.use(
   })
 );
 
-// Serve static files from the "img" directory
-app.use("/img", express.static(path.join(__dirname, "img"))); // Add this line to serve images
+app.use("/img", express.static(path.join(__dirname, "img"))); 
 
-// Define your routes
 app.use("/user", require("./routers/userRouter"));
 app.use("/admin", require("./routers/adminRouter"));
 app.use("/parkingOwner", require("./routers/parkingOwnerRouter"));
 app.use("/parkingSpace", require("./routers/parkingSpaceRouter"));
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}/`);
 });

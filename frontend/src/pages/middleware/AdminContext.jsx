@@ -14,7 +14,7 @@ export const AdminContextProvider = ({ children }) => {
   const fetchAdmins = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/admin/fetch");
+      const response = await axios.get("http://localhost:5000/admin/fetch");
       setAdmins(response.data);
     } catch (error) {
       console.error("Error fetching admin data:", error);

@@ -7,12 +7,10 @@ const fs = require("fs");
 
 const ownersDir = path.join(__dirname, "../img/owners");
 
-// Ensure the directory exists
 if (!fs.existsSync(ownersDir)) {
   fs.mkdirSync(ownersDir, { recursive: true });
 }
 
-// Multer setup for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, ownersDir);
@@ -39,7 +37,7 @@ const upload = multer({
   },
 });
 
-// Route to add a new parking owner
+
 router.post("/add", upload.single("ownerPhoto"), async (req, res) => {
   try {
     const { name, age, email, contact } = req.body;
@@ -71,7 +69,7 @@ router.post("/add", upload.single("ownerPhoto"), async (req, res) => {
   }
 });
 
-// Route to fetch parking owners
+
 router.get("/fetch", async (req, res) => {
   try {
     const parkingOwners = await ParkingOwner.find();
@@ -89,5 +87,63 @@ router.get("/fetch", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+
+router.patch("/edit", upload.single("ownerPhoto"), async (req, res) => {
+  try {
+    const { id, name, age, email, contact } = req.body;
+
+    
+    let parkingOwner = await ParkingOwner.findById(id);
+    if (!parkingOwner) {
+      return res.status(404).json({ message: "Parking owner not found" });
+    }
+
+    parkingOwner.ownerName = name || parkingOwner.ownerName;
+    parkingOwner.ownerEmail = email || parkingOwner.ownerEmail;
+    parkingOwner.ownerAge = age || parkingOwner.ownerAge;
+    parkingOwner.ownerContact = contact || parkingOwner.ownerContact;
+
+    if (req.file) {
+      
+      if (parkingOwner.ownerPhoto) {
+        const oldPhotoPath = path.join(ownersDir, parkingOwner.ownerPhoto);
+        if (fs.existsSync(oldPhotoPath)) {
+          fs.unlinkSync(oldPhotoPath);
+        }
+      }
+      parkingOwner.ownerPhoto = req.file.filename;
+    }
+
+    const updatedParkingOwner = await parkingOwner.save();
+
+    return res.status(200).json({
+      message: "Parking owner updated successfully.",
+      ownerId: updatedParkingOwner._id,
+      name: updatedParkingOwner.ownerName,
+    });
+  } catch (error) {
+    console.error("Error editing parking owner:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.delete("/delete/:id", async (req, res) => {
+    try {
+      const ownerId = req.params.id;
+
+      const deletedOwner = await ParkingOwner.findByIdAndDelete(ownerId);
+  
+      if (!deletedOwner) {
+        return res.status(404).json({ message: "Parking owner not found." });
+      }
+  
+      res.status(200).json({ message: "Parking owner deleted successfully." });
+    } catch (error) {
+      console.error("Error deleting parking owner:", error);
+      res.status(500).json({ message: "An error occurred while deleting the parking owner." });
+    }
+  });
+  
 
 module.exports = router;

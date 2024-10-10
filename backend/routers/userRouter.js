@@ -81,7 +81,7 @@ router.post("/login", async (req, res) => {
         .cookie("userToken", userToken, {
           httpOnly: true,
         })
-        .send(existingUser.name);
+        .json({ userName: existingUser.name, userId: existingUser._id });
     } else {
       return res.status(400).send("User not found...");
     }
@@ -132,7 +132,9 @@ router.post("/update", async (req, res) => {
 
       if (!result) return res.status(404).send("User Not Exists");
 
-      return res.status(200).json({ message: "User updated successfully", data: result });
+      return res
+        .status(200)
+        .json({ message: "User updated successfully", data: result });
     } else {
       return res.status(400).send("No user ID or update data provided");
     }
@@ -142,8 +144,7 @@ router.post("/update", async (req, res) => {
   }
 });
 
-
-router.post("/fetch", async (req, res) => {
+router.get("/fetch", async (req, res) => {
   try {
     const userData = await User.find();
     res.status(200).json(userData);

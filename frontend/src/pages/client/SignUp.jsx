@@ -68,7 +68,7 @@ const SignUp = () => {
               className="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.toLowerCase())}
               value={email}
             />
             <div id="emailHelp" className="form-text">

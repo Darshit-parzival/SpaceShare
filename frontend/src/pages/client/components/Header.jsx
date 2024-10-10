@@ -22,6 +22,7 @@ const Header = () => {
       const response = await axios.post("http://localhost:5000/user/logout");
       if (response.status === 200) {
         sessionStorage.removeItem("userName");
+        sessionStorage.removeItem("userId");
         setUserName("");
       }
     } catch (error) {

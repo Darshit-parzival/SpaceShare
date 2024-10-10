@@ -163,7 +163,7 @@ router.get("/loggedIn", (req, res) => {
   }
 });
 
-router.post("/fetch", async (req, res) => {
+router.get("/fetch", async (req, res) => {
   try {
     const adminData = await Admin.find();
     res.status(200).json(adminData);

@@ -8,20 +8,24 @@ export const ParkingContextProvider = ({ children }) => {
   const [owners, setOwners] = useState([]);
   const [spaces, setSpaces] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // State to hold error messages
+  const [error, setError] = useState(null);
 
   const fetchOwnersAndSpaces = async () => {
     setLoading(true);
-    setError(null); // Reset error state before fetch
+    setError(null);
     try {
-      const ownersResponse = await axios.get("http://localhost:5000/parkingOwner/fetch");
-      const spacesResponse = await axios.post("http://localhost:5000/parkingSpace/fetch");
-      
+      const ownersResponse = await axios.get(
+        "http://localhost:5000/parkingOwner/fetch"
+      );
+      const spacesResponse = await axios.get(
+        "http://localhost:5000/parkingSpace/fetch"
+      );
+
       setOwners(ownersResponse.data);
       setSpaces(spacesResponse.data);
     } catch (error) {
       console.error("Error fetching parking data:", error);
-      setError("Failed to fetch parking data. Please try again later."); // Set error message
+      setError("Failed to fetch parking data. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -32,7 +36,9 @@ export const ParkingContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <ParkingContext.Provider value={{ owners, spaces, loading, fetchOwnersAndSpaces, error }}>
+    <ParkingContext.Provider
+      value={{ owners, spaces, loading, fetchOwnersAndSpaces, error }}
+    >
       {children}
     </ParkingContext.Provider>
   );

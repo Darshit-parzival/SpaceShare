@@ -32,28 +32,31 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
       parkingState,
       parkingCountry,
       parkingPincode,
+      parkingPrice,
     } = req.body;
-
+    
     console.log({
-      parkingOwner,
-      parkingName,
-      parkingPhoto,
-      parkingAddress,
-      parkingCity,
-      parkingState,
-      parkingCountry,
-      parkingPincode,
+        parkingOwner,
+        parkingName,
+        parkingPhoto,
+        parkingAddress,
+        parkingCity,
+        parkingState,
+        parkingCountry,
+        parkingPincode,
+        parkingPrice,
     });
-
+    
     if (
-      !parkingOwner ||
-      !parkingName ||
-      !parkingPhoto ||
-      !parkingAddress ||
-      !parkingCity ||
-      !parkingState ||
-      !parkingCountry ||
-      !parkingPincode
+        !parkingOwner ||
+        !parkingName ||
+        !parkingPhoto ||
+        !parkingAddress ||
+        !parkingCity ||
+        !parkingState ||
+        !parkingCountry ||
+        !parkingPincode||
+        !parkingPrice
     ) {
       return res.status(400).send("Missing required fields");
     }
@@ -67,6 +70,7 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
       parkingState,
       parkingCountry,
       parkingPincode,
+      parkingPrice,
     });
 
     await newParkingSpace.save();
@@ -77,7 +81,7 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
   }
 });
 
-router.post("/fetch", async (req, res) => {
+router.get("/fetch", async (req, res) => {
   try {
     const parkingSpaces = await ParkingSpace.find().populate("parkingOwner");
 

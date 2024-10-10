@@ -14,7 +14,7 @@ export const UserContextProvider = ({ children }) => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/user/fetch");
+      const response = await axios.get("http://localhost:5000/user/fetch");
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);

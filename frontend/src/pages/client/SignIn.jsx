@@ -28,9 +28,11 @@ const SignIn = () => {
       );
 
       if (response.status === 200) {
-        sessionStorage.setItem("userName", response.data);
+        sessionStorage.setItem("userName", response.data.userName);
+        sessionStorage.setItem("userId", response.data.userId);
         setUserName(response.data);
         navigate("/");
+        window.location.reload();
       } else setToast(true);
     } catch (error) {
       console.error(error);
@@ -67,7 +69,7 @@ const SignIn = () => {
                 className="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.toLowerCase())}
                 value={email}
               />
               <div id="emailHelp" className="form-text">

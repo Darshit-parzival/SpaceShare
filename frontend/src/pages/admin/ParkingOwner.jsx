@@ -6,13 +6,13 @@ import { ParkingContext } from "../middleware/ParkingContext";
 import LoadingScreen from "../../LoadingScreen";
 
 const ParkingOwner = () => {
-  const { owners, spaces, loading } = useContext(ParkingContext);
-
+  const { owners, spaces, loading, fetchOwnersAndSpaces } = useContext(ParkingContext);
+  
   const ownerSpaceCounts = owners.map((owner) => {
     const totalSpaces = spaces.filter(
-      (space) => space.parkingOwner === owner._id
+      (space) => space.parkingOwner === owner._id.toString()
     ).length;
-    console.log(`Owner: ${owner.ownerPhoto}, Total Spaces: ${totalSpaces}`);
+
     return {
       ...owner,
       totalSpaces,
@@ -20,6 +20,7 @@ const ParkingOwner = () => {
   });
 
   if (loading) {
+    fetchOwnersAndSpaces();
     return (
       <>
         <Header />
@@ -36,6 +37,7 @@ const ParkingOwner = () => {
       </>
     );
   }
+
 
   return (
     <>
@@ -56,7 +58,8 @@ const ParkingOwner = () => {
             </div>
             <div className="d-flex flex-wrap justify-content-left">
               {ownerSpaceCounts.map((profileData) => (
-                <div
+                <Link
+                  to={`/admin/parkingOwnerProfile?id=${profileData._id}`}
                   className="card m-2"
                   style={{
                     width: "18rem",
@@ -72,7 +75,7 @@ const ParkingOwner = () => {
                   }
                 >
                   <img
-                    src={profileData.ownerPhoto || "/path/to/default/image.jpg"} // Default image if none exists
+                    src={profileData.ownerPhoto || "/default-owner-photo.jpg"}
                     className="card-img-top"
                     alt={`${profileData.ownerName}'s photo`}
                   />
@@ -83,7 +86,7 @@ const ParkingOwner = () => {
                       Total Spaces: {profileData.totalSpaces}
                     </p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </main>
