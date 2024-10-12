@@ -108,11 +108,21 @@ const ParkingOwnerProfile = () => {
 
   const handleDeleteOwner = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/parkingOwner/delete/${ownerId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:5000/parkingOwner/delete/${ownerId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-      if (response.ok) {
+      const spaceResponse = await fetch(
+        `http://localhost:5000/parkingSpace/delete/${ownerId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok && spaceResponse.ok) {
         const result = await response.json();
         setToast({ show: true, message: result.message, type: "success" });
         fetchOwnersAndSpaces();
@@ -144,6 +154,80 @@ const ParkingOwnerProfile = () => {
       if (modalBackdrop) {
         modalBackdrop.remove();
       }
+    }
+  };
+
+  console.log(spaces.parkingAddress);
+
+  const [newParkingSpace, setNewParkingSpace] = useState({
+    photo: null,
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    pincode: "",
+    price: "",
+  });
+
+  const handleEditSpaceClick = (space) => {
+    setNewParkingSpace({
+      photo: space.parkingPhoto,
+      name: space.parkingName,
+      address: space.parkingAddress,
+      city: space.parkingCity,
+      state: space.parkingState,
+      country: space.parkingCountry,
+      pincode: space.parkingPincode,
+      price: space.parkingPrice,
+    });
+  };
+
+  const handleParkingSpaceChange = (e) => {
+    const { name, value } = e.target;
+    setNewParkingSpace({ ...newParkingSpace, [name]: value });
+  };
+
+  const handleImageUpload = (e) => {
+    setNewParkingSpace({ ...newParkingSpace, photo: e.target.files[0] });
+  };
+
+  const addParkingSpace = async () => {
+    const formData = new FormData();
+    formData.append("parkingPhoto", newParkingSpace.photo);
+    formData.append("id", newParkingSpace._id);
+    formData.append("name", newParkingSpace.name);
+    formData.append("address", newParkingSpace.address);
+    formData.append("city", newParkingSpace.city);
+    formData.append("state", newParkingSpace.state);
+    formData.append("country", newParkingSpace.country);
+    formData.append("pincode", newParkingSpace.pincode);
+    formData.append("price", newParkingSpace.price);
+    
+    try {
+      const response = await fetch("http://localhost:5000/parkingSpace/edit", {
+        method: "PATCH",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setToast({ show: true, message: result.message, type: "success" });
+        fetchOwnersAndSpaces();
+      } else {
+        setToast({
+          show: true,
+          message: "Failed to Update parking space.",
+          type: "danger",
+        });
+      }
+    } catch (error) {
+      setToast({
+        show: true,
+        message: "Error occurred while Update parking space.",
+        type: "danger",
+      });
+      console.error("Error Update parking space:", error);
     }
   };
 
@@ -236,6 +320,8 @@ const ParkingOwnerProfile = () => {
                     <p>Age: {parkingOwner.ownerAge}</p>
                     <p>Contact: {parkingOwner.ownerContact}</p>
                     <p>Email: {parkingOwner.ownerEmail}</p>
+                    <p>Registered on: {parkingOwner.registerDate} (YYYY-MM-DD)</p>
+                    <p>Plan Type: {parkingOwner.planType}</p>
                     <p>Total Parking Spaces: {parkingSpaces.length}</p>
                   </div>
                 </div>
@@ -287,10 +373,19 @@ const ParkingOwnerProfile = () => {
                         </div>
 
                         <div className="profile-actions d-flex justify-content-center">
-                          <button className="btn btn-warning mt-3 me-3" data-bs-toggle="modal" data-bs-target="editSpaceModal">
+                          <button
+                            className="btn btn-warning mt-3 me-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editSpaceModal"
+                            onClick={() => handleEditSpaceClick(space)}
+                          >
                             Edit
                           </button>
-                          <button className="btn btn-danger mt-3 ms-3" data-bs-toggle="modal" data-bs-target="deleteSpaceModal">
+                          <button
+                            className="btn btn-danger mt-3 ms-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="deleteSpaceModal"
+                          >
                             Delete
                           </button>
                         </div>
@@ -445,6 +540,152 @@ const ParkingOwnerProfile = () => {
                 onClick={handleDeleteOwner}
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="modal fade"
+        id="editSpaceModal"
+        tabIndex="-1"
+        aria-labelledby="editSpaceModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="editSpaceModalLabel">
+                Edit Parking Space
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div className="mb-3">
+                <label htmlFor="photoInput" className="form-label">
+                  Upload Photo
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id="photoInput"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="nameInput" className="form-label">
+                  Parking Space Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nameInput"
+                  name="name"
+                  value={newParkingSpace.name}
+                  onChange={handleParkingSpaceChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="addressInput" className="form-label">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="addressInput"
+                  name="address"
+                  value={newParkingSpace.address}
+                  onChange={handleParkingSpaceChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="cityInput" className="form-label">
+                  City
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="cityInput"
+                  name="city"
+                  value={newParkingSpace.city}
+                  onChange={handleParkingSpaceChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="stateInput" className="form-label">
+                  State
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="stateInput"
+                  name="state"
+                  value={newParkingSpace.state}
+                  onChange={handleParkingSpaceChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="countryInput" className="form-label">
+                  Country
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="countryInput"
+                  name="country"
+                  value={newParkingSpace.country}
+                  onChange={handleParkingSpaceChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="priceInput" className="form-label">
+                  Price
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="priceInput"
+                  name="price"
+                  value={newParkingSpace.price}
+                  onChange={handleParkingSpaceChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="pincodeInput" className="form-label">
+                  Pincode
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="pincodeInput"
+                  name="pincode"
+                  value={newParkingSpace.pincode}
+                  onChange={handleParkingSpaceChange}
+                />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={addParkingSpace}
+                data-bs-dismiss="modal"
+              >
+                Update Parking Space
               </button>
             </div>
           </div>

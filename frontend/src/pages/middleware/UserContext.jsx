@@ -8,6 +8,7 @@ export const UserContextProvider = ({ children }) => {
   const [userName, setUserName] = useState(
     sessionStorage.getItem("userName") || ""
   );
+  const [userId, setUserId] = useState(sessionStorage.getItem("userId") || "");
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +30,15 @@ export const UserContextProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ userName, setUserName, users, loading, fetchUsers }}
+      value={{
+        userName,
+        userId,
+        setUserName,
+        setUserId,
+        users,
+        loading,
+        fetchUsers,
+      }}
     >
       {children}
     </UserContext.Provider>

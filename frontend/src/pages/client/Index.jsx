@@ -28,7 +28,7 @@ const Index = () => {
     const matchedSpaces = spaces.filter((space) =>
       space.parkingCity.toLowerCase().includes(searchCity.toLowerCase())
     );
-  
+
     const spacesWithOwners = matchedSpaces.map((space) => {
       const owner = owners.find((owner) => owner._id == space.parkingOwner);
       return {
@@ -36,12 +36,15 @@ const Index = () => {
         owner: owner ? owner.ownerName : "Owner not found",
       };
     });
-  
+
     setFilteredSpaces(spacesWithOwners);
   };
 
   const handleBook = () => {
-    if (!sessionStorage.getItem("userName") && !sessionStorage.getItem("userId")) {
+    if (
+      !sessionStorage.getItem("userName") &&
+      !sessionStorage.getItem("userId")
+    ) {
       alert("Please Log in first...");
       navigate("/signin");
     }
@@ -98,55 +101,54 @@ const Index = () => {
       </div>
 
       {filteredSpaces.length > 0 ? (
-  <section className="parking_results py-5">
-    <div className="container">
-      <h2 className="mb-4 text-center">
-        Available Parking Spaces in {searchCity}
-      </h2>
-      <div className="row">
-        {filteredSpaces.map((space) => (
-          <div key={space._id} className="col-md-4 mb-4">
-            <div className="card shadow-sm h-100">
-              <img
-                src={space.parkingPhoto || 'default-parking.jpg'}
-                className="card-img-top"
-                alt={space.parkingName}
-                style={{ height: "200px", objectFit: "cover" }}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{space.parkingName}</h5>
-                <p className="card-text">
-                  <strong>Location:</strong> {space.parkingCity}
-                </p>
-                <p className="card-text">
-                  <strong>Price:</strong> {space.parkingPrice} ₹
-                </p>
-                <p className="card-text">
-                  <strong>Owner:</strong> {space.owner}
-                </p>
-              </div>
-              <div className="card-footer d-flex justify-content-between">
-                <button className="btn btn-primary" onClick={handleBook}>
-                  Book Now
-                </button>
-                <button className="btn btn-outline-secondary">
-                  More Details
-                </button>
-              </div>
+        <section className="parking_results py-5">
+          <div className="container">
+            <h2 className="mb-4 text-center">
+              Available Parking Spaces in {searchCity}
+            </h2>
+            <div className="row">
+              {filteredSpaces.map((space) => (
+                <div key={space._id} className="col-md-4 mb-4">
+                  <div className="card shadow-sm h-100">
+                    <img
+                      src={space.parkingPhoto || "default-parking.jpg"}
+                      className="card-img-top"
+                      alt={space.parkingName}
+                      style={{ height: "200px", objectFit: "cover" }}
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">{space.parkingName}</h5>
+                      <p className="card-text">
+                        <strong>Location:</strong> {space.parkingCity}
+                      </p>
+                      <p className="card-text">
+                        <strong>Price:</strong> {space.parkingPrice} ₹
+                      </p>
+                      <p className="card-text">
+                        <strong>Owner:</strong> {space.owner}
+                      </p>
+                    </div>
+                    <div className="card-footer d-flex justify-content-between">
+                      <button className="btn btn-primary" onClick={handleBook}>
+                        Book Now
+                      </button>
+                      <button className="btn btn-outline-secondary">
+                        More Details
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-  </section>
-) : (
-  searchCity && (
-    <p className="text-center mt-4">
-      No parking spaces found in {searchCity}
-    </p>
-  )
-)}
-
+        </section>
+      ) : (
+        searchCity && (
+          <p className="text-center mt-4">
+            No parking spaces found in {searchCity}
+          </p>
+        )
+      )}
 
       {/* About Us Section */}
       <section className="about_section layout_padding">

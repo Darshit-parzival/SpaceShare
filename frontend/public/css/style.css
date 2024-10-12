@@ -1022,3 +1022,67 @@ a:focus {
   /* width: auto; Maintain aspect ratio */
   /* height: auto; Maintain aspect ratio */
 }
+
+.pricing_section {
+  padding: 60px 0;
+}
+
+.heading_container {
+  margin-bottom: 40px;
+}
+
+.pricing_grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.pricing_plan {
+  flex: 1 1 300px; /* Flex grow and shrink */
+  background-color: #f8f9fa; /* Light background color */
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.pricing_plan:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007bff; /* Primary color */
+}
+
+.name {
+  font-size: 1.5rem;
+  margin: 20px 0;
+}
+
+.description {
+  font-size: 1rem;
+  margin-bottom: 30px;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 25px;
+}
+
+/* Specific background colors for each plan */
+.basic_plan {
+  background-color: #d4edda; /* Light green */
+}
+
+.premium_plan {
+  background-color: #cce5ff; /* Light blue */
+}
+
+.standard_plan {
+  background-color: #fff3cd; /* Light yellow */
+}

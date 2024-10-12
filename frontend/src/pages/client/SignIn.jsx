@@ -7,36 +7,58 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../middleware/UserContext";
 
 const SignIn = () => {
-  const { setUserName } = useContext(UserContext);
+  const { setUserName, setUserId } = useContext(UserContext);
   const navigate = useNavigate();
   const [toast, setToast] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const errors = {};
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(email)) {
+      errors.email = "Invalid email format";
+    }
+
+    setErrors(errors);
+
+    return Object.keys(errors).length === 0; 
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const loginData = {
-        email,
-        password,
-      };
-      const response = await axios.post(
-        "http://localhost:5000/user/login",
-        loginData
-      );
+    if (validate()) {
+      try {
+        const loginData = {
+          email,
+          password,
+        };
 
-      if (response.status === 200) {
-        sessionStorage.setItem("userName", response.data.userName);
-        sessionStorage.setItem("userId", response.data.userId);
-        setUserName(response.data);
-        navigate("/");
-        window.location.reload();
-      } else setToast(true);
-    } catch (error) {
-      console.error(error);
-      setToast(true);
+        const response = await axios.post(
+          "http://localhost:5000/user/login",
+          loginData
+        );
+
+        if (response.status === 200) {
+          sessionStorage.setItem("userName", response.data.userName);
+          sessionStorage.setItem("userId", response.data.userId);
+          setUserName(response.data.userName);
+          setUserId(response.data.userId);
+          navigate("/");
+        } else {
+          setToast(true);
+        }
+      } catch (error) {
+        console.error(error);
+        setToast(true);
+      }
     }
   };
 
@@ -48,6 +70,7 @@ const SignIn = () => {
       return () => clearTimeout(timer);
     }
   }, [toast]);
+
   return (
     <>
       <div className="sub_page">
@@ -66,12 +89,15 @@ const SignIn = () => {
               </label>
               <input
                 type="email"
-                className="form-control"
+                className={`form-control ${errors.email ? "is-invalid" : ""}`}
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
                 onChange={(e) => setEmail(e.target.value.toLowerCase())}
                 value={email}
               />
+              {errors.email && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
               <div id="emailHelp" className="form-text">
                 We&apos;ll never share your email with anyone else.
               </div>
@@ -82,11 +108,14 @@ const SignIn = () => {
               </label>
               <input
                 type="password"
-                className="form-control"
+                className={`form-control ${errors.password ? "is-invalid" : ""}`}
                 id="exampleInputPassword1"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
+              {errors.password && (
+                <div className="invalid-feedback">{errors.password}</div>
+              )}
             </div>
 
             <button type="submit" className="btn btn-primary">
@@ -110,6 +139,8 @@ const SignIn = () => {
         </div>
         <Footer />
       </div>
+
+      {/* Toast for invalid credentials */}
       <div
         className={`toast align-items-center text-white bg-danger border-0 position-fixed bottom-0 end-0 m-3 ${
           toast ? "show" : "hide"

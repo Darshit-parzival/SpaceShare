@@ -19,6 +19,7 @@ import ParkingOwnerAdd from "./pages/admin/ParkingOwnerAdd";
 import ParkingSpaceReport from "./pages/admin/ParkingSpaceReport";
 import ParkingSpaceGraph from "./pages/admin/ParkingSpaceGraph";
 import Requests from "./pages/admin/Requests";
+import RegisterOwner from "./pages/client/RegisterOwner";
 
 const Urls = () => {
   const location = useLocation();
@@ -47,6 +48,7 @@ const Urls = () => {
         <Route path="/price" element={<Price />} />
         <Route path="/why" element={<Why />} />
         <Route path="/testimonial" element={<Testimonial />} />
+        <Route path="/RegisterOwner" element={<RegisterOwner />} />
         {loggedIn === false && (
           <>
             <Route path="/signin" element={<SignIn />} />

@@ -4,7 +4,7 @@ import { UserContext } from "../../middleware/UserContext";
 import axios from "axios";
 
 const Header = () => {
-  const { userName, setUserName } = useContext(UserContext);
+  const { userName, userId, setUserName, setUserId } = useContext(UserContext);
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState(location.pathname);
 
@@ -12,10 +12,12 @@ const Header = () => {
     setCurrentPath(location.pathname);
 
     const sessionUserName = sessionStorage.getItem("userName");
-    if (sessionUserName && !userName) {
+    const sessionUserId = sessionStorage.getItem("userId");
+    if ((sessionUserName && !userName) && (sessionUserId && !userId)) {
       setUserName(sessionUserName);
+      setUserId(sessionUserId);
     }
-  }, [location, userName, setUserName]);
+  }, [location, userName, setUserName, userId, setUserId]);
 
   const logout = async () => {
     try {
@@ -24,6 +26,7 @@ const Header = () => {
         sessionStorage.removeItem("userName");
         sessionStorage.removeItem("userId");
         setUserName("");
+        setUserId("");
       }
     } catch (error) {
       console.error("Logout error:", error);
@@ -124,8 +127,8 @@ const Header = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link className="dropdown-item" to="/owner">
-                          Become Owner
+                        <Link className="dropdown-item" to="/OwnerLogin">
+                          Login as an Owner
                         </Link>
                       </li>
                     </ul>

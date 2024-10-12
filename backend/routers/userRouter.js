@@ -9,15 +9,20 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
 
-    // Check if all required fields are provided
+    // Check for missing fields
     if (!name || !email || !password || !confirmPassword) {
       return res.status(400).send("Missing required fields");
     }
 
-    // Call the authentication function and handle its result
+    // Check if the email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already exists." });
+    }
+
+    // Authenticate the user
     const authResult = await userAuth(name, email, password, confirmPassword);
 
-    // Ensure authResult exists and has a status property
     if (!authResult || typeof authResult.status === "undefined") {
       return res.status(500).send("Unexpected error during authentication.");
     }
@@ -42,7 +47,10 @@ router.post("/register", async (req, res) => {
 
     const savedUser = await newUser.save();
 
-    // Send a response with the user data
+    if (!savedUser) {
+      return res.status(400).json({ message: "Internal server error" });
+    }
+
     return res.status(201).json({
       message: "User created successfully.",
       userId: savedUser._id,
@@ -50,9 +58,10 @@ router.post("/register", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal server error");
+    res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 // Login
 router.post("/login", async (req, res) => {

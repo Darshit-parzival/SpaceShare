@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const timestamp = Date.now();
     const date = new Date(timestamp).toISOString().split("T")[0];
-    const ext = path.extname(file.originalname).toLowerCase(); 
+    const ext = path.extname(file.originalname).toLowerCase();
     cb(null, `${date}_${timestamp}${ext}`);
   },
 });
@@ -28,22 +28,24 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif/;
     const mimetype = filetypes.test(file.mimetype);
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
 
     if (mimetype && extname) {
       return cb(null, true);
     }
-    cb(new Error("Error: File type not supported!")); 
+    cb(new Error("Error: File type not supported!"));
   },
 });
 
-
 router.post("/add", upload.single("ownerPhoto"), async (req, res) => {
   try {
-    const { name, age, email, contact } = req.body;
+    const { name, age, email, contact, approved, planType } = req.body;
     const ownerPhoto = req.file ? req.file.filename : null;
+    const today = new Date().toISOString().split("T")[0];
 
-    if (!name || !age || !email || !contact) {
+    if (!name || !age || !email || !contact || !approved || !planType) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -53,6 +55,9 @@ router.post("/add", upload.single("ownerPhoto"), async (req, res) => {
       ownerEmail: email,
       ownerContact: contact,
       ownerPhoto: ownerPhoto,
+      approved: approved,
+      planType: planType,
+      registerDate: today,
     });
 
     const savedParkingOwner = await newParkingOwner.save();
@@ -68,7 +73,6 @@ router.post("/add", upload.single("ownerPhoto"), async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 router.get("/fetch", async (req, res) => {
   try {
@@ -88,12 +92,10 @@ router.get("/fetch", async (req, res) => {
   }
 });
 
-
 router.patch("/edit", upload.single("ownerPhoto"), async (req, res) => {
   try {
     const { id, name, age, email, contact } = req.body;
 
-    
     let parkingOwner = await ParkingOwner.findById(id);
     if (!parkingOwner) {
       return res.status(404).json({ message: "Parking owner not found" });
@@ -105,7 +107,6 @@ router.patch("/edit", upload.single("ownerPhoto"), async (req, res) => {
     parkingOwner.ownerContact = contact || parkingOwner.ownerContact;
 
     if (req.file) {
-      
       if (parkingOwner.ownerPhoto) {
         const oldPhotoPath = path.join(ownersDir, parkingOwner.ownerPhoto);
         if (fs.existsSync(oldPhotoPath)) {
@@ -129,21 +130,22 @@ router.patch("/edit", upload.single("ownerPhoto"), async (req, res) => {
 });
 
 router.delete("/delete/:id", async (req, res) => {
-    try {
-      const ownerId = req.params.id;
+  try {
+    const ownerId = req.params.id;
 
-      const deletedOwner = await ParkingOwner.findByIdAndDelete(ownerId);
-  
-      if (!deletedOwner) {
-        return res.status(404).json({ message: "Parking owner not found." });
-      }
-  
-      res.status(200).json({ message: "Parking owner deleted successfully." });
-    } catch (error) {
-      console.error("Error deleting parking owner:", error);
-      res.status(500).json({ message: "An error occurred while deleting the parking owner." });
+    const deletedOwner = await ParkingOwner.findByIdAndDelete(ownerId);
+
+    if (!deletedOwner) {
+      return res.status(404).json({ message: "Parking owner not found." });
     }
-  });
-  
+
+    res.status(200).json({ message: "Parking owner deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting parking owner:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting the parking owner." });
+  }
+});
 
 module.exports = router;

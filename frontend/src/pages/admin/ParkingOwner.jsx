@@ -6,18 +6,39 @@ import { ParkingContext } from "../middleware/ParkingContext";
 import LoadingScreen from "../../LoadingScreen";
 
 const ParkingOwner = () => {
-  const { owners, spaces, loading, fetchOwnersAndSpaces } = useContext(ParkingContext);
-  
-  const ownerSpaceCounts = owners.map((owner) => {
-    const totalSpaces = spaces.filter(
-      (space) => space.parkingOwner === owner._id.toString()
-    ).length;
+  const { owners, spaces, loading, fetchOwnersAndSpaces } =
+    useContext(ParkingContext);
 
-    return {
-      ...owner,
-      totalSpaces,
-    };
-  });
+  const isWithinPlanPeriod = (registeredDate, planType) => {
+    const currentDate = new Date();
+    const registrationDate = new Date(registeredDate);
+
+    switch (planType) {
+      case "basic":
+        return currentDate - registrationDate <= 2 * 30 * 24 * 60 * 60 * 1000;
+      case "premium":
+        return currentDate - registrationDate <= 4 * 30 * 24 * 60 * 60 * 1000;
+      case "standard":
+        return currentDate - registrationDate <= 6 * 30 * 24 * 60 * 60 * 1000;
+      case "lifetime":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const ownerSpaceCounts = owners
+    .filter((owner) => isWithinPlanPeriod(owner.registeredDate, owner.planType))
+    .map((owner) => {
+      const totalSpaces = spaces.filter(
+        (space) => space.parkingOwner === owner._id.toString()
+      ).length;
+
+      return {
+        ...owner,
+        totalSpaces,
+      };
+    });
 
   if (loading) {
     fetchOwnersAndSpaces();
@@ -37,7 +58,6 @@ const ParkingOwner = () => {
       </>
     );
   }
-
 
   return (
     <>
