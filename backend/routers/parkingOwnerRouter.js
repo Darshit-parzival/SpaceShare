@@ -152,4 +152,34 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
+router.post("/approval", async (req, res) => {
+  try {
+    const { id, approved } = req.body;
+
+    if (approved === undefined) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    if (approved) {
+      const parkingOwner = await ParkingOwner.findById(id);
+      if (!parkingOwner) {
+        return res.status(404).json({ message: "Parking owner not found" });
+      }
+      parkingOwner.approved = approved;
+      await parkingOwner.save();
+
+      return res.status(200).json({
+        message: "Parking owner approved successfully.",
+        ownerId: parkingOwner._id,
+        name: parkingOwner.ownerName,
+      });
+    }
+  } catch (error) {
+    console.error("Error deleting parking owner:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting the parking owner." });
+  }
+});
+
 module.exports = router;

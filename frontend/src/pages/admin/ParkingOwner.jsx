@@ -36,9 +36,11 @@ const ParkingOwner = () => {
     }
   };
 
-  const filteredOwners = owners.filter((owner) =>
-    isWithinPlanPeriod(owner.registerDate, owner.planType)
-  );
+  const filteredOwners = owners
+    .filter((owner) => owner.approved)
+    .filter((owner) =>
+      isWithinPlanPeriod(owner.registerDate, owner.planType)
+    );
 
   if (loading) {
     fetchOwnersAndSpaces();

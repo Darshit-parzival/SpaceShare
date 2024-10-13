@@ -8,7 +8,7 @@ const Footer = () => {
               <div className="col-md-6 col-lg-3 info_col">
                 <div className="info_form">
                   <h4>Stay Connected</h4>
-                  <form action="">
+                  <form onSubmit={handleSubmit}>
                     <input type="text" placeholder="Enter Your Name" />
                     <input type="text" placeholder="Enter Your Email" />
                     <textarea type="text" className="mb-1" placeholder="Enter Your Message"></textarea>

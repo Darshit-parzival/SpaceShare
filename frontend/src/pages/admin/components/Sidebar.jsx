@@ -60,28 +60,49 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/parkingOwner">
-              <i className="bi bi-p-circle-fill"></i>
+              <Link
+                className="nav-link d-flex align-items-center gap-2"
+                to="/admin/parkingOwner"
+              >
+                <i className="bi bi-p-circle-fill"></i>
                 Parking Space Owners
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/parkingSpaceReport">
-              <i className="bi bi-file-earmark-bar-graph-fill"></i>
+              <Link
+                className="nav-link d-flex align-items-center gap-2"
+                to="/admin/parkingSpaceReport"
+              >
+                <i className="bi bi-file-earmark-bar-graph-fill"></i>
                 Parking Space Reports
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/req">
-              <i className="bi bi-file-earmark-arrow-down-fill"></i>
+              <Link
+                className="nav-link d-flex align-items-center gap-2"
+                to="/admin/req"
+              >
+                <i className="bi bi-file-earmark-arrow-down-fill"></i>
                 Requests
-              </Link> 
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link d-flex align-items-center gap-2" to="/admin/req">
-              <i className="bi bi-person-fill-up"></i>
-                User Messages
-              </Link> 
+              <Link
+                className="nav-link d-flex align-items-center gap-2"
+                to="/admin/req"
+              >
+                <i className="bi bi-person-fill-up"></i>
+                Contact us messages
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link d-flex align-items-center gap-2"
+                to="/admin/req"
+              >
+                <i className="bi bi-quote"></i>
+                testimonials
+              </Link>
             </li>
           </ul>
         </div>
