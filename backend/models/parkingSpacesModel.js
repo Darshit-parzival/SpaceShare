@@ -10,6 +10,7 @@ const parkingSpaceSchema = new mongoose.Schema({
   parkingCountry: { type: String, required: true },
   parkingPincode: { type: Number, required: true },
   parkingPrice: { type: Number, required: true },
+  parkingSlots: { type: Number, required: true },
 });
 
 const ParkingSpace = mongoose.model("ParkingSpace", parkingSpaceSchema);

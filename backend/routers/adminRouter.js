@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const existingUser = await ParkingOwner.findOne({ email });
+    const existingUser = await Admin.findOne({ email });
 
     if (existingUser) {
       const authResult = await userLoginAuth(

@@ -13,8 +13,8 @@ const IndexAdmin = () => {
 
     try {
       const loginData = {
-        email,
-        password,
+        email: email,
+        password: password,
       };
       const response = await axios.post(
         "http://localhost:5000/admin/login",

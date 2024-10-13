@@ -18,7 +18,7 @@ app.use(
     credentials: true,
   })
 );
-
+~
 app.use("/img", express.static(path.join(__dirname, "img"))); 
 
 app.use("/user", require("./routers/userRouter"));

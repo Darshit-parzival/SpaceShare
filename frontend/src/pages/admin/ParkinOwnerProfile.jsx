@@ -157,8 +157,6 @@ const ParkingOwnerProfile = () => {
     }
   };
 
-  console.log(spaces.parkingAddress);
-
   const [newParkingSpace, setNewParkingSpace] = useState({
     photo: null,
     name: "",
@@ -682,7 +680,7 @@ const ParkingOwnerProfile = () => {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={addParkingSpace}
+                onClick={() => addParkingSpace()}
                 data-bs-dismiss="modal"
               >
                 Update Parking Space

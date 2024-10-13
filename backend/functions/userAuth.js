@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 
-const userAuth = async (name, email, password) => {
+const userAuth = async (name, email, password, confirmPassword) => {
   // Check if passwords match
   if (password !== confirmPassword) {
     return { status: 400, message: "Passwords do not match" };

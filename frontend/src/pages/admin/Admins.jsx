@@ -119,6 +119,7 @@ const Admins = () => {
       });
       document.querySelector("#updateAdminModal .btn-close").click();
       fetchAdmins();
+      setRes(response);
     }
   };
 

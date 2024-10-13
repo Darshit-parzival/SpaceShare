@@ -9,7 +9,7 @@ const parkingOwnerSchema = new mongoose.Schema({
   approved: { type: Boolean, required: true, default: false },
   planType: { type: String, required: true },
   registerDate: { type: String, required: true },
-  password: { type: String, required: true },
+  password: { type: String, required: false },
 });
 
 const ParkingOwner = mongoose.model("ParkingOwner", parkingOwnerSchema);

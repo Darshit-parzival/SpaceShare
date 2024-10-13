@@ -56,13 +56,12 @@ const ContactMessages = () => {
         messages.filter((message) => message._id !== selectedMessageId)
       );
 
-      // Set response for toast notification
       setRes({
         status: 200,
         name: selectedMessageName,
         message: "Message deleted successfully.",
       });
-      setToast(true); // Show toast
+      setToast(true);
       setSelectedMessageId(null);
       setSelectedMessageName("");
     } catch (error) {
@@ -71,7 +70,7 @@ const ContactMessages = () => {
         status: 500,
         message: "Error deleting message.",
       });
-      setToast(true); // Show error toast
+      setToast(true);
     }
   };
 
