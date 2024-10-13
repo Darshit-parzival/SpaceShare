@@ -1,12 +1,25 @@
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../middleware/AdminContext";
 import { UserContext } from "../middleware/UserContext";
+import { ParkingContext } from "../middleware/ParkingContext";
+import axios from "axios";
 
 const HomeAdmin = () => {
+  const [totalContacts, setTotalContacts] = useState(0);
+
   const { admins } = useContext(AdminContext);
   const { users } = useContext(UserContext);
+  const { owners } = useContext(ParkingContext);
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const response = await axios.get("http://localhost:5000/contact/fetch");
+      setTotalContacts(response.data.length);
+    };
+
+    fetchContacts();
+  }, []);
   return (
     <>
       <Header />
@@ -28,7 +41,9 @@ const HomeAdmin = () => {
                       <i className="mb-2 bi bi-person-circle"></i>
                     </div>
                     <div className="ms-2">
-                      <label className="text-muted me-1 fw-bold">Total Admins:</label>
+                      <label className="text-muted me-1 fw-bold">
+                        Total Admins:
+                      </label>
                       <label>{admins.length}</label>
                     </div>
                   </div>
@@ -44,7 +59,9 @@ const HomeAdmin = () => {
                       <i className="mb-2 bi bi-people-fill"></i>
                     </div>
                     <div className="ms-2">
-                      <label className="text-muted me-1 fw-bold">Total Users:</label>
+                      <label className="text-muted me-1 fw-bold">
+                        Total Users:
+                      </label>
                       <label>{users.length}</label>
                     </div>
                   </div>
@@ -54,17 +71,15 @@ const HomeAdmin = () => {
                 <div
                   className="card bg-light"
                   style={{ height: "5rem", borderColor: "black" }}
-                > 
+                >
                   <div className="card-body d-flex justify-content-center align-items-center">
                     <div>
                       Parking space giver
                       <i className="bi bi-person-check-fill"></i>
                     </div>
                     <div className="ms-2">
-                      <label className="text-muted me-1">
-                        Total:
-                      </label>
-                      <label>space giver counts</label>
+                      <label className="text-muted me-1">Total:</label>
+                      <label>{owners.length}</label>
                     </div>
                   </div>
                 </div>
@@ -83,7 +98,7 @@ const HomeAdmin = () => {
                       <label className="text-muted me-1">
                         Total Contact Us:
                       </label>
-                      <label>Contact us count</label>
+                      <label>{totalContacts}</label>
                     </div>
                   </div>
                 </div>
