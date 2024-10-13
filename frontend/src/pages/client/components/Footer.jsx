@@ -27,18 +27,27 @@ const Footer = () => {
       );
       setRes(response.status);
       setToast(true);
-      setTimeout(() => setToast(false), 3000); // Hide the toast after 3 seconds
+      setTimeout(() => setToast(false), 3000);
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
     } catch (error) {
       console.error(error);
-      setRes(500); // Set a generic error response code
+      setRes(500);
       setToast(true);
-      setTimeout(() => setToast(false), 3000); // Hide the toast after 3 seconds
+      setTimeout(() => setToast(false), 3000);
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
     }
   };
 
   return (
     <>
-      {/* Toast notification */}
       <div
         className={`toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-3 ${
           toast ? "show" : "hide"
@@ -63,7 +72,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Footer Section */}
       <section className="info_section">
         <div className="container">
           <div className="info_top">
@@ -83,7 +91,7 @@ const Footer = () => {
                       type="text"
                       name="email"
                       placeholder="Enter Your Email"
-                      value={formData.email}
+                      value={formData.email.toLowerCase()}
                       onChange={handleInputChange}
                     />
                     <textarea
@@ -112,7 +120,6 @@ const Footer = () => {
                 </div>
               </div>
 
-              {/* About Us Section */}
               <div className="col-md-6 col-lg-3 info_col">
                 <div className="info_detail">
                   <h4>About Us</h4>
@@ -126,7 +133,6 @@ const Footer = () => {
                 </div>
               </div>
 
-              {/* Online Booking Section */}
               <div className="col-md-6 col-lg-3 info_col">
                 <div className="info_detail">
                   <h4>Online Booking</h4>
@@ -139,7 +145,6 @@ const Footer = () => {
                 </div>
               </div>
 
-              {/* Contact Us Section */}
               <div className="col-md-6 col-lg-3 info_col">
                 <h4>Contact us</h4>
                 <p>
@@ -166,7 +171,6 @@ const Footer = () => {
         </div>
       </section>
 
-      {/* Footer Bottom Section */}
       <footer className="footer_section">
         <div className="container">
           <p>

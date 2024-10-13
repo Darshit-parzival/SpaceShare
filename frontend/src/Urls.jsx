@@ -20,6 +20,7 @@ import ParkingSpaceReport from "./pages/admin/ParkingSpaceReport";
 import ParkingSpaceGraph from "./pages/admin/ParkingSpaceGraph";
 import Requests from "./pages/admin/Requests";
 import RegisterOwner from "./pages/client/RegisterOwner";
+import ContactMessages from "./pages/admin/ContactMessages";
 
 const Urls = () => {
   const location = useLocation();
@@ -63,6 +64,7 @@ const Urls = () => {
             <Route path="/admin/home" element={<HomeAdmin />} />
             <Route path="/admin/admins" element={<Admins />} />
             <Route path="/admin/users" element={<Users />} />
+            <Route path="/admin/contact" element={<ContactMessages />} />
             <Route path="/admin/parkingOwner" element={<ParkingOwner />} />
             <Route
               path="/admin/parkingOwnerProfile"

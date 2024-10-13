@@ -89,7 +89,7 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link
                 className="nav-link d-flex align-items-center gap-2"
-                to="/admin/req"
+                to="/admin/contact"
               >
                 <i className="bi bi-person-fill-up"></i>
                 Contact us messages
