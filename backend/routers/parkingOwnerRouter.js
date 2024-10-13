@@ -49,6 +49,10 @@ router.post("/add", upload.single("ownerPhoto"), async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
+    console.log("name", name);
+    console.log("age", age);
+    console.log("ownerPhoto", ownerPhoto);
+
     const newParkingOwner = new ParkingOwner({
       ownerName: name,
       ownerAge: age,

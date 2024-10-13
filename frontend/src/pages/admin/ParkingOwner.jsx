@@ -6,20 +6,29 @@ import { ParkingContext } from "../middleware/ParkingContext";
 import LoadingScreen from "../../LoadingScreen";
 
 const ParkingOwner = () => {
-  const { owners, spaces, loading, fetchOwnersAndSpaces } =
-    useContext(ParkingContext);
+  const { owners, loading, fetchOwnersAndSpaces } = useContext(ParkingContext);
+
+  const getMonthDifference = (startDate, endDate) => {
+    return (
+      endDate.getFullYear() * 12 +
+      endDate.getMonth() -
+      (startDate.getFullYear() * 12 + startDate.getMonth())
+    );
+  };
 
   const isWithinPlanPeriod = (registeredDate, planType) => {
     const currentDate = new Date();
     const registrationDate = new Date(registeredDate);
 
+    const monthsDifference = getMonthDifference(registrationDate, currentDate);
+
     switch (planType) {
       case "basic":
-        return currentDate - registrationDate <= 2 * 30 * 24 * 60 * 60 * 1000;
+        return monthsDifference <= 2;
       case "premium":
-        return currentDate - registrationDate <= 4 * 30 * 24 * 60 * 60 * 1000;
+        return monthsDifference <= 4;
       case "standard":
-        return currentDate - registrationDate <= 6 * 30 * 24 * 60 * 60 * 1000;
+        return monthsDifference <= 6;
       case "lifetime":
         return true;
       default:
@@ -27,18 +36,9 @@ const ParkingOwner = () => {
     }
   };
 
-  const ownerSpaceCounts = owners
-    .filter((owner) => isWithinPlanPeriod(owner.registeredDate, owner.planType))
-    .map((owner) => {
-      const totalSpaces = spaces.filter(
-        (space) => space.parkingOwner === owner._id.toString()
-      ).length;
-
-      return {
-        ...owner,
-        totalSpaces,
-      };
-    });
+  const filteredOwners = owners.filter((owner) =>
+    isWithinPlanPeriod(owner.registerDate, owner.planType)
+  );
 
   if (loading) {
     fetchOwnersAndSpaces();
@@ -77,7 +77,7 @@ const ParkingOwner = () => {
               </Link>
             </div>
             <div className="d-flex flex-wrap justify-content-left">
-              {ownerSpaceCounts.map((profileData) => (
+              {filteredOwners.map((profileData) => (
                 <Link
                   to={`/admin/parkingOwnerProfile?id=${profileData._id}`}
                   className="card m-2"
@@ -103,7 +103,7 @@ const ParkingOwner = () => {
                     <h5 className="card-title">{profileData.ownerName}</h5>
                     <hr className="w-100" />
                     <p className="card-text">
-                      Total Spaces: {profileData.totalSpaces}
+                      Plan Type: {profileData.planType}
                     </p>
                   </div>
                 </Link>

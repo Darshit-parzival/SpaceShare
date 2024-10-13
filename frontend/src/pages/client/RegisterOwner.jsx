@@ -9,8 +9,6 @@ const RegisterOwner = () => {
   const [searchParams] = useSearchParams();
   const plan = searchParams.get("plan");
 
-  console.log(plan);
-
   const [toast, setToast] = useState(false);
 
   const [photo, setPhoto] = useState(null);
@@ -65,7 +63,7 @@ const RegisterOwner = () => {
 
     if (validate()) {
       const ownerData = new FormData();
-      ownerData.append("photo", photo);
+      ownerData.append("ownerPhoto", photo);
       ownerData.append("name", name);
       ownerData.append("email", email);
       ownerData.append("contact", contact);
@@ -73,18 +71,20 @@ const RegisterOwner = () => {
       ownerData.append("approved", false);
       ownerData.append("planType", plan);
 
+      // Log the FormData values
+      console.log("name:", ownerData.get("ownerPhoto"));
+      console.log("email:", ownerData.get("email"));
+      console.log("contact:", ownerData.get("contact"));
+      console.log("age:", ownerData.get("age"));
+      console.log("planType:", ownerData.get("planType"));
+
       try {
         const response = await axios.post(
           "http://localhost:5000/parkingOwner/add",
-          ownerData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
+          ownerData
         );
 
-        if (response.status === 200) {
+        if (response.status === 201) {
           setToast(true);
           setPhoto(null);
           setName("");
@@ -118,6 +118,7 @@ const RegisterOwner = () => {
                 type="file"
                 className={`form-control ${errors.photo ? "is-invalid" : ""}`}
                 id="photo"
+                accept="image/*"
                 onChange={(e) => setPhoto(e.target.files[0])}
               />
               {errors.photo && (
@@ -204,7 +205,10 @@ const RegisterOwner = () => {
         style={{ minWidth: "300px" }}
       >
         <div className="d-flex">
-          <div className="toast-body">Owner registered successfully!</div>
+          <div className="toast-body">
+            Owner registered successfully! Your Request approval will be
+            notified via Email
+          </div>
           <button
             type="button"
             className="btn-close btn-close-white me-2 m-auto"
