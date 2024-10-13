@@ -1,17 +1,98 @@
+import axios from "axios";
+import { useState } from "react";
+
 const Footer = () => {
+  const [toast, setToast] = useState(false);
+  const [res, setRes] = useState(0);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/contact/add",
+        formData
+      );
+      setRes(response.status);
+      setToast(true);
+      setTimeout(() => setToast(false), 3000); // Hide the toast after 3 seconds
+    } catch (error) {
+      console.error(error);
+      setRes(500); // Set a generic error response code
+      setToast(true);
+      setTimeout(() => setToast(false), 3000); // Hide the toast after 3 seconds
+    }
+  };
+
   return (
     <>
-    <section className="info_section ">
+      {/* Toast notification */}
+      <div
+        className={`toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-3 ${
+          toast ? "show" : "hide"
+        }`}
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        style={{ minWidth: "300px" }}
+      >
+        <div className="d-flex">
+          <div className="toast-body">
+            {res === 201
+              ? "Your message has been sent successfully!"
+              : "Something went wrong!"}
+          </div>
+          <button
+            type="button"
+            className="btn-close btn-close-white me-2 m-auto"
+            aria-label="Close"
+            onClick={() => setToast(false)}
+          ></button>
+        </div>
+      </div>
+
+      {/* Footer Section */}
+      <section className="info_section">
         <div className="container">
-          <div className="info_top ">
-            <div className="row ">
+          <div className="info_top">
+            <div className="row">
               <div className="col-md-6 col-lg-3 info_col">
                 <div className="info_form">
                   <h4>Stay Connected</h4>
                   <form onSubmit={handleSubmit}>
-                    <input type="text" placeholder="Enter Your Name" />
-                    <input type="text" placeholder="Enter Your Email" />
-                    <textarea type="text" className="mb-1" placeholder="Enter Your Message"></textarea>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Enter Your Name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                    />
+                    <input
+                      type="text"
+                      name="email"
+                      placeholder="Enter Your Email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                    />
+                    <textarea
+                      name="message"
+                      className="mb-1"
+                      placeholder="Enter Your Message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                    ></textarea>
                     <button type="submit">Submit</button>
                   </form>
                   <div className="social_box">
@@ -30,25 +111,41 @@ const Footer = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 col-lg-3 info_col ">
+
+              {/* About Us Section */}
+              <div className="col-md-6 col-lg-3 info_col">
                 <div className="info_detail">
                   <h4>About Us</h4>
                   <p>
-                  we connect people looking for parking and storage solutions with those who have space to share, making city living more convenient and efficient. Our platform ensures a secure, easy, and reliable way to rent out or find spaces whenever you need them.
+                    We connect people looking for parking and storage solutions
+                    with those who have space to share, making city living more
+                    convenient and efficient. Our platform ensures a secure,
+                    easy, and reliable way to rent out or find spaces whenever
+                    you need them.
                   </p>
                 </div>
               </div>
-              <div className="col-md-6 col-lg-3 info_col ">
+
+              {/* Online Booking Section */}
+              <div className="col-md-6 col-lg-3 info_col">
                 <div className="info_detail">
                   <h4>Online Booking</h4>
                   <p>
-                  Our streamlined booking process ensures you can find, select, and book a space in just a few clicks. User-friendly navigation and clear instructions make it easy to rent a space, saving you time and effort.
+                    Our streamlined booking process ensures you can find,
+                    select, and book a space in just a few clicks. User-friendly
+                    navigation and clear instructions make it easy to rent a
+                    space, saving you time and effort.
                   </p>
                 </div>
               </div>
+
+              {/* Contact Us Section */}
               <div className="col-md-6 col-lg-3 info_col">
                 <h4>Contact us</h4>
-                <p>&quot;Reach out to us anytime for assistance, inquiries, or feedback—we&apos;re here to help!&quot;</p>
+                <p>
+                  &quot;Reach out to us anytime for assistance, inquiries, or
+                  feedback—we&apos;re here to help!&quot;
+                </p>
                 <div className="contact_nav">
                   <a href="">
                     <i className="fa fa-map-marker" aria-hidden="true"></i>
@@ -68,15 +165,18 @@ const Footer = () => {
           </div>
         </div>
       </section>
-      <footer className="footer_section">
-    <div className="container">
-      <p>
-        &copy; <span id="displayYear"></span> Created by Jay Purani, Janvi Suthar, Tanvi Vara
-      </p>
-    </div>
-  </footer>
-    </>
-  )
-}
 
-export default Footer
+      {/* Footer Bottom Section */}
+      <footer className="footer_section">
+        <div className="container">
+          <p>
+            &copy; <span id="displayYear"></span> Created by Jay Purani & Janvi
+            Suthar
+          </p>
+        </div>
+      </footer>
+    </>
+  );
+};
+
+export default Footer;
