@@ -14,6 +14,7 @@ const ParkingOwnerAdd = () => {
     contact: "",
     email: "",
     photo: null,
+    password: "",
     parkingSpaces: [],
   });
 
@@ -103,13 +104,14 @@ const ParkingOwnerAdd = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try { 
+    try {
       const formData = new FormData();
       formData.append("name", owner.name);
       formData.append("age", owner.age);
       formData.append("contact", owner.contact);
       formData.append("email", owner.email);
       formData.append("approved", true);
+      formData.append("password", owner.password);
       formData.append("planType", "lifetime");
       if (owner.photo) {
         formData.append("ownerPhoto", owner.photo);
@@ -172,6 +174,7 @@ const ParkingOwnerAdd = () => {
           age: "",
           contact: "",
           email: "",
+          password: "",
           parkingSpaces: [],
         });
       } else {
@@ -280,6 +283,19 @@ const ParkingOwnerAdd = () => {
                   id="emailInput"
                   name="email"
                   value={owner.email}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="emailInput" className="form-label">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="emailInput"
+                  name="password"
+                  value={owner.password}
                   onChange={handleInputChange}
                 />
               </div>

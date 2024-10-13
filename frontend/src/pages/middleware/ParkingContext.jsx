@@ -5,6 +5,12 @@ export const ParkingContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const ParkingContextProvider = ({ children }) => {
+  const [ownerName, setOwnerName] = useState(
+    sessionStorage.getItem("ownerName") || ""
+  );
+  const [ownerId, setOwnerId] = useState(
+    sessionStorage.getItem("ownerId") || ""
+  );
   const [owners, setOwners] = useState([]);
   const [spaces, setSpaces] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +43,18 @@ export const ParkingContextProvider = ({ children }) => {
 
   return (
     <ParkingContext.Provider
-      value={{ owners, spaces, loading, fetchOwnersAndSpaces, error }}
+      value={{
+        owners,
+        spaces,
+        loading,
+        fetchOwnersAndSpaces,
+        error,
+        setError,
+        ownerName,
+        setOwnerName,
+        ownerId,
+        setOwnerId,
+      }}
     >
       {children}
     </ParkingContext.Provider>

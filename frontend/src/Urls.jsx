@@ -21,15 +21,20 @@ import ParkingSpaceGraph from "./pages/admin/ParkingSpaceGraph";
 import Requests from "./pages/admin/Requests";
 import RegisterOwner from "./pages/client/RegisterOwner";
 import ContactMessages from "./pages/admin/ContactMessages";
+import OwnerLogin from "./pages/client/OwnerLogin";
+import OwnerHome from "./pages/owner/OwnerHome";
 
 const Urls = () => {
   const location = useLocation();
-  const { loggedIn, adminLoggedIn, loading } = useContext(AuthContext);
+  const { loggedIn, adminLoggedIn, ownerLoggedIn, loading } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!loading) {
-      if (!adminLoggedIn && location.pathname.startsWith("/admin")) {
+      if (!ownerLoggedIn && location.pathname.startsWith("/owner")) {
+        navigate("/OwnerLogin");
+      } else if (!adminLoggedIn && location.pathname.startsWith("/admin")) {
         navigate("/admin");
       } else if (
         loggedIn &&
@@ -38,7 +43,14 @@ const Urls = () => {
         navigate("/");
       }
     }
-  }, [loggedIn, adminLoggedIn, location.pathname, navigate, loading]);
+  }, [
+    loggedIn,
+    adminLoggedIn,
+    location.pathname,
+    navigate,
+    loading,
+    ownerLoggedIn,
+  ]);
 
   return (
     !loading && (
@@ -50,6 +62,7 @@ const Urls = () => {
         <Route path="/why" element={<Why />} />
         <Route path="/testimonial" element={<Testimonial />} />
         <Route path="/RegisterOwner" element={<RegisterOwner />} />
+        <Route path="/OwnerLogin" element={<OwnerLogin />} />
         {loggedIn === false && (
           <>
             <Route path="/signin" element={<SignIn />} />
@@ -83,6 +96,11 @@ const Urls = () => {
               element={<ParkingSpaceGraph />}
             />
             <Route path="/admin/req" element={<Requests />} />
+          </>
+        )}
+        {ownerLoggedIn && (
+          <>
+            <Route path="/owner/home" element={<OwnerHome />} />
           </>
         )}
       </Routes>

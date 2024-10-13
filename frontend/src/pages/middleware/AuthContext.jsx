@@ -8,6 +8,7 @@ function AuthContextProvider(props) {
   const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const [adminLoggedIn, setAdminLoggedIn] = useState(false);
+  const [ownerLoggedIn, setOwnerLoggedIn] = useState(false);
 
   async function getLoggedIn() {
     try {
@@ -22,7 +23,9 @@ function AuthContextProvider(props) {
   }
   async function getAdminLoggedIn() {
     try {
-      const loggedInRes = await axios.get("http://localhost:5000/admin/loggedIn");
+      const loggedInRes = await axios.get(
+        "http://localhost:5000/admin/loggedIn"
+      );
       setAdminLoggedIn(loggedInRes.data);
     } catch (error) {
       console.error("Error checking logged-in status:", error);
@@ -31,10 +34,24 @@ function AuthContextProvider(props) {
       setLoading(false);
     }
   }
+  async function getOwnerLoggedIn() {
+    try {
+      const loggedInRes = await axios.get(
+        "http://localhost:5000/parkingOwner/loggedIn"
+      );
+      setOwnerLoggedIn(loggedInRes.data);
+    } catch (error) {
+      console.error("Error checking logged-in status:", error);
+      setOwnerLoggedIn(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     getLoggedIn();
     getAdminLoggedIn();
+    getOwnerLoggedIn();
   }, []);
 
   return (
@@ -46,7 +63,10 @@ function AuthContextProvider(props) {
         adminLoggedIn,
         setAdminLoggedIn,
         getAdminLoggedIn,
-        loading
+        ownerLoggedIn,
+        setOwnerLoggedIn,
+        getOwnerLoggedIn,
+        loading,
       }}
     >
       {props.children}

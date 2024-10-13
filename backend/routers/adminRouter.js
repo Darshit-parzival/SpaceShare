@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const existingUser = await Admin.findOne({ email });
+    const existingUser = await ParkingOwner.findOne({ email });
 
     if (existingUser) {
       const authResult = await userLoginAuth(
@@ -133,7 +133,6 @@ router.post("/update", async (req, res) => {
         .status(400)
         .json({ message: "No user ID or update data provided" });
     }
-
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
@@ -153,9 +152,9 @@ router.get("/loggedIn", (req, res) => {
   try {
     const AdminToken = req.cookies.AdminToken;
     if (!AdminToken) return res.send(false);
-    
+
     jwt.verify(AdminToken, process.env.JWT_KEY);
-    
+
     res.send(true);
   } catch (error) {
     console.error(error);

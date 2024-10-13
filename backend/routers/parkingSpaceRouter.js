@@ -103,7 +103,8 @@ router.get("/fetch", async (req, res) => {
 
 router.patch("/edit", upload.single("parkingPhoto"), async (req, res) => {
   try {
-    const { id, name, address, city, state, country, pincode, price } = req.body;
+    const { id, name, address, city, state, country, pincode, price } =
+      req.body;
 
     let parkingSpace = await ParkingSpace.findById(id);
     if (!parkingSpace) {
@@ -140,7 +141,6 @@ router.patch("/edit", upload.single("parkingPhoto"), async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 router.delete("/delete/:id", async (req, res) => {
   try {

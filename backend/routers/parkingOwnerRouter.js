@@ -4,6 +4,7 @@ const ParkingOwner = require("../models/parkingOwnerModel");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const jwt = require("jsonwebtoken");
 
 const ownersDir = path.join(__dirname, "../img/owners");
 
@@ -41,17 +42,27 @@ const upload = multer({
 
 router.post("/add", upload.single("ownerPhoto"), async (req, res) => {
   try {
-    const { name, age, email, contact, approved, planType } = req.body;
+    const { name, age, email, contact, approved, planType, password } =
+      req.body;
     const ownerPhoto = req.file ? req.file.filename : null;
     const today = new Date().toISOString().split("T")[0];
 
-    if (!name || !age || !email || !contact || !approved || !planType) {
+    if (
+      !name ||
+      !age ||
+      !email ||
+      !contact ||
+      !approved ||
+      !planType ||
+      !password
+    ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     console.log("name", name);
     console.log("age", age);
     console.log("ownerPhoto", ownerPhoto);
+    console.log("password", password);
 
     const newParkingOwner = new ParkingOwner({
       ownerName: name,
@@ -62,6 +73,7 @@ router.post("/add", upload.single("ownerPhoto"), async (req, res) => {
       approved: approved,
       planType: planType,
       registerDate: today,
+      password: password,
     });
 
     const savedParkingOwner = await newParkingOwner.save();
@@ -179,6 +191,47 @@ router.post("/approval", async (req, res) => {
     res
       .status(500)
       .json({ message: "An error occurred while deleting the parking owner." });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const existingUser = await ParkingOwner.findOne({ ownerEmail: email });
+
+    if (existingUser.password === password) {
+      const userToken = jwt.sign(
+        {
+          userToken: existingUser._id,
+        },
+        process.env.JWT_KEY
+      );
+
+      return res
+        .cookie("OwnerToken", userToken, {
+          httpOnly: true,
+        })
+        .json({ ownerName: existingUser.ownerName, ownerId: existingUser._id });
+    } else {
+      return res.status(400).send("Owner not found...");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+router.get("/loggedIn", (req, res) => {
+  try {
+    const OwnerToken = req.cookies.OwnerToken;
+    if (!OwnerToken) return res.send(false);
+
+    jwt.verify(OwnerToken, process.env.JWT_KEY);
+
+    res.send(true);
+  } catch (error) {
+    console.error(error);
+    res.send(false);
   }
 });
 

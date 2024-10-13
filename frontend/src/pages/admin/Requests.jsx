@@ -151,52 +151,60 @@ const Requests = () => {
             </div>
             {/* Card list */}
             <div className="d-flex flex-wrap justify-content-left">
-              {filteredOwners.map((profileData, index) => (
-                <div
-                  className="card m-2"
-                  style={{
-                    width: "18rem",
-                    transition: "transform 0.2s",
-                    cursor: "pointer",
-                  }}
-                  key={index}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
-                >
-                  <img
-                    src={profileData.ownerPhoto}
-                    className="card-img-top"
-                    alt="..."
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{profileData.ownerName}</h5>
-                    <hr className="w-100" />
-                    <p className="card-text">Email: {profileData.ownerEmail}</p>
-                    <hr />
-                    <p className="card-text">
-                      Contact: {profileData.ownerContact}
-                    </p>
-                    <div className="profile-actions d-flex justify-content-center">
-                      <button
-                        className="btn btn-success mt-3 me-3"
-                        onClick={(e) => handleApprove(profileData._id, e)}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        className="btn btn-danger mt-3 ms-3"
-                        onClick={(e) => handleDeny(profileData._id, e)}
-                      >
-                        Deny
-                      </button>
+              {filteredOwners.length > 0 ? (
+                filteredOwners.map((profileData, index) => (
+                  <div
+                    className="card m-2"
+                    style={{
+                      width: "18rem",
+                      transition: "transform 0.2s",
+                      cursor: "pointer",
+                    }}
+                    key={index}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.transform = "scale(1.05)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.transform = "scale(1)")
+                    }
+                  >
+                    <img
+                      src={profileData.ownerPhoto}
+                      className="card-img-top"
+                      alt="Owner Photo"
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">{profileData.ownerName}</h5>
+                      <hr className="w-100" />
+                      <p className="card-text">
+                        Email: {profileData.ownerEmail}
+                      </p>
+                      <hr />
+                      <p className="card-text">
+                        Contact: {profileData.ownerContact}
+                      </p>
+                      <div className="profile-actions d-flex justify-content-center">
+                        <button
+                          className="btn btn-success mt-3 me-3"
+                          onClick={(e) => handleApprove(profileData._id, e)}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className="btn btn-danger mt-3 ms-3"
+                          onClick={(e) => handleDeny(profileData._id, e)}
+                        >
+                          Deny
+                        </button>
+                      </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="alert alert-info" role="alert">
+                  No requests found!
                 </div>
-              ))}
+              )}
             </div>
           </main>
         </div>

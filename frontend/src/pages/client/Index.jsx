@@ -40,17 +40,16 @@ const Index = () => {
     setFilteredSpaces(spacesWithOwners);
   };
 
-  const handleBook = () => {
+  const handleBook = (id) => {
     if (
       !sessionStorage.getItem("userName") &&
       !sessionStorage.getItem("userId")
     ) {
       alert("Please Log in first...");
       navigate("/signin");
+    } else {
+      sessionStorage.setItem("spaceId", id);
     }
-    // else{
-
-    // }
   };
 
   return (
@@ -129,7 +128,10 @@ const Index = () => {
                       </p>
                     </div>
                     <div className="card-footer d-flex justify-content-between">
-                      <button className="btn btn-primary" onClick={handleBook}>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleBook(space._id)}
+                      >
                         Book Now
                       </button>
                       <button className="btn btn-outline-secondary">
