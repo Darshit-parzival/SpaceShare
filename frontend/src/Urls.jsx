@@ -23,6 +23,8 @@ import RegisterOwner from "./pages/client/RegisterOwner";
 import ContactMessages from "./pages/admin/ContactMessages";
 import OwnerLogin from "./pages/client/OwnerLogin";
 import OwnerHome from "./pages/owner/OwnerHome";
+import Profile from "./pages/client/Profile";
+import PageNotFound from "./PageNotFound";
 
 const Urls = () => {
   const location = useLocation();
@@ -38,8 +40,12 @@ const Urls = () => {
         navigate("/admin");
       } else if (
         loggedIn &&
-        (location.pathname === "/signin" || location.pathname === "/signup")
+        (location.pathname === "/signin" ||
+          location.pathname === "/signup" ||
+          location.pathname === "/forgot")
       ) {
+        navigate("/");
+      } else if (loggedIn === false && location.pathname === "/profile") {
         navigate("/");
       }
     }
@@ -63,6 +69,7 @@ const Urls = () => {
         <Route path="/testimonial" element={<Testimonial />} />
         <Route path="/RegisterOwner" element={<RegisterOwner />} />
         <Route path="/OwnerLogin" element={<OwnerLogin />} />
+        {loggedIn && <Route path="/profile" element={<Profile />} />}
         {loggedIn === false && (
           <>
             <Route path="/signin" element={<SignIn />} />
@@ -103,6 +110,7 @@ const Urls = () => {
             <Route path="/owner/home" element={<OwnerHome />} />
           </>
         )}
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     )
   );

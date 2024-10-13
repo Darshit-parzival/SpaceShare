@@ -1086,3 +1086,44 @@ a:focus {
 .standard_plan {
   background-color: #fff3cd; /* Light yellow */
 }
+
+/* Background gradient and typography styling */
+.page-404 {
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  color: #333;
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #352c0b, #352824);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-custom {
+  background-color: #fda085;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-custom:hover {
+  background-color: #f6d365;
+  transform: scale(1.05);
+}
+
+/* Custom illustration styling */
+.illustration img {
+  max-width: 400px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}

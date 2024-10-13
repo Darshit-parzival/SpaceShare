@@ -1,23 +1,22 @@
-/* eslint-disable react/no-unescaped-entities */
 import Header from "./components/Header";
 import sliderBg from "./img/slider-bg.jpg";
 import AboutImg from "./img/about-img.jpg";
 import w1 from "./img/w1.png";
 import w2 from "./img/w2.png";
 import w3 from "./img/w3.png";
-import PricingBg from "./img/pricing-bg.jpg";
 import Footer from "./components/Footer";
 import ClientSection from "./components/ClientSection";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ParkingContext } from "../middleware/ParkingContext";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const { owners, spaces } = useContext(ParkingContext);
   const navigate = useNavigate();
-
+  const [toast, setToast] = useState(false);
   const [searchCity, setSearchCity] = useState("");
   const [filteredSpaces, setFilteredSpaces] = useState([]);
+  const [selectedSpace, setSelectedSpace] = useState(null);
 
   const handleSearchChange = (e) => {
     setSearchCity(e.target.value);
@@ -49,8 +48,18 @@ const Index = () => {
       navigate("/signin");
     } else {
       sessionStorage.setItem("spaceId", id);
+      setToast(true);
     }
   };
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => {
+        setToast(false);
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   return (
     <>
@@ -134,7 +143,12 @@ const Index = () => {
                       >
                         Book Now
                       </button>
-                      <button className="btn btn-outline-secondary">
+                      <button
+                        className="btn btn-outline-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#detailModal"
+                        onClick={() => setSelectedSpace(space)}
+                      >
                         More Details
                       </button>
                     </div>
@@ -265,63 +279,109 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="pricing_section layout_padding">
-        <div className="bg-box">
-          <img src={PricingBg} alt="" />
-        </div>
-        <div className="container">
-          <div className="heading_container heading_center">
-            <h2>Our Pricing</h2>
-          </div>
-          <div className="col-xl-10 px-0 mx-auto">
-            <div className="row">
-              <div className="col-md-6 col-lg-4 mx-auto">
-                <div className="box">
-                  <h4 className="price">100₹</h4>
-                  <h5 className="name">Basic</h5>
-                  <p>
-                    Get access to our basic parking plan, which includes a
-                    reserved parking spot for up to 2 hours at any of our
-                    participating locations. Enjoy hassle-free parking with easy
-                    booking, real-time availability updates, and secure
-                    payments. Ideal for quick errands or short visits to the
-                    city.
-                  </p>
-                </div>
-              </div>
-              <div className="col-md-6 col-lg-4 mx-auto">
-                <div className="box box-center">
-                  <h4 className="price">300₹</h4>
-                  <h5 className="name">Standard</h5>
-                  <p>
-                    The perfect option for those who need parking for a full day
-                    or longer. Our Standard plan includes a reserved spot for up
-                    to 24 hours, making it ideal for business trips or extended
-                    city visits. Includes 24/7 customer support and easy
-                    booking.
-                  </p>
-                </div>
-              </div>
-              <div className="col-md-6 col-lg-4 mx-auto">
-                <div className="box">
-                  <h4 className="price">500₹</h4>
-                  <h5 className="name">Premium</h5>
-                  <p>
-                    Enjoy the ultimate parking experience with our Premium plan,
-                    offering secure and guaranteed parking spots for long-term
-                    stays. Whether you're leaving for a weekend getaway or need
-                    reliable parking near the airport, we've got you covered.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <ClientSection />
 
       <Footer />
+
+      <div
+        className="modal fade"
+        id="detailModal"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                {selectedSpace ? selectedSpace.parkingName : "Modal title"}
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              {selectedSpace ? (
+                <>
+                  <img
+                    src={selectedSpace.parkingPhoto || "default-parking.jpg"}
+                    alt={selectedSpace.parkingName}
+                    className="img-fluid mb-3"
+                  />
+                  <p>
+                    <strong>Location:</strong> {selectedSpace.parkingCity}
+                  </p>
+                  <p>
+                    <strong>Price:</strong> {selectedSpace.parkingPrice} ₹
+                  </p>
+                  <p>
+                    <strong>Owner:</strong> {selectedSpace.owner}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {selectedSpace.parkingAddress}
+                  </p>
+                  <p>
+                    <strong>City:</strong> {selectedSpace.parkingCity}
+                  </p>
+                  <p>
+                    <strong>State:</strong> {selectedSpace.parkingState}
+                  </p>
+                  <p>
+                    <strong>Country:</strong> {selectedSpace.parkingCountry}
+                  </p>
+                  <p>
+                    <strong>Pincode:</strong> {selectedSpace.parkingPincode}
+                  </p>
+                </>
+              ) : (
+                "Loading..."
+              )}
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                onClick={() => handleBook(selectedSpace._id)}
+                className="btn btn-primary"
+                data-bs-dismiss="modal"
+              >
+                Book Now
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className={`toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-3 ${
+          toast ? "show" : "hide"
+        }`}
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        style={{ minWidth: "300px" }}
+      >
+        <div className="d-flex">
+          <div className="toast-body">
+            Your spot added to cart
+          </div>
+          <button
+            type="button"
+            className="btn-close btn-close-white me-2 m-auto"
+            aria-label="Close"
+            onClick={() => setToast(false)}
+          ></button>
+        </div>
+      </div>
     </>
   );
 };
