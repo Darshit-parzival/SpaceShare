@@ -9,30 +9,24 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
 
-    // Check for missing fields
     if (!name || !email || !password || !confirmPassword) {
       return res.status(400).send("Missing required fields");
     }
-
-    // Check if the email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists." });
     }
 
-    // Authenticate the user
     const authResult = await userAuth(name, email, password, confirmPassword);
 
     if (!authResult || typeof authResult.status === "undefined") {
       return res.status(500).send("Unexpected error during authentication.");
     }
 
-    // If authentication fails, return an error
     if (authResult.status !== 200) {
       return res.status(authResult.status).send(authResult.message);
     }
 
-    // If authentication is successful, proceed
     const {
       name: authName,
       email: authEmail,

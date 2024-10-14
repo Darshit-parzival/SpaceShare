@@ -26,8 +26,8 @@ const Index = () => {
     e.preventDefault();
     const matchedSpaces = spaces.filter(
       (space) =>
-        space.parkingCity.toLowerCase().includes(searchCity.toLowerCase()) &&
-        space.parkingSlots > 0
+        space.parkingCity.toLowerCase().includes(searchCity.toLowerCase())
+      
     );
 
     const spacesWithOwners = matchedSpaces.map((space) => {

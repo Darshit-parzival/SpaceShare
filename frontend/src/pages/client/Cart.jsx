@@ -5,15 +5,24 @@ import SideBar from "./components/SideBar";
 import { Link } from "react-router-dom";
 import { ParkingContext } from "../middleware/ParkingContext";
 import { useContext } from "react";
+import { BookingContext } from "../middleware/BookingContext";
 
 const Cart = () => {
   const { spaces = [] } = useContext(ParkingContext);
+  const { bookings } = useContext(BookingContext);
   const cart = JSON.parse(sessionStorage.getItem("bookedSpaces") || "[]");
   const products = Array.isArray(cart) ? cart : [];
 
-  const bookedSpaces = products.map((spaceId) =>
-    spaces.find((space) => space._id === spaceId)
+  // Create a set of paid spaceIds
+  const paidSpaceIds = new Set(
+    bookings
+      .filter((booking) => booking.isPaid) // Filter for paid bookings
+      .map((booking) => booking.parkingId) // Extract parkingIds
   );
+
+  const bookedSpaces = products
+    .map((spaceId) => spaces.find((space) => space._id === spaceId))
+    .filter((space) => space && !paidSpaceIds.has(space._id)); // Exclude paid spaces
 
   return (
     <div className="sub_page">
@@ -34,11 +43,11 @@ const Cart = () => {
                 <h2 className="mb-4 fw-bold">Your Cart</h2>
 
                 <div className="d-flex flex-wrap justify-content-left">
-                  {bookedSpaces.filter(Boolean).map((space) => (
+                  {bookedSpaces.map((space) => (
                     <Link
-                      to={`/DetailedCart?id=${space?._id}`}
+                      to={`/DetailedCart?id=${space._id}`}
                       className="card m-2"
-                      key={space?._id}
+                      key={space._id}
                       style={{
                         width: "18rem",
                         transition: "transform 0.2s",
@@ -52,16 +61,13 @@ const Cart = () => {
                       }
                     >
                       <img
-                        src={
-                          space?.parkingPhoto || "/path/to/default-image.jpg"
-                        }
+                        src={space.parkingPhoto || "/path/to/default-image.jpg"}
                         className="card-img-top"
                         alt="Owner's photo"
                       />
                       <div className="card-body">
                         <h5 className="card-title">
-                          Parking Name:{" "}
-                          {space?.parkingName || "Unknown Parking"}
+                          Parking Name: {space.parkingName || "Unknown Parking"}
                         </h5>
                       </div>
                     </Link>

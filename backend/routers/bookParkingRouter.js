@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const UserBooking = require("../models/userBookingModel");
+const ParkingSpace = require("../models/parkingSpacesModel");
 
 // Add Contact Message
 router.post("/book", async (req, res) => {
@@ -12,6 +13,7 @@ router.post("/book", async (req, res) => {
       endDate,
       duration,
       totalPrice,
+      ownerId,
     } = req.body;
 
     if (
@@ -21,7 +23,8 @@ router.post("/book", async (req, res) => {
       !startDate ||
       !endDate ||
       !duration ||
-      !totalPrice
+      !totalPrice ||
+      !ownerId
     ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -34,18 +37,36 @@ router.post("/book", async (req, res) => {
       endDate: endDate,
       duration: duration,
       totalPrice: totalPrice,
+      ownerId: ownerId,
     });
 
-    const savedBooking = await newUserBooking.save();
+    const parkingSlots = await ParkingSpace.findById(parkingId).select(
+      "parkingSlots"
+    );
 
-    if (!savedBooking) {
-      return res.status(400).json({ message: "Internal server error" });
+    const bookedSlots = await UserBooking.countDocuments({
+      parkingId: parkingId,
+    });
+
+    console.log(parkingSlots);
+    console.log(bookedSlots);
+
+    if (bookedSlots < parkingSlots.parkingSlots) {
+      const savedBooking = await newUserBooking.save();
+
+      if (!savedBooking) {
+        return res.status(400).json({ message: "Internal server error" });
+      }
+
+      return res.status(200).json({
+        message: "Booked parking successfully.",
+        bookingId: savedBooking._id,
+      });
+    } else {
+      return res.status(999).json({
+        message: "No available slots",
+      });
     }
-
-    return res.status(200).json({
-      message: "Booked parking successfully.",
-      bookingId: savedBooking._id,
-    });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");

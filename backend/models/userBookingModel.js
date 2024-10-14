@@ -8,6 +8,7 @@ const userBookingSchema = new mongoose.Schema({
   endDate: { type: String, required: true },
   duration: { type: String, required: true },
   totalPrice: { type: String, required: true },
+  ownerId: { type: String, required: true },
 });
 
 const UserBooking = mongoose.model("UserBooking", userBookingSchema);

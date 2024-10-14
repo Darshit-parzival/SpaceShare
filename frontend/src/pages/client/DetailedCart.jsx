@@ -10,14 +10,17 @@ import Button from "react-bootstrap/Button";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ParkingContext } from "../middleware/ParkingContext";
 import axios from "axios";
+import { BookingContext } from "../middleware/BookingContext";
 
 const DetailedCart = () => {
   const [showModal, setShowModal] = useState(false);
+  const { fetchBookings } = useContext(BookingContext);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isValid, setIsValid] = useState(false);
   const { spaces, loading } = useContext(ParkingContext);
   const [searchParams] = useSearchParams();
+  const [toastMessage, setToastMessage] = useState("");
   const spaceId = searchParams.get("id");
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
@@ -71,12 +74,12 @@ const DetailedCart = () => {
       const minEndDate = new Date(date.getTime() + 60 * 60 * 1000);
       setEndDate(minEndDate);
     }
-    validateDates(); // Validate when start date changes
+    validateDates();
   };
 
   const handleEndDateChange = (date) => {
     setEndDate(date);
-    validateDates(); // Validate when end date changes
+    validateDates();
   };
 
   const isToday = (date) => {
@@ -119,18 +122,22 @@ const DetailedCart = () => {
             endDate: endDate,
             duration: durationInHours,
             totalPrice: totalPrice,
+            ownerId: parkingSpace.parkingOwner,
             isPaid: true,
           }
         );
         if (response.status === 200) {
+          setToastMessage(response.data.message);
           setToast(true);
+          fetchBookings();
           navigate("/cart");
-        } else {
-          alert("Failed to book parking. Please try again later.");
+        } else if (response.status === 999) {
+          setToastMessage(response.data.message);
+          setToast(true);
         }
       } catch (error) {
         console.error("Error booking parking:", error);
-        alert("Failed to book parking. Please try again later.");
+        alert("Slots are full");
       }
 
       console.log("Booking Details:");
@@ -166,7 +173,7 @@ const DetailedCart = () => {
                 style={{ minWidth: "300px" }}
               >
                 <div className="d-flex">
-                  <div className="toast-body">Your Parking is booked</div>
+                  <div className="toast-body">{toastMessage}</div>
                   <button
                     type="button"
                     className="btn-close btn-close-white me-2 m-auto"

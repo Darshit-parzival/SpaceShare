@@ -29,12 +29,17 @@ import Cart from "./pages/client/Cart";
 import GiveTestimonial from "./pages/client/GiveTestimonial";
 import GiveFeedback from "./pages/client/GiveFeedback";
 import DetailedCart from "./pages/client/DetailedCart";
+import Cookies from "js-cookie";
 
 const Urls = () => {
   const location = useLocation();
   const { loggedIn, adminLoggedIn, ownerLoggedIn, loading } =
     useContext(AuthContext);
   const navigate = useNavigate();
+
+  const deleteCookie = () => {
+    Cookies.remove("userToken");
+  };
 
   useEffect(() => {
     if (!loading) {
@@ -46,13 +51,19 @@ const Urls = () => {
         loggedIn &&
         (location.pathname === "/signin" ||
           location.pathname === "/signup" ||
-          location.pathname === "/forgot")
+          location.pathname === "/forgot" )
       ) {
         navigate("/");
       } else if (loggedIn === false && location.pathname === "/profile") {
         navigate("/");
       }
     }
+    window.addEventListener("beforeunload", deleteCookie);
+
+    return () => {
+      window.removeEventListener("beforeunload", deleteCookie);
+      deleteCookie();
+    };
   }, [
     loggedIn,
     adminLoggedIn,
