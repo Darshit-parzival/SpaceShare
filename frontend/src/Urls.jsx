@@ -25,6 +25,10 @@ import OwnerLogin from "./pages/client/OwnerLogin";
 import OwnerHome from "./pages/owner/OwnerHome";
 import Profile from "./pages/client/Profile";
 import PageNotFound from "./PageNotFound";
+import Cart from "./pages/client/Cart";
+import GiveTestimonial from "./pages/client/GiveTestimonial";
+import GiveFeedback from "./pages/client/GiveFeedback";
+import DetailedCart from "./pages/client/DetailedCart";
 
 const Urls = () => {
   const location = useLocation();
@@ -69,7 +73,16 @@ const Urls = () => {
         <Route path="/testimonial" element={<Testimonial />} />
         <Route path="/RegisterOwner" element={<RegisterOwner />} />
         <Route path="/OwnerLogin" element={<OwnerLogin />} />
-        {loggedIn && <Route path="/profile" element={<Profile />} />}
+        {loggedIn && (
+          <>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/givetestimonial" element={<GiveTestimonial />} />
+            <Route path="/givetestimonial" element={<GiveTestimonial />} />
+            <Route path="/givefeedback" element={<GiveFeedback />} />
+            <Route path="/DetailedCart" element={<DetailedCart />} />
+          </>
+        )}
         {loggedIn === false && (
           <>
             <Route path="/signin" element={<SignIn />} />

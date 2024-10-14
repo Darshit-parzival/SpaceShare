@@ -27,6 +27,7 @@ const Header = () => {
         sessionStorage.removeItem("userId");
         setUserName("");
         setUserId("");
+        window.location.reload();
       }
     } catch (error) {
       console.error("Logout error:", error);

@@ -26,6 +26,7 @@ app.use("/admin", require("./routers/adminRouter"));
 app.use("/parkingOwner", require("./routers/parkingOwnerRouter"));
 app.use("/parkingSpace", require("./routers/parkingSpaceRouter"));
 app.use("/contact", require("./routers/contactRouter"));
+app.use("/bookParking", require("./routers/bookParkingRouter"));
 
 app.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}/`);

@@ -158,6 +158,7 @@ const ParkingOwnerProfile = () => {
   };
 
   const [newParkingSpace, setNewParkingSpace] = useState({
+    id: "",
     photo: null,
     name: "",
     address: "",
@@ -166,10 +167,12 @@ const ParkingOwnerProfile = () => {
     country: "",
     pincode: "",
     price: "",
+    slots: "",
   });
 
   const handleEditSpaceClick = (space) => {
     setNewParkingSpace({
+      id: space._id,
       photo: space.parkingPhoto,
       name: space.parkingName,
       address: space.parkingAddress,
@@ -178,6 +181,7 @@ const ParkingOwnerProfile = () => {
       country: space.parkingCountry,
       pincode: space.parkingPincode,
       price: space.parkingPrice,
+      slots: space.parkingSlots,
     });
   };
 
@@ -193,7 +197,7 @@ const ParkingOwnerProfile = () => {
   const addParkingSpace = async () => {
     const formData = new FormData();
     formData.append("parkingPhoto", newParkingSpace.photo);
-    formData.append("id", newParkingSpace._id);
+    formData.append("id", newParkingSpace.id);
     formData.append("name", newParkingSpace.name);
     formData.append("address", newParkingSpace.address);
     formData.append("city", newParkingSpace.city);
@@ -201,7 +205,8 @@ const ParkingOwnerProfile = () => {
     formData.append("country", newParkingSpace.country);
     formData.append("pincode", newParkingSpace.pincode);
     formData.append("price", newParkingSpace.price);
-    
+    formData.append("slots", newParkingSpace.slots);
+
     try {
       const response = await fetch("http://localhost:5000/parkingSpace/edit", {
         method: "PATCH",
@@ -318,7 +323,9 @@ const ParkingOwnerProfile = () => {
                     <p>Age: {parkingOwner.ownerAge}</p>
                     <p>Contact: {parkingOwner.ownerContact}</p>
                     <p>Email: {parkingOwner.ownerEmail}</p>
-                    <p>Registered on: {parkingOwner.registerDate} (YYYY-MM-DD)</p>
+                    <p>
+                      Registered on: {parkingOwner.registerDate} (YYYY-MM-DD)
+                    </p>
                     <p>Plan Type: {parkingOwner.planType}</p>
                     <p>Total Parking Spaces: {parkingSpaces.length}</p>
                   </div>
@@ -368,6 +375,8 @@ const ParkingOwnerProfile = () => {
                           <p>State: {space.parkingState}</p>
                           <p>Country: {space.parkingCountry}</p>
                           <p>Pin Code: {space.parkingPincode}</p>
+                          <p>Price: {space.parkingPrice}</p>
+                          <p>Total Slots: {space.parkingSlots}</p>
                         </div>
 
                         <div className="profile-actions d-flex justify-content-center">
@@ -643,6 +652,19 @@ const ParkingOwnerProfile = () => {
                 />
               </div>
               <div className="mb-3">
+                <label htmlFor="pincodeInput" className="form-label">
+                  Pincode
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="pincodeInput"
+                  name="pincode"
+                  value={newParkingSpace.pincode}
+                  onChange={handleParkingSpaceChange}
+                />
+              </div>
+              <div className="mb-3">
                 <label htmlFor="priceInput" className="form-label">
                   Price
                 </label>
@@ -656,15 +678,15 @@ const ParkingOwnerProfile = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="pincodeInput" className="form-label">
-                  Pincode
+                <label htmlFor="priceInput" className="form-label">
+                  Total Slots
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
-                  id="pincodeInput"
-                  name="pincode"
-                  value={newParkingSpace.pincode}
+                  id="slotsInput"
+                  name="slots"
+                  value={newParkingSpace.slots}
                   onChange={handleParkingSpaceChange}
                 />
               </div>

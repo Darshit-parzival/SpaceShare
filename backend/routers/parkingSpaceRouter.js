@@ -35,6 +35,7 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
       parkingCountry,
       parkingPincode,
       parkingPrice,
+      parkingSlots,
     } = req.body;
 
     console.log({
@@ -47,6 +48,7 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
       parkingCountry,
       parkingPincode,
       parkingPrice,
+      parkingSlots,
     });
 
     if (
@@ -58,7 +60,8 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
       !parkingState ||
       !parkingCountry ||
       !parkingPincode ||
-      !parkingPrice
+      !parkingPrice ||
+      !parkingSlots
     ) {
       return res.status(400).send("Missing required fields");
     }
@@ -73,6 +76,7 @@ router.post("/add", upload.single("parkingPhoto"), async (req, res) => {
       parkingCountry,
       parkingPincode,
       parkingPrice,
+      parkingSlots,
     });
 
     await newParkingSpace.save();
@@ -103,7 +107,7 @@ router.get("/fetch", async (req, res) => {
 
 router.patch("/edit", upload.single("parkingPhoto"), async (req, res) => {
   try {
-    const { id, name, address, city, state, country, pincode, price } =
+    const { id, name, address, city, state, country, pincode, price, slots } =
       req.body;
 
     let parkingSpace = await ParkingSpace.findById(id);
@@ -118,6 +122,7 @@ router.patch("/edit", upload.single("parkingPhoto"), async (req, res) => {
     parkingSpace.parkingCountry = country || parkingSpace.parkingCountry;
     parkingSpace.parkingPincode = pincode || parkingSpace.parkingPincode;
     parkingSpace.parkingPrice = price || parkingSpace.parkingPrice;
+    parkingSpace.parkingSlots = slots || parkingSpace.parkingSlots;
 
     if (req.file) {
       if (parkingSpace.parkingPhoto) {

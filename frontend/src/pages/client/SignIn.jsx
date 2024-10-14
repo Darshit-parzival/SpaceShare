@@ -52,6 +52,7 @@ const SignIn = () => {
           setUserName(response.data.userName);
           setUserId(response.data.userId);
           navigate("/");
+          window.location.reload();
         } else {
           setToast(true);
         }

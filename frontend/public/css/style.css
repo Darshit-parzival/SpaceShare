@@ -1100,6 +1100,24 @@ a:focus {
   -webkit-text-fill-color: transparent;
 }
 
+.nav-link-item {
+  display: block;
+  padding: 10px;
+  border-radius: 4px;
+  color: #000;
+  background-color: transparent;
+}
+
+.nav-link-item:hover {
+  background-color: #f8f9fa; 
+  color: #007bff;
+}
+
+.active {
+  background-color: #007bff; 
+  color: #fff; 
+}
+
 .btn-custom {
   background-color: #fda085;
   border: none;
@@ -1126,4 +1144,27 @@ a:focus {
   50% {
     transform: translateY(-15px);
   }
+}
+
+.parking-image {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.parking-details {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.details-section {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.details-section h2 {
+  color: #333;
+}
+
+.details-section a {
+  text-transform: uppercase;
 }

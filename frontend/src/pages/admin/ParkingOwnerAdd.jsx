@@ -27,6 +27,7 @@ const ParkingOwnerAdd = () => {
     country: "",
     pincode: "",
     price: "",
+    slots: "",
   });
 
   const handleOwnerPhotoChange = (e) => {
@@ -54,16 +55,6 @@ const ParkingOwnerAdd = () => {
   };
 
   const addParkingSpace = () => {
-    const formData = new FormData();
-    formData.append("photo", newParkingSpace.photo);
-    formData.append("name", newParkingSpace.name);
-    formData.append("address", newParkingSpace.address);
-    formData.append("city", newParkingSpace.city);
-    formData.append("state", newParkingSpace.state);
-    formData.append("country", newParkingSpace.country);
-    formData.append("pincode", newParkingSpace.pincode);
-    formData.append("price", newParkingSpace.price);
-
     if (editIndex !== null) {
       const updatedParkingSpaces = owner.parkingSpaces.map((space, index) =>
         index === editIndex ? newParkingSpace : space
@@ -86,6 +77,7 @@ const ParkingOwnerAdd = () => {
       country: "",
       pincode: "",
       price: "",
+      slots: "",
     });
   };
 
@@ -142,6 +134,7 @@ const ParkingOwnerAdd = () => {
           parkingFormData.append("parkingCountry", space.country);
           parkingFormData.append("parkingPincode", space.pincode);
           parkingFormData.append("parkingPrice", space.price);
+          parkingFormData.append("parkingSlots", space.slots);
 
           const parkingSpaceResponse = await axios.post(
             "http://localhost:5000/parkingSpace/add",
@@ -348,6 +341,9 @@ const ParkingOwnerAdd = () => {
                       <p>
                         <strong>Pincode:</strong> {space.pincode}
                       </p>
+                      <p>
+                        <strong>Slots:</strong> {space.slots}
+                      </p>
                       {space.photo && (
                         <img
                           src={URL.createObjectURL(space.photo)}
@@ -506,6 +502,20 @@ const ParkingOwnerAdd = () => {
                         id="pincodeInput"
                         name="pincode"
                         value={newParkingSpace.pincode}
+                        onChange={handleParkingSpaceChange}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="pincodeInput" className="form-label">
+                        Total Parking Slots
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        className="form-control"
+                        id="pincodeInput"
+                        name="slots"
+                        value={newParkingSpace.slots}
                         onChange={handleParkingSpaceChange}
                       />
                     </div>

@@ -1,11 +1,27 @@
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import NavBg from "./img/slider-bg.jpg";
+import SideBar from "./components/SideBar";
+import { useContext, useState, useEffect } from "react";
+import { UserContext } from "../middleware/UserContext";
 
-const Profile = ({ name, email }) => {
+const Profile = () => {
+  const { users } = useContext(UserContext); // Access users directly from context
+  const userId = sessionStorage.getItem("userId");
+
+  const [user, setUser] = useState(null);
+
+  const filterUser = () => {
+    const filteredUser = users.find((user) => user._id === userId); // Find user in the users array
+    setUser(filteredUser);
+  };
+
+  useEffect(() => {
+    filterUser();
+  }, [users]); // Run filterUser when users change
+
   return (
     <div className="sub_page">
-      {/* Background and Header */}
       <div className="hero_area">
         <div className="bg-box">
           <img src={NavBg} alt="Background" />
@@ -13,42 +29,44 @@ const Profile = ({ name, email }) => {
         <Header />
       </div>
 
-      {/* Main Content Section */}
       <div className="container-fluid py-5">
         <div className="row">
-          {/* Sidebar */}
-          <aside className="col-md-3">
-            <div className="bg-light p-4 shadow-sm h-100">
-              <h4 className="text-center">Menu</h4>
-              <ul className="list-group">
-                <li className="list-group-item">Cart</li>
-                <li className="list-group-item">Testimonials</li>
-                <li className="list-group-item">Feedback</li>
-              </ul>
-            </div>
-          </aside>
+          <SideBar />
 
-          {/* Profile Content */}
           <main className="col-md-9">
             <div className="card shadow-sm p-4">
               <div className="card-body">
-                {/* Greeting */}
-                <h2 className="mb-4">Welcome, {name}!</h2>
-                
-                {/* Profile Info */}
-                <div className="mb-3">
-                  <h5 className="fw-bold">Profile Information</h5>
-                  <p><strong>Name: </strong>{name}</p>
-                  <p><strong>Email: </strong>{email}</p>
-                </div>
+                {user ? (
+                  <>
+                    <h2 className="mb-4">Welcome, <b>{user.name}!</b></h2>
 
-                {/* Add more sections for future content */}
-                <div className="mt-5">
-                  <h5 className="fw-bold">More Information Coming Soon...</h5>
-                  <p>
-                    Stay tuned for exciting updates, personalized content, and much more!
-                  </p>
-                </div>
+                    <div className="mb-3">
+                      <h5 className="fw-bold">Profile Information</h5>
+                      <p>
+                        <strong>Name: </strong>
+                        {user.name}
+                      </p>
+                      <p>
+                        <strong>Email: </strong>
+                        {user.email}
+                      </p>
+                      <p>
+                        <strong>Total Parking Space use: </strong>
+                        {user.email}
+                      </p>
+                      <p>
+                        <strong>Total Given Testimonials: </strong>
+                        {user.email}
+                      </p>
+                      <p>
+                        <strong>Total Given Feedbacks: </strong>
+                        {user.email}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <p>Loading user data...</p>
+                )}
               </div>
             </div>
           </main>

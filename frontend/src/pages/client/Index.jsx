@@ -24,8 +24,10 @@ const Index = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    const matchedSpaces = spaces.filter((space) =>
-      space.parkingCity.toLowerCase().includes(searchCity.toLowerCase())
+    const matchedSpaces = spaces.filter(
+      (space) =>
+        space.parkingCity.toLowerCase().includes(searchCity.toLowerCase()) &&
+        space.parkingSlots > 0
     );
 
     const spacesWithOwners = matchedSpaces.map((space) => {
@@ -47,7 +49,15 @@ const Index = () => {
       alert("Please Log in first...");
       navigate("/signin");
     } else {
-      sessionStorage.setItem("spaceId", id);
+      let bookedSpaces =
+        JSON.parse(sessionStorage.getItem("bookedSpaces")) || [];
+
+      if (!bookedSpaces.includes(id)) {
+        bookedSpaces.push(id);
+      }
+
+      sessionStorage.setItem("bookedSpaces", JSON.stringify(bookedSpaces));
+
       setToast(true);
     }
   };
@@ -371,9 +381,7 @@ const Index = () => {
         style={{ minWidth: "300px" }}
       >
         <div className="d-flex">
-          <div className="toast-body">
-            Your spot added to cart
-          </div>
+          <div className="toast-body">Your spot added to cart</div>
           <button
             type="button"
             className="btn-close btn-close-white me-2 m-auto"

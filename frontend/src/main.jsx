@@ -7,6 +7,7 @@ import { AuthContextProvider } from "./pages/middleware/AuthContext";
 import { AdminContextProvider } from "./pages/middleware/AdminContext";
 import { UserContextProvider } from "./pages/middleware/UserContext";
 import { ParkingContextProvider } from "./pages/middleware/ParkingContext.jsx";
+import { BookingContextProvider } from "./pages/middleware/BookingContext.jsx";
 
 axios.defaults.withCredentials = true;
 
@@ -17,7 +18,9 @@ createRoot(document.getElementById("root")).render(
         <AdminContextProvider>
           <UserContextProvider>
             <ParkingContextProvider>
-              <Urls />
+              <BookingContextProvider>
+                <Urls />
+              </BookingContextProvider>
             </ParkingContextProvider>
           </UserContextProvider>
         </AdminContextProvider>
