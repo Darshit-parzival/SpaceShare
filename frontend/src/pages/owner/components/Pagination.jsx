@@ -3,9 +3,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
   return (
     <nav aria-label="Page navigation">
       <ul className="pagination justify-content-center">
-        <li
-          className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-        >
+        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
           <button
             className="page-link"
             onClick={() => handlePageChange(currentPage - 1)}
@@ -16,9 +14,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
         {Array.from({ length: totalPages }, (_, i) => (
           <li
             key={i + 1}
-            className={`page-item ${
-              currentPage === i + 1 ? "active" : ""
-            }`}
+            className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
           >
             <button
               className="page-link"
@@ -29,7 +25,9 @@ const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
           </li>
         ))}
         <li
-          className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+          className={`page-item ${
+            currentPage === totalPages ? "disabled" : ""
+          }`}
         >
           <button
             className="page-link"
