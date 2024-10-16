@@ -103,8 +103,8 @@ const ParkingGraph = () => {
 
           <div
             style={{
-              height: "calc(100vh - 150px)", // Adjust height as needed
-              overflow: "hidden", // Prevent scrolling
+              height: "calc(100vh - 150px)",
+              overflow: "hidden", 
             }}
           >
             {chartType === "bar" && (

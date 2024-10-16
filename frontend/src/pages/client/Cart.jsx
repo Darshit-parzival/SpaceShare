@@ -16,7 +16,7 @@ const Cart = () => {
   const paidSpaceIds = new Set(
     bookings
       .filter((booking) => booking.isPaid)
-      .map((booking) => booking.parkingId) 
+      .map((booking) => booking.parkingId)
   );
 
   const bookedSpaces = products

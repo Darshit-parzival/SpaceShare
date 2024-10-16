@@ -18,8 +18,7 @@ app.use(
     credentials: true,
   })
 );
-~
-app.use("/img", express.static(path.join(__dirname, "img"))); 
+~app.use("/img", express.static(path.join(__dirname, "img")));
 
 app.use("/user", require("./routers/userRouter"));
 app.use("/admin", require("./routers/adminRouter"));
@@ -27,6 +26,7 @@ app.use("/parkingOwner", require("./routers/parkingOwnerRouter"));
 app.use("/parkingSpace", require("./routers/parkingSpaceRouter"));
 app.use("/contact", require("./routers/contactRouter"));
 app.use("/bookParking", require("./routers/bookParkingRouter"));
+app.use("/testimonial", require("./routers/testimonialRouter"));
 
 app.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}/`);
