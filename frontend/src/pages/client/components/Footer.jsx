@@ -174,8 +174,8 @@ const Footer = () => {
       <footer className="footer_section">
         <div className="container">
           <p>
-            &copy; <span id="displayYear"></span> Created by Jay Purani & Janvi
-            Suthar
+            &copy; <span id="displayYear"></span> Created by Jay Purani, Janvi
+            Suthar & Tanvi Vara
           </p>
         </div>
       </footer>
