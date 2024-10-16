@@ -42,6 +42,15 @@ const SideBar = () => {
               Feedback
             </NavLink>
           </li>
+          <li className="list-group-item">
+            <NavLink
+              to="/paymentHistory"
+              className="text-decoration-none nav-link-item"
+              activeclassname="active"
+            >
+              Payment History
+            </NavLink>
+          </li>
         </ul>
       </div>
     </aside>

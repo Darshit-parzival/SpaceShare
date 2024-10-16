@@ -13,16 +13,15 @@ const Cart = () => {
   const cart = JSON.parse(sessionStorage.getItem("bookedSpaces") || "[]");
   const products = Array.isArray(cart) ? cart : [];
 
-  // Create a set of paid spaceIds
   const paidSpaceIds = new Set(
     bookings
-      .filter((booking) => booking.isPaid) // Filter for paid bookings
-      .map((booking) => booking.parkingId) // Extract parkingIds
+      .filter((booking) => booking.isPaid)
+      .map((booking) => booking.parkingId) 
   );
 
   const bookedSpaces = products
     .map((spaceId) => spaces.find((space) => space._id === spaceId))
-    .filter((space) => space && !paidSpaceIds.has(space._id)); // Exclude paid spaces
+    .filter((space) => space && !paidSpaceIds.has(space._id));
 
   return (
     <div className="sub_page">

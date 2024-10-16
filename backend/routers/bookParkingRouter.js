@@ -2,7 +2,6 @@ const router = require("express").Router();
 const UserBooking = require("../models/userBookingModel");
 const ParkingSpace = require("../models/parkingSpacesModel");
 
-// Add Contact Message
 router.post("/book", async (req, res) => {
   try {
     const {
@@ -40,18 +39,11 @@ router.post("/book", async (req, res) => {
       ownerId: ownerId,
     });
 
-    const parkingSlots = await ParkingSpace.findById(parkingId).select(
-      "parkingSlots"
-    );
+    // Count total bookings for the specific parkingId
+    const bookedSlots = await UserBooking.countDocuments({ parkingId: parkingId });
 
-    const bookedSlots = await UserBooking.countDocuments({
-      parkingId: parkingId,
-    });
-
-    console.log(parkingSlots);
-    console.log(bookedSlots);
-
-    if (bookedSlots < parkingSlots.parkingSlots) {
+    // If no bookings exist yet, insert the first booking without checking for slots
+    if (bookedSlots === 0) {
       const savedBooking = await newUserBooking.save();
 
       if (!savedBooking) {
@@ -59,13 +51,33 @@ router.post("/book", async (req, res) => {
       }
 
       return res.status(200).json({
-        message: "Booked parking successfully.",
+        message: "First booking added successfully.",
         bookingId: savedBooking._id,
       });
     } else {
-      return res.status(999).json({
-        message: "No available slots",
-      });
+      // Fetch parking slots for the given parkingId
+      const parkingSpace = await ParkingSpace.findById(parkingId).select(
+        "parkingSlots"
+      );
+
+      // Check if there are available slots for subsequent bookings
+      if (bookedSlots < parkingSpace.parkingSlots) {
+        const savedBooking = await newUserBooking.save();
+
+        if (!savedBooking) {
+          return res.status(400).json({ message: "Internal server error" });
+        }
+
+        return res.status(200).json({
+          message: "Booked parking successfully.",
+          bookingId: savedBooking._id,
+        });
+      } else {
+        // If no slots are available, return an error message
+        return res.status(999).json({
+          message: "No available slots",
+        });
+      }
     }
   } catch (error) {
     console.error(error);
@@ -85,24 +97,24 @@ router.get("/fetch", async (req, res) => {
   }
 });
 
-// Delete Contact Message
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete", async (req, res) => {
+  const { parkingId } = req.body;
+
   try {
-    const { id } = req.params;
+    const deletedBooking = await UserBooking.findOneAndDelete({
+      parkingId: parkingId,
+    });
 
-    const deletedContact = await Contact.findByIdAndDelete(id);
+    console.log(parkingId);
 
-    if (!deletedContact) {
-      return res.status(404).json({ message: "Contact message not found" });
+    if (!deletedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
     }
 
-    return res.status(200).json({
-      message: "Contact message deleted successfully.",
-      contactId: deletedContact._id,
-    });
+    res.status(200).json({ message: "Booking deleted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal server error");
+    console.error("Error deleting booking:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
