@@ -6,7 +6,7 @@ import { ParkingContext } from "../middleware/ParkingContext";
 import { UserContext } from "../middleware/UserContext";
 import { useContext, useState } from "react";
 import LoadingScreen from "../../LoadingScreen";
-import { Pagination } from "react-bootstrap";
+import Pagination from "./components/Pagination";
 
 const ParkingSpaceReport = () => {
   const { bookings, loading } = useContext(BookingContext);
@@ -106,13 +106,6 @@ const ParkingSpaceReport = () => {
                               )}
                             </tbody>
                           </table>
-
-                          {/* Pagination Component */}
-                          <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={handlePageChange}
-                          />
                         </div>
                       </div>
                     ))
@@ -122,6 +115,13 @@ const ParkingSpaceReport = () => {
                 </div>
               );
             })}
+
+            {/* Pagination outside of the card */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </main>
         </div>
       </div>

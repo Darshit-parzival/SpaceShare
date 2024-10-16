@@ -31,6 +31,7 @@ import GiveFeedback from "./pages/client/GiveFeedback";
 import DetailedCart from "./pages/client/DetailedCart";
 import Cookies from "js-cookie";
 import PaymentHistory from "./pages/client/PaymentHistory";
+import Testimonials from "./pages/admin/Testimonials";
 
 const Urls = () => {
   const location = useLocation();
@@ -52,7 +53,7 @@ const Urls = () => {
         loggedIn &&
         (location.pathname === "/signin" ||
           location.pathname === "/signup" ||
-          location.pathname === "/forgot" )
+          location.pathname === "/forgot")
       ) {
         navigate("/");
       } else if (loggedIn === false && location.pathname === "/profile") {
@@ -127,6 +128,7 @@ const Urls = () => {
               path="/admin/parkingSpaceGraph"
               element={<ParkingSpaceGraph />}
             />
+            <Route path="/admin/testimonial" element={<Testimonials />} />
             <Route path="/admin/req" element={<Requests />} />
           </>
         )}
