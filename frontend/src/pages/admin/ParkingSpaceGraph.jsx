@@ -1,17 +1,19 @@
-import { useState } from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { useState, useContext } from "react";
+import { Bar, Pie } from "react-chartjs-2";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import { ParkingContext } from "../middleware/ParkingContext";
+import { BookingContext } from "../middleware/BookingContext";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
   LineElement,
-  PointElement,
   Title,
   Tooltip,
   Legend,
+  ArcElement,
 } from "chart.js";
 
 ChartJS.register(
@@ -19,65 +21,30 @@ ChartJS.register(
   LinearScale,
   BarElement,
   LineElement,
-  PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
-const parkingOwners = [
-  {
-    name: "Anon",
-    parkingSpaces: [
-      {
-        name: "Main Parking",
-        users: [
-          { name: "John Doe", parkingTime: "2024-10-01 10:00 AM" },
-          { name: "Jane Smith", parkingTime: "2024-10-01 10:30 AM" },
-        ],
-      },
-      {
-        name: "Secondary Parking",
-        users: [{ name: "Mark Johnson", parkingTime: "2024-10-01 11:00 AM" }],
-      },
-    ],
-  },
-  {
-    name: "Doe",
-    parkingSpaces: [
-      {
-        name: "Main Parking",
-        users: [
-          { name: "John Doe", parkingTime: "2024-10-01 10:00 AM" },
-          { name: "Jane Smith", parkingTime: "2024-10-01 10:30 AM" },
-        ],
-      },
-      {
-        name: "Secondary Parking",
-        users: [{ name: "Mark Johnson", parkingTime: "2024-10-01 11:00 AM" }],
-      },
-    ],
-  },
-];
-
 const ParkingGraph = () => {
+  const { owners, spaces } = useContext(ParkingContext);
+  const { bookings } = useContext(BookingContext);
   const [chartType, setChartType] = useState("bar");
 
-  // Prepare data for the chart
-  const labels = parkingOwners.flatMap((owner) =>
-    owner.parkingSpaces.map((space) => space.name)
+  // Bar Graph Data: Number of Bookings per Parking Space
+  const labels = spaces.map((space) => space.parkingName);
+  const bookingCounts = spaces.map(
+    (space) =>
+      bookings.filter((booking) => booking.parkingId === space._id).length
   );
 
-  const userCounts = parkingOwners.flatMap((owner) =>
-    owner.parkingSpaces.map((space) => space.users.length)
-  );
-
-  const data = {
+  const bookingData = {
     labels: labels,
     datasets: [
       {
-        label: "Number of Users",
-        data: userCounts,
+        label: "Number of Bookings",
+        data: bookingCounts,
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
@@ -85,28 +52,88 @@ const ParkingGraph = () => {
     ],
   };
 
+  // Pie Chart Data: Total Income by Owner
+  const ownerIncome = owners.map((owner) => {
+    const totalIncome = bookings
+      .filter((booking) => booking.ownerId === owner._id)
+      .reduce((acc, booking) => acc + parseFloat(booking.totalPrice), 0);
+    return totalIncome;
+  });
+
+  const incomeData = {
+    labels: owners.map((owner) => owner.ownerName),
+    datasets: [
+      {
+        label: "Total Income",
+        data: ownerIncome,
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.6)",
+          "rgba(54, 162, 235, 0.6)",
+          "rgba(255, 206, 86, 0.6)",
+          "rgba(75, 192, 192, 0.6)",
+          "rgba(153, 102, 255, 0.6)",
+        ],
+      },
+    ],
+  };
+
   return (
     <>
       <Header />
-      <div className="container-fluid">
-        <div className="row">
-          <Sidebar />
-          <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-              <h1 className="h2">Parking Space Owner Reports</h1>
-            </div>
-            <h2>Parking Owners Graph</h2>
-            <select onChange={(e) => setChartType(e.target.value)} value={chartType}>
-                <option value="bar">Bar Chart</option>
-                <option value="line">Line Chart</option>
-            </select>
-            {chartType === 'bar' ? (
-                <Bar data={data} options={{ responsive: true }} />
-            ) : (
-                <Line data={data} options={{ responsive: true }} />
+      <div style={{ display: "flex", height: "100vh" }}>
+        <Sidebar />
+        <main style={{ flex: 1, padding: "20px", overflow: "hidden" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "20px",
+            }}
+          >
+            <h1 style={{ fontSize: "24px" }}>Parking Space Owner Reports</h1>
+          </div>
+          <select
+            onChange={(e) => setChartType(e.target.value)}
+            value={chartType}
+            style={{ marginBottom: "20px" }}
+          >
+            <option value="bar">Bar Graph - Bookings</option>
+            <option value="pie">Pie Chart - Income by Owner</option>
+          </select>
+
+          <div
+            style={{
+              height: "calc(100vh - 150px)", // Adjust height as needed
+              overflow: "hidden", // Prevent scrolling
+            }}
+          >
+            {chartType === "bar" && (
+              <Bar
+                data={bookingData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                    },
+                  },
+                }}
+                height={300} // Set desired height
+              />
             )}
-          </main>
-        </div>
+            {chartType === "pie" && (
+              <Pie
+                data={incomeData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                }}
+                height={300} // Set desired height
+              />
+            )}
+          </div>
+        </main>
       </div>
     </>
   );
