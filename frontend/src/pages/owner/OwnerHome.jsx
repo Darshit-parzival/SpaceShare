@@ -1,7 +1,21 @@
+import { useContext } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import { BookingContext } from "../middleware/BookingContext";
+import { ParkingContext } from "../middleware/ParkingContext";
 
 const OwnerHome = () => {
+  const { bookings } = useContext(BookingContext);
+  const { spaces } = useContext(ParkingContext);
+  const ownerId = sessionStorage.getItem("ownerId");
+
+  // Filter bookings by ownerId
+  const ownerBookings = bookings.filter(
+    (booking) => booking.ownerId === ownerId
+  );
+
+  const ownerSpaces = spaces.filter((space) => space.parkingOwner === ownerId);
+
   return (
     <>
       <Header />
@@ -26,7 +40,7 @@ const OwnerHome = () => {
                       <label className="text-muted me-1 fw-bold">
                         Total Users:
                       </label>
-                      <label>{/* Placeholder for total admins */}</label>
+                      <label>{ownerBookings.length}</label>
                     </div>
                   </div>
                 </div>
@@ -45,7 +59,7 @@ const OwnerHome = () => {
                       <label className="text-muted me-1 fw-bold">
                         Total Spaces:
                       </label>
-                      <label>{/* Placeholder for total users */}</label>
+                      <label>{ownerSpaces.length}</label>
                     </div>
                   </div>
                 </div>

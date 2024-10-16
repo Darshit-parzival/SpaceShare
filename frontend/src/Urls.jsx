@@ -32,6 +32,8 @@ import DetailedCart from "./pages/client/DetailedCart";
 import Cookies from "js-cookie";
 import PaymentHistory from "./pages/client/PaymentHistory";
 import Testimonials from "./pages/admin/Testimonials";
+import OwnerProfile from "./pages/owner/OwnerProfile";
+import UsersOfOwners from "./pages/owner/UsersOfOwners";
 
 const Urls = () => {
   const location = useLocation();
@@ -135,6 +137,8 @@ const Urls = () => {
         {ownerLoggedIn && (
           <>
             <Route path="/owner/home" element={<OwnerHome />} />
+            <Route path="/owner/profile" element={<OwnerProfile />} />
+            <Route path="/owner/users" element={<UsersOfOwners />} />
           </>
         )}
         <Route path="*" element={<PageNotFound />} />
