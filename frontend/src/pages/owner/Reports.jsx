@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { BookingContext } from "../middleware/BookingContext";
@@ -10,7 +9,7 @@ import Pagination from "./components/Pagination";
 
 const ParkingSpaceReport = () => {
   const { bookings, loading } = useContext(BookingContext);
-  const { owners, spaces } = useContext(ParkingContext); // Including spaces
+  const { owners, spaces } = useContext(ParkingContext); 
   const { users } = useContext(UserContext);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -52,9 +51,6 @@ const ParkingSpaceReport = () => {
           <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <h1 className="h2">Parking Space Owner Reports</h1>
-              <Link className="btn btn-primary" to="/admin/parkingSpaceGraph">
-                Graphical View
-              </Link>
             </div>
 
             {currentItems.map((booking, index) => {

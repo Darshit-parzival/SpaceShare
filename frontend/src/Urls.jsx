@@ -33,6 +33,7 @@ import PaymentHistory from "./pages/client/PaymentHistory";
 import Testimonials from "./pages/admin/Testimonials";
 import OwnerProfile from "./pages/owner/OwnerProfile";
 import UsersOfOwners from "./pages/owner/UsersOfOwners";
+import Reports from "./pages/owner/Reports";
 
 const Urls = () => {
   const location = useLocation();
@@ -137,7 +138,7 @@ const Urls = () => {
             <Route path="/owner/home" element={<OwnerHome />} />
             <Route path="/owner/profile" element={<OwnerProfile />} />
             <Route path="/owner/users" element={<UsersOfOwners />} />
-            <Route path="/owner/users" element={<UsersOfOwners />} />
+            <Route path="/owner/parkingSpaceReport" element={<Reports />} />
           </>
         )}
         <Route path="*" element={<PageNotFound />} />
