@@ -68,20 +68,80 @@ const DetailedCart = () => {
 
   const generatePdf = (parkingSpace, startDate, endDate, totalPrice) => {
     const doc = new jsPDF();
-    doc.text("Parking Booking Confirmation", 10, 10);
-    doc.text(`Parking Space: ${parkingSpace.parkingName}`, 10, 20);
-    doc.text(`Address: ${parkingSpace.parkingAddress}`, 10, 30);
-    doc.text(`City: ${parkingSpace.parkingCity}`, 10, 40);
-    doc.text(`State: ${parkingSpace.parkingState}`, 10, 50);
-    doc.text(`Country: ${parkingSpace.parkingCountry}`, 10, 60);
-    doc.text(`Pincode: ${parkingSpace.parkingPincode}`, 10, 70);
-    doc.text(`Price per hour: ${parkingSpace.parkingPrice} ₹`, 10, 80);
-    doc.text(`Start Date & Time: ${startDate}`, 10, 90);
-    doc.text(`End Date & Time: ${endDate}`, 10, 100);
-    doc.text(`Total Price: ${totalPrice} ₹`, 10, 110);
+
+    // Company Name
+    doc.setFontSize(26);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 51, 102); // Dark Blue
+    doc.text("SpaceShare", 105, 15, { align: "center" });
+
+    // Subtitle
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(0, 102, 204); // Lighter Blue
+    doc.text("Parking Booking Confirmation", 105, 25, { align: "center" });
+
+    // Horizontal separator line below title
+    doc.setLineWidth(0.5);
+    doc.setDrawColor(0, 102, 204);
+    doc.line(10, 30, 200, 30);
+
+    // Parking Details Section Title
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text("Parking Details", 10, 40);
+
+    // Parking details
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Parking Space: ${parkingSpace.parkingName}`, 10, 50);
+    doc.text(`Address: ${parkingSpace.parkingAddress}`, 10, 60);
+    doc.text(`City: ${parkingSpace.parkingCity}`, 10, 70);
+    doc.text(`State: ${parkingSpace.parkingState}`, 10, 80);
+    doc.text(`Country: ${parkingSpace.parkingCountry}`, 10, 90);
+    doc.text(`Pincode: ${parkingSpace.parkingPincode}`, 10, 100);
+    doc.text(`Price per hour: ${parkingSpace.parkingPrice} ₹`, 10, 110);
+
+    // Booking Details Section Title
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("Booking Details", 10, 130);
+
+    // Booking details
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Start Date & Time: ${startDate}`, 10, 140);
+    doc.text(`End Date & Time: ${endDate}`, 10, 150);
+    doc.text(`Total Price: ${totalPrice} ₹`, 10, 160);
+
+    // Footer Section with thank you note
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(100, 100, 100);
+    doc.text("Thank you for choosing SpaceShare!", 105, 190, {
+      align: "center",
+    });
+
+    // Footer separator
+    doc.setLineWidth(0.3);
+    doc.setDrawColor(192, 192, 192);
+    doc.line(10, 195, 200, 195);
+
+    // Additional footer information
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(128, 128, 128);
+    doc.text(
+      "For any queries, contact us at support@spaceshare.com",
+      105,
+      205,
+      { align: "center" }
+    );
 
     // Save the generated PDF
-    doc.save("Parking_Booking_Confirmation.pdf");
+    doc.save("SpaceShare_Parking_Confirmation.pdf");
   };
 
   const handleShow = () => setShowModal(true);
@@ -247,7 +307,7 @@ const DetailedCart = () => {
                     </Modal.Header>
                     <Modal.Body>
                       <div className="mb-3">
-                        <label>Start Date & Time:</label>
+                        <label className="me-2">Start Date & Time:</label>
                         <DatePicker
                           selected={startDate}
                           onChange={handleStartDateChange}
@@ -260,9 +320,7 @@ const DetailedCart = () => {
                         />
                       </div>
                       <div className="mb-3">
-                        <label>
-                          End Date & Time (at least 1 hour after start):
-                        </label>
+                        <label className="me-2">End Date & Time :</label>
                         <DatePicker
                           selected={endDate}
                           onChange={handleEndDateChange}
@@ -278,6 +336,7 @@ const DetailedCart = () => {
                           dateFormat="Pp"
                           className="form-control"
                         />
+                        <label>(at least 1 hour after start)</label>
                       </div>
                     </Modal.Body>
 
@@ -301,7 +360,7 @@ const DetailedCart = () => {
                   {isValid && (
                     <Button
                       variant="success"
-                      className="mt-4 px-5 py-2"
+                      className="ms-2"
                       onClick={handleBookNow}
                     >
                       Book Now

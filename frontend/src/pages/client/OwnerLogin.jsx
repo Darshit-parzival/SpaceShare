@@ -52,6 +52,7 @@ const OwnerLogin = () => {
           setOwnerName(response.data.ownerName);
           setOwnerId(response.data.ownerId);
           navigate("/owner/home");
+          window.location.href("/owner/home");
         } else {
           setToast(true);
         }
