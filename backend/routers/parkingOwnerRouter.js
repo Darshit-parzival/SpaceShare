@@ -235,4 +235,13 @@ router.get("/loggedIn", (req, res) => {
   }
 });
 
+router.post("/logout", (req, res) => {
+  res
+    .cookie("OwnerToken", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    })
+    .send("Owner Logged out");
+});
+
 module.exports = router;

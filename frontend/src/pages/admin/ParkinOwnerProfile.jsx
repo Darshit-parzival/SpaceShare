@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import { useContext, useEffect, useState } from "react";
 import { ParkingContext } from "../middleware/ParkingContext";
 import LoadingScreen from "../../LoadingScreen";
+import axios from "axios";
 
 const ParkingOwnerProfile = () => {
   const navigate = useNavigate();
@@ -17,6 +18,72 @@ const ParkingOwnerProfile = () => {
   const parkingSpaces = spaces.filter(
     (space) => space.parkingOwner === ownerId
   );
+
+  const [formData, setFormData] = useState({
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    price: "",
+    pincode: "",
+    slots: 0,
+    photo: null,
+  });
+
+  const handleAddInputChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: files ? files[0] : value,
+    }));
+  };
+
+  const AddhandleSubmit = async () => {
+    try {
+      const data = new FormData();
+      data.append("parkingOwner", ownerId);
+      data.append("parkingName", formData.name);
+      data.append("parkingAddress", formData.address);
+      data.append("parkingCity", formData.city);
+      data.append("parkingState", formData.state);
+      data.append("parkingCountry", formData.country);
+      data.append("parkingPincode", formData.price);
+      data.append("parkingPrice", formData.pincode);
+      data.append("parkingSlots", formData.slots);
+      data.append("parkingPhoto", formData.photo); // file upload
+
+      const response = await axios.post(
+        "http://localhost:5000/parkingSpace/add",
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(response.data);
+
+      document.querySelector(".btn-close").click();
+
+      window.location.reload();
+
+      setFormData({
+        name: "",
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+        price: "",
+        pincode: "",
+        slots: 0,
+        photo: null,
+      });
+    } catch (error) {
+      console.error("There was an error adding the parking space!", error);
+    }
+  };
 
   const [newParkingOwner, setNewParkingOwner] = useState({
     photo: null,
@@ -331,6 +398,13 @@ const ParkingOwnerProfile = () => {
                   </div>
                 </div>
                 <div className="profile-actions d-flex flex-column align-items-end">
+                  <button
+                    className="btn btn-secondary mb-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addSpaceModal"
+                  >
+                    Add Parking Space
+                  </button>
                   <button
                     className="btn btn-warning mb-2"
                     data-bs-toggle="modal"
@@ -706,6 +780,166 @@ const ParkingOwnerProfile = () => {
                 data-bs-dismiss="modal"
               >
                 Update Parking Space
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="modal fade"
+        id="addSpaceModal"
+        tabIndex="-1"
+        aria-labelledby="addSpaceModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="addSpaceModalLabel">
+                Add Parking Space
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div className="mb-3">
+                <label htmlFor="photoInput" className="form-label">
+                  Upload Photo
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id="photoInput"
+                  accept="image/*"
+                  name="photo"
+                  onChange={handleAddInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="nameInput" className="form-label">
+                  Parking Space Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="nameInput"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleAddInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="addressInput" className="form-label">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="addressInput"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleAddInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="cityInput" className="form-label">
+                  City
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="cityInput"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleAddInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="stateInput" className="form-label">
+                  State
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="stateInput"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleAddInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="countryInput" className="form-label">
+                  Country
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="countryInput"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleAddInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="priceInput" className="form-label">
+                  Price
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="priceInput"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleAddInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="pincodeInput" className="form-label">
+                  Pincode
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="pincodeInput"
+                  name="pincode"
+                  value={formData.pincode}
+                  onChange={handleAddInputChange}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="slotsInput" className="form-label">
+                  Total Parking Slots
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  className="form-control"
+                  id="slotsInput"
+                  name="slots"
+                  value={formData.slots}
+                  onChange={handleAddInputChange}
+                />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={AddhandleSubmit}
+              >
+                Add Parking Space
               </button>
             </div>
           </div>

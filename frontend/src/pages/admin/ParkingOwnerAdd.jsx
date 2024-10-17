@@ -18,6 +18,33 @@ const ParkingOwnerAdd = () => {
     parkingSpaces: [],
   });
 
+  const [parkingSpaceDetails, setParkingSpaceDetails] = useState({
+    spaceName: "",
+    spaceAddress: "",
+    spaceCity: "",
+    spaceState: "",
+    spaceCountry: "",
+    spacePincode: "",
+    spacePrice: 0,
+    totalSlots: 0,
+    spacePhoto: null,
+  });
+
+  const handleAddInputChange = (e) => {
+    const { name, value } = e.target;
+    setParkingSpaceDetails({
+      ...parkingSpaceDetails,
+      [name]: value,
+    });
+  };
+
+  const handlePhotoUpload = (e) => {
+    setParkingSpaceDetails({
+      ...parkingSpaceDetails,
+      spacePhoto: e.target.files[0],
+    });
+  };
+
   const [newParkingSpace, setNewParkingSpace] = useState({
     photo: null,
     name: "",
@@ -93,6 +120,31 @@ const ParkingOwnerAdd = () => {
     setOwner((prev) => ({ ...prev, parkingSpaces: updatedParkingSpaces }));
   };
 
+  const handleAddSpaceSubmit = async () => {
+    const formData = new FormData();
+    formData.append("spaceName", parkingSpaceDetails.spaceName);
+    formData.append("spaceAddress", parkingSpaceDetails.spaceAddress);
+    formData.append("spaceCity", parkingSpaceDetails.spaceCity);
+    formData.append("spaceState", parkingSpaceDetails.spaceState);
+    formData.append("spaceCountry", parkingSpaceDetails.spaceCountry);
+    formData.append("spacePincode", parkingSpaceDetails.spacePincode);
+    formData.append("spacePrice", parkingSpaceDetails.spacePrice);
+    formData.append("totalSlots", parkingSpaceDetails.totalSlots);
+    formData.append("spacePhoto", parkingSpaceDetails.spacePhoto);
+
+    try {
+      await axios.post("http://localhost:5000/parkingSpace/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("Parking space added successfully!");
+    } catch (error) {
+      console.error("Error adding parking space:", error);
+      alert("Failed to add parking space. Please try again.");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -153,6 +205,7 @@ const ParkingOwnerAdd = () => {
             });
             setToast(true);
             fetchOwnersAndSpaces();
+            window.local.href = "/admin/parkingOwner";
           } else {
             console.error(
               "Error adding parking space:",
@@ -381,18 +434,16 @@ const ParkingOwnerAdd = () => {
             {/* Modal for Adding/Editing Parking Space */}
             <div
               className="modal fade"
-              id="parkingSpaceModal"
+              id="addSpaceModal"
               tabIndex="-1"
-              aria-labelledby="parkingSpaceModalLabel"
+              aria-labelledby="addSpaceModalLabel"
               aria-hidden="true"
             >
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title" id="parkingSpaceModalLabel">
-                      {editIndex !== null
-                        ? "Edit Parking Space"
-                        : "Add Parking Space"}
+                    <h5 className="modal-title" id="addSpaceModalLabel">
+                      Add Parking Space
                     </h5>
                     <button
                       type="button"
@@ -411,7 +462,7 @@ const ParkingOwnerAdd = () => {
                         className="form-control"
                         id="photoInput"
                         accept="image/*"
-                        onChange={handleImageUpload}
+                        onChange={handlePhotoUpload}
                       />
                     </div>
                     <div className="mb-3">
@@ -422,9 +473,9 @@ const ParkingOwnerAdd = () => {
                         type="text"
                         className="form-control"
                         id="nameInput"
-                        name="name"
-                        value={newParkingSpace.name}
-                        onChange={handleParkingSpaceChange}
+                        name="spaceName"
+                        value={parkingSpaceDetails.spaceName}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mb-3">
@@ -435,9 +486,9 @@ const ParkingOwnerAdd = () => {
                         type="text"
                         className="form-control"
                         id="addressInput"
-                        name="address"
-                        value={newParkingSpace.address}
-                        onChange={handleParkingSpaceChange}
+                        name="spaceAddress"
+                        value={parkingSpaceDetails.spaceAddress}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mb-3">
@@ -448,9 +499,9 @@ const ParkingOwnerAdd = () => {
                         type="text"
                         className="form-control"
                         id="cityInput"
-                        name="city"
-                        value={newParkingSpace.city}
-                        onChange={handleParkingSpaceChange}
+                        name="spaceCity"
+                        value={parkingSpaceDetails.spaceCity}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mb-3">
@@ -461,9 +512,9 @@ const ParkingOwnerAdd = () => {
                         type="text"
                         className="form-control"
                         id="stateInput"
-                        name="state"
-                        value={newParkingSpace.state}
-                        onChange={handleParkingSpaceChange}
+                        name="spaceState"
+                        value={parkingSpaceDetails.spaceState}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mb-3">
@@ -474,22 +525,9 @@ const ParkingOwnerAdd = () => {
                         type="text"
                         className="form-control"
                         id="countryInput"
-                        name="country"
-                        value={newParkingSpace.country}
-                        onChange={handleParkingSpaceChange}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="priceInput" className="form-label">
-                        Price
-                      </label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        id="priceInput"
-                        name="price"
-                        value={newParkingSpace.price}
-                        onChange={handleParkingSpaceChange}
+                        name="spaceCountry"
+                        value={parkingSpaceDetails.spaceCountry}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mb-3">
@@ -500,23 +538,36 @@ const ParkingOwnerAdd = () => {
                         type="text"
                         className="form-control"
                         id="pincodeInput"
-                        name="pincode"
-                        value={newParkingSpace.pincode}
-                        onChange={handleParkingSpaceChange}
+                        name="spacePincode"
+                        value={parkingSpaceDetails.spacePincode}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mb-3">
-                      <label htmlFor="pincodeInput" className="form-label">
+                      <label htmlFor="priceInput" className="form-label">
+                        Price
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="priceInput"
+                        name="spacePrice"
+                        value={parkingSpaceDetails.spacePrice}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="slotsInput" className="form-label">
                         Total Parking Slots
                       </label>
                       <input
                         type="number"
                         min="0"
                         className="form-control"
-                        id="pincodeInput"
-                        name="slots"
-                        value={newParkingSpace.slots}
-                        onChange={handleParkingSpaceChange}
+                        id="slotsInput"
+                        name="totalSlots"
+                        value={parkingSpaceDetails.totalSlots}
+                        onChange={handleAddInputChange}
                       />
                     </div>
                   </div>
@@ -531,12 +582,9 @@ const ParkingOwnerAdd = () => {
                     <button
                       type="button"
                       className="btn btn-primary"
-                      onClick={addParkingSpace}
-                      data-bs-dismiss="modal"
+                      onClick={handleAddSpaceSubmit}
                     >
-                      {editIndex !== null
-                        ? "Update Parking Space"
-                        : "Add Parking Space"}
+                      Add Parking Space
                     </button>
                   </div>
                 </div>

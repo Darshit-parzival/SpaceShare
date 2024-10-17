@@ -137,6 +137,7 @@ const Urls = () => {
             <Route path="/owner/home" element={<OwnerHome />} />
             <Route path="/owner/profile" element={<OwnerProfile />} />
             <Route path="/owner/users" element={<UsersOfOwners />} />
+            <Route path="/owner/users" element={<UsersOfOwners />} />
           </>
         )}
         <Route path="*" element={<PageNotFound />} />
