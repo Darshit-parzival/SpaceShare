@@ -10,6 +10,7 @@ import Button from "react-bootstrap/Button";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ParkingContext } from "../middleware/ParkingContext";
 import axios from "axios";
+import { jsPDF } from "jspdf";
 import { BookingContext } from "../middleware/BookingContext";
 
 const DetailedCart = () => {
@@ -64,6 +65,24 @@ const DetailedCart = () => {
       </div>
     );
   }
+
+  const generatePdf = (parkingSpace, startDate, endDate, totalPrice) => {
+    const doc = new jsPDF();
+    doc.text("Parking Booking Confirmation", 10, 10);
+    doc.text(`Parking Space: ${parkingSpace.parkingName}`, 10, 20);
+    doc.text(`Address: ${parkingSpace.parkingAddress}`, 10, 30);
+    doc.text(`City: ${parkingSpace.parkingCity}`, 10, 40);
+    doc.text(`State: ${parkingSpace.parkingState}`, 10, 50);
+    doc.text(`Country: ${parkingSpace.parkingCountry}`, 10, 60);
+    doc.text(`Pincode: ${parkingSpace.parkingPincode}`, 10, 70);
+    doc.text(`Price per hour: ${parkingSpace.parkingPrice} ₹`, 10, 80);
+    doc.text(`Start Date & Time: ${startDate}`, 10, 90);
+    doc.text(`End Date & Time: ${endDate}`, 10, 100);
+    doc.text(`Total Price: ${totalPrice} ₹`, 10, 110);
+
+    // Save the generated PDF
+    doc.save("Parking_Booking_Confirmation.pdf");
+  };
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -130,6 +149,7 @@ const DetailedCart = () => {
           setToastMessage(response.data.message);
           setToast(true);
           fetchBookings();
+          generatePdf(parkingSpace, startDate, endDate, totalPrice);
           navigate("/cart");
         } else if (response.status === 999) {
           setToastMessage(response.data.message);
