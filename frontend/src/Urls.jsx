@@ -27,7 +27,6 @@ import Profile from "./pages/client/Profile";
 import PageNotFound from "./PageNotFound";
 import Cart from "./pages/client/Cart";
 import GiveTestimonial from "./pages/client/GiveTestimonial";
-import GiveFeedback from "./pages/client/GiveFeedback";
 import DetailedCart from "./pages/client/DetailedCart";
 import Cookies from "js-cookie";
 import PaymentHistory from "./pages/client/PaymentHistory";
@@ -93,7 +92,6 @@ const Urls = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/givetestimonial" element={<GiveTestimonial />} />
-            <Route path="/givefeedback" element={<GiveFeedback />} />
             <Route path="/DetailedCart" element={<DetailedCart />} />
             <Route path="/paymentHistory" element={<PaymentHistory />} />
           </>

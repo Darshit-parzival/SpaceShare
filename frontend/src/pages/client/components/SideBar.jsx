@@ -35,15 +35,6 @@ const SideBar = () => {
           </li>
           <li className="list-group-item">
             <NavLink
-              to="/givefeedback"
-              className="text-decoration-none nav-link-item"
-              activeclassname="active"
-            >
-              Feedback
-            </NavLink>
-          </li>
-          <li className="list-group-item">
-            <NavLink
               to="/paymentHistory"
               className="text-decoration-none nav-link-item"
               activeclassname="active"

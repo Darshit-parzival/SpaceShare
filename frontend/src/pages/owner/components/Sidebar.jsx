@@ -51,7 +51,7 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link
                 className="nav-link d-flex align-items-center gap-2"
-                to="/admin/users"
+                to="/owner/users"
               >
                 <i className="bi bi-people-fill mb-1"></i>
                 Parking Space Users
@@ -60,19 +60,10 @@ const Sidebar = () => {
             <li className="nav-item">
               <Link
                 className="nav-link d-flex align-items-center gap-2"
-                to="/admin/parkingSpaceReport"
+                to="/owner/parkingSpaceReport"
               >
                 <i className="bi bi-file-earmark-bar-graph-fill"></i>
                 Parking Space Reports
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link d-flex align-items-center gap-2"
-                to="/admin/req"
-              >
-                <i className="bi bi-file-earmark-arrow-down-fill"></i>
-                feedbacks
               </Link>
             </li>
           </ul>
